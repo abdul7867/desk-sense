@@ -91,6 +91,51 @@ if [[ "$MODE" == "full" ]]; then
   fi
 fi
 
+# --- Gates a linter cannot catch -------------------------------------------
+# These two are the ones that actually get skipped, because nothing mechanical
+# has ever checked them.
+
+# Secrets in the working tree
+secrets=$(git status --porcelain 2>/dev/null | awk '{print $NF}' \
+  | grep -E '(^|/)\.env(\.|$)|\.pem$|(^|/)id_(rsa|ed25519)$|credentials\.json$' || true)
+if [[ -n "$secrets" ]]; then
+  if ! git check-ignore -q $secrets 2>/dev/null; then
+    failures+="
+--- secrets gate ---
+These look like secret files and are not gitignored:
+$secrets
+Add them to .gitignore before finishing.
+"
+  fi
+fi
+
+# Docs should change with the code they describe
+if [[ "${TOKENSAVER_DOCS_GATE:-on}" == "on" ]]; then
+  code_changed=$(git status --porcelain 2>/dev/null | awk '{print $NF}' \
+    | grep -E '\.(ts|tsx|js|jsx|py|go|rs|java|rb|php)$' | grep -vE '(test|spec)\.' || true)
+  docs_changed=$(git status --porcelain 2>/dev/null | awk '{print $NF}' \
+    | grep -E '(\.md$|^docs/|README)' || true)
+  n_code=$(grep -c . <<<"$code_changed" 2>/dev/null || echo 0)
+  if [[ -n "$code_changed" ]] && [[ -z "$docs_changed" ]] && (( n_code >= 3 )); then
+    failures+="
+--- docs gate ---
+${n_code} non-test source files changed and no documentation changed with them.
+Update the README, API docs, or .claude/skills/codebase-overview/SKILL.md in this
+same change, or state plainly why none was needed.
+Disable this gate with TOKENSAVER_DOCS_GATE=off.
+"
+  fi
+fi
+
+# --- Record the outcome for the next session's situation report -------------
+status_dir=".claude"; [[ -d "$status_dir" ]] && {
+  if [[ -n "$failures" ]]; then
+    echo "FAILED ($(date '+%Y-%m-%d %H:%M'))" > "$status_dir/.tokensaver-status"
+  else
+    echo "passed ($(date '+%Y-%m-%d %H:%M'))" > "$status_dir/.tokensaver-status"
+  fi
+}
+
 if [[ -n "$failures" ]]; then
   cat >&2 <<EOF
 Definition of Done not met — the project is in a failing state, so this work is not finished.

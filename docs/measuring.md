@@ -181,3 +181,61 @@ savings that cost correctness are not savings.
 
 If tokens fell and the last two rows got worse, the system is failing at its actual
 job. Back the aggressive settings out.
+
+---
+
+## Step 11 — Verify the observability layer
+
+These came later and each has its own acceptance test.
+
+### The situation report
+
+Start a fresh session in a project with uncommitted changes. Claude should open
+already knowing your branch, what's modified, and whether tests last passed —
+**without running a single exploration command**.
+
+Check its real cost:
+
+```bash
+echo "{\"cwd\":\"$PWD\"}" | .claude/hooks/situation-report.sh \
+  | jq -r '.hookSpecificOutput.additionalContext' | wc -c
+```
+
+Divide by 4 for a rough token estimate. If it exceeds ~300 tokens, lower
+`TOKENSAVER_SITREP_MAX_LINES` — this component is supposed to be cheaper than what it
+replaces, and it should be held to that.
+
+### The cache countdown
+
+Watch the status line during a long session. When it reads `cache Nm left (Xk to
+rebuild)`, that's your one-hour TTL expiring. The `Xk` is what your next message costs
+if you let it lapse.
+
+The habit this is meant to create: when you see under ~5 minutes, either finish the
+current thought or accept the rebuild deliberately. Previously you paid this silently.
+
+### The hazard hooks
+
+```bash
+# Should be REFUSED
+echo "SECRET=x" > .env && git add .env
+# Should be ALLOWED
+git add src/
+```
+
+Test the write blocker by asking Claude to edit `package-lock.json` directly. It must
+refuse and tell you to use the package manager.
+
+**If a hazard hook ever blocks something you legitimately wanted, that is a bug worth
+fixing** — not something to work around with the override. A gate you routinely
+override is a gate you've already disabled.
+
+### The context audit
+
+```bash
+.claude/audit-context.sh
+```
+
+Run it monthly, and before adding any new skill or rule. If the verdict moves to
+`moderate` or `heavy`, prune before you add. The levers are listed in its output, in
+priority order.
