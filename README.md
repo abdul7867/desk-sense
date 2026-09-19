@@ -48,7 +48,12 @@ Profiles: `--profile balanced` (default) or `--profile aggressive`. See
 
 | Path | What it does |
 |---|---|
-| `.claude/settings.json` | Sonnet default, Haiku subagents, hooks wired up |
+| `.claude/settings.json` | Sonnet default, Haiku subagents, hooks and status line wired up |
+| `.claude/hooks/situation-report.sh` | **`SessionStart`** — injects branch, test status, matching lessons and TODOs. ~170 tokens, replaces thousands of orientation tokens |
+| `.claude/statusline/cockpit.sh` | Context %, cost, and **prompt-cache countdown**. Runs outside the context window — zero tokens |
+| `.claude/hooks/block-hazards-bash.sh` | **Denies** secret commits, force-push to the default branch, destructive deletes |
+| `.claude/hooks/block-hazards-write.sh` | **Denies** hand-edited lockfiles, writes into `node_modules`, edits to generated files |
+| `.claude/audit-context.sh` | Reports what this setup costs you at startup |
 | `.claude/agents/test-runner.md` | Runs tests in its own context, returns **only failures** |
 | `.claude/agents/log-digger.md` | Greps big logs, returns matches with context |
 | `.claude/agents/codebase-scout.md` | Read-only "where is X" — returns `file:line`, not file dumps |
@@ -68,6 +73,95 @@ Profiles: `--profile balanced` (default) or `--profile aggressive`. See
 | `.github/workflows/ci.yml` | The backstop |
 
 Nothing is overwritten without `--force`, which backs up first. Re-running is safe.
+
+---
+
+## The three things that make it more than a config bundle
+
+### 1. Claude opens oriented, not blind
+
+A `SessionStart` hook injects a situation report: branch, recent commits, uncommitted
+files, last verification result, **lessons matching the files you're touching**, and
+TODO markers in changed files.
+
+Measured at **~171 tokens** in normal use and **~231** under adversarial load (60
+changed files, 100 lessons) — it's hard-capped. It replaces the thousands of tokens
+Claude would otherwise spend working out where things stand.
+
+It's also what finally makes `docs/lessons.md` get *read*. A ledger nobody reads
+protects nothing.
+
+```bash
+TOKENSAVER_SITREP=off              # disable
+TOKENSAVER_SITREP_MAX_LINES=25     # tighten the cap
+```
+
+### 2. The cache countdown
+
+The status line shows something you currently can't see:
+
+```
+Sonnet  myapp  (feature-auth)
+████████████░░░░░░░░ 64% ctx  $2.15  cache 4m left (118k to rebuild)  88% hit
+```
+
+On a subscription your prompt cache TTL is **one hour**. When it lapses, your next
+message reprocesses the entire conversation. That's the largest hidden cost on the Pro
+plan and right now you simply pay it without knowing.
+
+Claude Code reports both `expires_at` and `recache_tokens_if_cold`, so the line turns
+it into a decision: finish the thought now, or accept the rebuild. **Costs zero
+tokens** — status lines run outside the context window.
+
+### 3. Hazards are refused, not discouraged
+
+`PreToolUse` deny hooks block four things outright:
+
+| Blocked | Not blocked |
+|---|---|
+| Committing `.env`, keys, or a staged diff containing a live-looking credential | Ordinary commits |
+| Force-push / `reset --hard` on the **default** branch | `--force-with-lease`, force-push to a feature branch |
+| Hand-editing lockfiles or `@generated` files | `package.json`, normal source |
+| `rm -rf` outside the project or on `$HOME`/`/` | `rm -rf ./dist`, anything in `/tmp` |
+
+Scope is deliberately narrow. A gate that fires on things you legitimately wanted is a
+gate you disable — and then it protects nothing. Verified against 27 block/allow cases.
+
+```bash
+TOKENSAVER_ALLOW_HAZARD=1 <command>   # deliberate override
+```
+
+---
+
+## Holding the system to its own standard
+
+```bash
+.claude/audit-context.sh
+```
+
+```
+Loaded every session
+  CLAUDE.md                             399
+  rules (unscoped)                        0
+  skill descriptions (3)                172
+  agent descriptions (5)                244
+  MEMORY.md index                         0
+  situation report (injected)            22
+  SUBTOTAL (bundle)                     837
+
+Loaded only when needed (costs nothing at rest)
+  skill bodies (3)                     1913
+  rules (path-scoped, 2)                733   only on matching files
+
+  Verdict: lean
+```
+
+**The whole bundle costs ~837 tokens per session; 2,646 more are deferred until
+needed.** It flags a bloated `CLAUDE.md`, rules missing a `paths:` key, and a
+`MEMORY.md` past its 200-line limit (where the overflow is silently dropped).
+
+This system tells you every component must prove it pays for itself. This is the script
+that holds it to that. Run it before adding anything.
 
 ---
 
@@ -230,3 +324,18 @@ Claude Code docs: [costs](https://code.claude.com/docs/en/costs) ·
 [Firecrawl: 14 best Claude Code skills](https://www.firecrawl.dev/blog/best-claude-code-skills) ·
 [Firecrawl: 12 ways to cut token consumption](https://www.firecrawl.dev/blog/claude-code-token-efficiency) ·
 [Honest tradeoffs of Superpowers](https://www.joanmedia.dev/ai-blog/the-honest-tradeoffs-of-superpowers-token-costs-overkill-and-the-alternatives)
+
+---
+
+## Environment variables
+
+| Variable | Effect |
+|---|---|
+| `TOKENSAVER_VERIFY` | `full` (default) / `quick` (lint+typecheck only) / `off` — the Stop gate |
+| `TOKENSAVER_DOCS_GATE` | `on` (default) / `off` — the docs-with-code check |
+| `TOKENSAVER_SITREP` | `on` (default) / `off` — the situation report |
+| `TOKENSAVER_SITREP_MAX_LINES` | Cap on report length (default 40) |
+| `TOKENSAVER_ALLOW_HAZARD` | `1` to override a hazard block for one command |
+
+All default to the safe, enabled state. Each is a deliberate escape hatch, not a
+setting you should need day to day.

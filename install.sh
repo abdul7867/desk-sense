@@ -105,6 +105,7 @@ say "Project templates (root)"
 copy_file "$SRC/templates/CLAUDE.md"            "CLAUDE.md"
 copy_file "$SRC/templates/DEFINITION-OF-DONE.md" "DEFINITION-OF-DONE.md"
 copy_file "$SRC/templates/.worktreeinclude"      ".worktreeinclude"
+copy_file "$SRC/audit-context.sh"                ".claude/audit-context.sh"
 copy_file "$SRC/templates/lessons.md"            "docs/lessons.md"
 copy_file "$SRC/templates/decisions.md"          "docs/decisions.md"
 
@@ -118,11 +119,12 @@ fi
 # Hooks must be executable or the Stop gate silently never fires.
 if [[ $DRY_RUN -eq 0 ]]; then
   chmod +x "$TARGET"/.claude/hooks/*.sh 2>/dev/null || true
+  chmod +x "$TARGET"/.claude/statusline/*.sh 2>/dev/null || true
 fi
 
 # .gitignore: worktrees must not show up as untracked noise in the main checkout.
 gi="$TARGET/.gitignore"
-for entry in ".claude/worktrees/" "*.tokensaver-bak"; do
+for entry in ".claude/worktrees/" "*.tokensaver-bak" ".claude/.tokensaver-status"; do
   if [[ ! -f "$gi" ]] || ! grep -qxF "$entry" "$gi" 2>/dev/null; then
     [[ $DRY_RUN -eq 0 ]] && printf '%s\n' "$entry" >> "$gi"
     say "  gitignore += $entry"
@@ -138,5 +140,6 @@ say "     The overview is the biggest single token saver — an empty one saves 
 say "  2. Edit .claude/rules/*.md to match your conventions; delete what does not apply."
 say "  3. Baseline before you judge it:  npx ccusage@latest daily"
 say "  4. In Claude Code, run /context and /hooks to confirm what loaded."
+say "  5. Check what this setup costs you:  .claude/audit-context.sh"
 say ""
 say "See README.md for the external skills to install and how to measure the result."
