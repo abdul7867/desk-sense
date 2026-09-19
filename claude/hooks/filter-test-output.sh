@@ -22,7 +22,7 @@ case "$cmd" in
 esac
 
 # Only touch recognised test runners at the start of the command.
-if ! grep -qE '^[[:space:]]*((npm|pnpm|yarn|bun)[[:space:]]+(run[[:space:]]+)?test|npx[[:space:]]+(vitest|jest)|vitest|jest|pytest|python[[:space:]]+-m[[:space:]]+pytest|go[[:space:]]+test|cargo[[:space:]]+test)\b' <<<"$cmd"; then
+if ! grep -qE '^[[:space:]]*((npm|pnpm|yarn|bun)[[:space:]]+(run[[:space:]]+)?test|npx[[:space:]]+(vitest|jest)|vitest|jest|pytest|python[[:space:]]+-m[[:space:]]+pytest|go[[:space:]]+test|cargo[[:space:]]+test|(\./)?gradlew?[[:space:]]+.*\btest|mvn[[:space:]]+.*\btest)\b' <<<"$cmd"; then
   exit 0
 fi
 
