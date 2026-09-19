@@ -1,0 +1,8 @@
+# Gitignored files copied into every new worktree.
+# A worktree is a fresh checkout, so untracked files like .env are NOT there by
+# default — without this, every new worktree starts with a broken dev environment.
+# Uses .gitignore syntax. Only files that match AND are gitignored are copied.
+
+.env
+.env.local
+.env.development

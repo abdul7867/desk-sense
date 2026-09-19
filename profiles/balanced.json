@@ -1,0 +1,9 @@
+{
+  "_comment": "Balanced profile (default). Merged over claude/settings.json by install.sh. Every setting here is documented by Anthropic and carries no quality risk.",
+  "model": "sonnet",
+  "env": {
+    "CLAUDE_CODE_SUBAGENT_MODEL": "haiku"
+  },
+  "autoMemoryEnabled": true,
+  "cleanupPeriodDays": 30
+}
