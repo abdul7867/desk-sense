@@ -19,6 +19,26 @@ RED=$'\033[31m'; AMB=$'\033[33m'; GRN=$'\033[32m'
 
 est() { [[ -f "$1" ]] && echo $(( $(wc -c < "$1") / 4 )) || echo 0; }
 
+# CLAUDE.md may be nothing but `@other-file.md` imports, which Claude Code
+# follows and loads in full. Measuring the file alone reported 2 tokens for a
+# CLAUDE.md that actually pulled in 392 — an audit that under-reports by two
+# orders of magnitude is worse than no audit. One level deep is enough for
+# every real case; deeper nesting is rare and would need cycle detection.
+est_with_imports() {
+  local f="$1"
+  [[ -f "$f" ]] || { echo 0; return; }
+  local t; t=$(est "$f")
+  local dir; dir=$(dirname "$f")
+  local line target
+  while IFS= read -r line; do
+    target="${line#@}"
+    target="${target%%[[:space:]]*}"
+    [[ -n "$target" ]] || continue
+    [[ -f "$dir/$target" ]] && t=$(( t + $(est "$dir/$target") ))
+  done < <(grep -o '^@[^[:space:]]*' "$f" 2>/dev/null)
+  echo "$t"
+}
+
 total=0
 row() { # label, tokens, note
   printf '  %-34s %6s  %s\n' "$1" "$2" "${3:-}"
@@ -33,8 +53,10 @@ echo
 # --- Always loaded ---------------------------------------------------------
 echo "${B}Loaded every session${R}"
 
-t=$(est CLAUDE.md)
+t=$(est_with_imports CLAUDE.md)
 note=""; (( t > 2000 )) && note="${RED}over budget — move detail into skills${R}"
+imported=$(grep -c '^@' CLAUDE.md 2>/dev/null || echo 0)
+(( imported > 0 )) && note="${note}${DIM} (includes $imported @import)${R}"
 row "CLAUDE.md" "$t" "$note"
 
 # Rules without a paths: key load at launch; scoped ones do not.
