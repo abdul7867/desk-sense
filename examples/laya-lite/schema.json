@@ -6,6 +6,7 @@
   },
   "allowed_scripts": ["latin", "devanagari"],
   "max_state_tokens": 512,
+  "model_max_len": 512,
   "zones": {"act": 0.85, "confirm": 0.60},
   "gates": {
     "g4_min_accuracy": 0.75,

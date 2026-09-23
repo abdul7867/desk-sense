@@ -41,7 +41,7 @@ def predictions(prob_fn, rows, questions):
 
 
 def score(records):
-    """records: (language, qid, qtype, probs, target) -> per-language summary."""
+    """records: (key, qid, qtype, probs, target) -> per-key (language or variety) summary."""
     out = {}
     for lang in sorted({r[0] for r in records}):
         rs = [r for r in records if r[0] == lang]
@@ -56,9 +56,10 @@ def score(records):
     return out
 
 
-def evaluate(prob_fn, rows, questions=None):
+def evaluate(prob_fn, rows, questions=None, key="language"):
     questions = questions or load_schema()["questions"]
-    records = [(r["language"], qid, questions[qid]["type"], p, t) for r, qid, p, t in predictions(prob_fn, rows, questions)]
+    records = [(r.get(key, r["language"]), qid, questions[qid]["type"], p, t)
+               for r, qid, p, t in predictions(prob_fn, rows, questions)]
     return score(records)
 
 
@@ -89,6 +90,7 @@ def main():
     ap.add_argument("--bundle", type=Path, default=DIST)
     ap.add_argument("--split", default="val", choices=["train", "val", "calib", "test"])
     ap.add_argument("--final", action="store_true", help="required for the test split (Day 7, once)")
+    ap.add_argument("--by", default="language", help="group results by this row field (e.g. variety)")
     args = ap.parse_args()
     if args.split == "test" and not args.final:
         raise SystemExit("the test split is locked (plan R5): run it once on Day 7 with --final")
@@ -98,7 +100,7 @@ def main():
     from app.ort_model import OrtModel
 
     m = OrtModel(args.bundle)
-    result = evaluate(m.probs, rows)
+    result = evaluate(m.probs, rows, key=args.by)
     print(json.dumps(result, indent=2, ensure_ascii=False))
     if args.split == "test":
         REPORTS.mkdir(exist_ok=True)

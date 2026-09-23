@@ -34,8 +34,8 @@ def requests(n):
     return out
 
 
-def measure(bundle, n, threads, db):
-    sup = Supervisor(db, bundle=bundle, threads=threads)  # real watchdog: it must not fire on a healthy worker
+def measure(bundle, n, threads, db, max_len=None):
+    sup = Supervisor(db, bundle=bundle, threads=threads, max_len=max_len)  # real watchdog: it must not fire on a healthy worker
     lat_e2e, lat_model, statuses = [], [], {}
     try:
         for text, fill_window in requests(n):
@@ -53,7 +53,7 @@ def measure(bundle, n, threads, db):
     supervisor_mb = peak_rss_mb()
     total = supervisor_mb + stats["peak_rss_mb"]
     return {
-        "requests": n, "statuses": statuses, "threads": threads, "bundle": str(bundle),
+        "requests": sum(statuses.values()), "minutes": round((time.monotonic() - started) / 60, 1), "statuses": statuses, "threads": threads, "max_len": sup.max_len, "bundle": str(bundle),
         "bundle_weights_mb": round(sum(f.stat().st_size for f in Path(bundle).glob("model.*")) / 1e6),
         "peak_mb": {"worker": stats["peak_rss_mb"], "supervisor_and_ui": round(supervisor_mb, 1),
                     "total": round(total, 1), "limit": LIMIT_MB},
@@ -64,7 +64,7 @@ def measure(bundle, n, threads, db):
         "model_latency_ms": {"p50": float(np.percentile(lat_model, 50)), "p95": float(np.percentile(lat_model, 95))},
         "end_to_end_ms": {"p50": round(float(np.percentile(lat_e2e, 50)), 1),
                           "p95": round(float(np.percentile(lat_e2e, 95)), 1)},
-        "passed": total <= LIMIT_MB,
+        "passed": total <= LIMIT_MB and restarts == 0 and set(statuses) == {"done"},
         "platform": sys.platform,
     }
 
@@ -76,9 +76,11 @@ def main():
     ap.add_argument("--threads", type=int, default=2)
     ap.add_argument("--out", type=Path, default=ROOT / "reports" / "g2_memory.json")
     ap.add_argument("--label", default="")
+    ap.add_argument("--max-len", type=int, help="override schema.json model_max_len")
+    ap.add_argument("--minutes", type=float, help="soak: run for this long instead of --n requests")
     args = ap.parse_args()
     with tempfile.TemporaryDirectory() as tmp:
-        report = measure(args.bundle, args.n, args.threads, Path(tmp) / "m.db")
+        report = measure(args.bundle, args.n, args.threads, Path(tmp) / "m.db", args.max_len, args.minutes)
     report["label"] = args.label
     args.out.parent.mkdir(exist_ok=True)
     args.out.write_text(json.dumps(report, indent=2))

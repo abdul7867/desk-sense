@@ -5,6 +5,8 @@ One JSON object per line in data/labeled/*.jsonl:
      "labels": {"department": "billing", "urgency": 2, "refund_requested": true,
                 "sentiment": "angry", "needs_human": false}}
 `urgency` may be the level index or its text. Missing labels are skipped for that question.
+Optional `group` (near-duplicates, one phrasing, one customer) keeps rows together in one split;
+optional `stratum` (e.g. department) makes every split get groups from every stratum.
 
     python -m model.data split                    # data/labeled -> data/splits (70/10/10/10 per language)
     python -m model.data agreement a.jsonl b.jsonl
@@ -62,6 +64,22 @@ def sha256(path):
     return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 
 
+def split_by_group(items, seed):
+    """Whole groups go to one split; each stratum spreads its groups over all splits."""
+    out = {k: [] for k in FRACTIONS}
+    strata = {}
+    for r in items:
+        strata.setdefault(r.get("stratum"), {}).setdefault(r.get("group", r["id"]), []).append(r)
+    for stratum, groups in sorted(strata.items(), key=lambda kv: str(kv[0])):
+        keys = sorted(groups)
+        random.Random("%s-%s" % (seed, stratum)).shuffle(keys)
+        held = max(1, round(len(keys) * FRACTIONS["test"])) if len(keys) >= 4 else 0
+        order = ["test"] * held + ["calib"] * held + ["val"] * held
+        for i, key in enumerate(keys):
+            out[order[i] if i < len(order) else "train"].extend(groups[key])
+    return out
+
+
 def split(seed=7, force=False):
     test_path = SPLITS / "test.jsonl"
     if test_path.exists() and not force:
@@ -75,6 +93,10 @@ def split(seed=7, force=False):
         by_lang.setdefault(r["language"], []).append(r)
     out = {k: [] for k in FRACTIONS}
     for lang, items in sorted(by_lang.items()):
+        if any("group" in r for r in items):
+            for name, rows_ in split_by_group(items, "%s-%s" % (seed, lang)).items():
+                out[name].extend(rows_)
+            continue
         random.Random("%s-%s" % (seed, lang)).shuffle(items)
         n, start = len(items), 0
         for i, (name, frac) in enumerate(FRACTIONS.items()):

@@ -113,12 +113,16 @@ class Worker:
 class Supervisor:
     def __init__(self, db_path, bundle=DEFAULT_BUNDLE, fake=False, fake_delay=0.0, schema_path=SCHEMA_PATH,
                  idle_timeout=300.0, mem_limit_mb=450.0, watchdog_interval=1.0, max_attempts=3,
-                 request_timeout=120.0, threads=2):
+                 request_timeout=120.0, threads=2, max_len=None):
         self.store = Store(db_path)
         self.schema = json.loads(Path(schema_path).read_text(encoding="utf-8"))
         self.log_path = Path(db_path).with_suffix(".worker.log")
         cmd = [sys.executable, "-m", "app.worker"]
-        cmd += ["--fake", "--fake-delay", str(fake_delay)] if fake else ["--bundle", str(bundle), "--threads", str(threads)]
+        # Tokens the model reads per question (question + options + ticket). Lower = faster, but the
+        # ticket must fit: longer ones are refused as too_long, never cut.
+        self.max_len = int(max_len or self.schema.get("model_max_len", 512))
+        cmd += (["--fake", "--fake-delay", str(fake_delay)] if fake
+                else ["--bundle", str(bundle), "--threads", str(threads), "--max-len", str(self.max_len)])
         self.cmd = cmd
         self.idle_timeout, self.mem_limit_mb = idle_timeout, mem_limit_mb
         self.max_attempts, self.request_timeout = max_attempts, request_timeout

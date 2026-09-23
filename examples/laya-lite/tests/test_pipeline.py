@@ -129,3 +129,50 @@ def test_trim_keeps_bytes_and_base_chars_and_drops_other_scripts():
     assert not {"中", "文", "中文"} & kept
     assert out["model"]["merges"] == [["a", "b"], ["क", "ा"]]
     assert list(keep) == sorted(keep) and out["model"]["vocab"]["ab"] == list(keep).index(4)
+
+
+def test_group_split_keeps_phrasings_apart_and_covers_every_stratum(tmp_path, monkeypatch):
+    import model.data as d
+    from model.synthetic import make_ticket
+    import random
+
+    rng = random.Random(1)
+    rows = [make_ticket(rng, v, i) for v in ("hi", "en", "hinglish") for i in range(200)]
+    (tmp_path / "labeled").mkdir()
+    d.write_jsonl(tmp_path / "labeled" / "s.jsonl", rows)
+    monkeypatch.setattr(d, "LABELED", tmp_path / "labeled")
+    monkeypatch.setattr(d, "SPLITS", tmp_path / "splits")
+    monkeypatch.setattr(d, "REPORTS", tmp_path / "reports")
+    d.split()
+    sp = {n: d.read_jsonl(tmp_path / "splits" / ("%s.jsonl" % n)) for n in d.FRACTIONS}
+    groups = {n: {r["group"] for r in v} for n, v in sp.items()}
+    assert not groups["train"] & (groups["test"] | groups["val"] | groups["calib"])
+    strata = {r["stratum"] for r in rows}
+    for name in ("val", "calib", "test"):
+        assert {r["stratum"] for r in sp[name]} == strata, name
+
+
+def test_synthetic_labels_follow_composition():
+    import random
+
+    from model.synthetic import make_ticket
+
+    rng = random.Random(5)
+    for i in range(300):
+        r = make_ticket(rng, rng.choice(["hi", "en", "hinglish"]), i)
+        lab = r["labels"]
+        assert not lab["refund_requested"] or lab["department"] == "billing"
+        assert lab["needs_human"] == (lab["department"] in ("billing", "technical", "account") or lab["sentiment"] == "angry")
+        if lab["department"] in ("sales", "other"):
+            assert lab["urgency"] == 0
+
+
+def test_micro_batches_bound_tokens_and_keep_every_item():
+    pytest.importorskip("torch")
+    from model.finetune.finetune import micro_batches
+
+    items = [{"ids": [0] * n} for n in (500, 40, 40, 300, 60, 512, 30)]
+    parts = micro_batches(items, 1024)
+    assert sorted(len(x["ids"]) for p in parts for x in p) == sorted(len(x["ids"]) for x in items)
+    for p in parts:
+        assert len(p) == 1 or max(len(x["ids"]) for x in p) * len(p) <= 1024

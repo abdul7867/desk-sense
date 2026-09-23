@@ -1,0 +1,23 @@
+{
+  "department": {
+    "n": 120,
+    "agreement": 1.0
+  },
+  "urgency": {
+    "n": 120,
+    "agreement": 0.925
+  },
+  "refund_requested": {
+    "n": 120,
+    "agreement": 1.0
+  },
+  "sentiment": {
+    "n": 120,
+    "agreement": 0.917
+  },
+  "needs_human": {
+    "n": 120,
+    "agreement": 0.95
+  },
+  "_verdict": "ok"
+}

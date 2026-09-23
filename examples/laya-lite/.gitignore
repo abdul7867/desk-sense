@@ -17,3 +17,4 @@ __pycache__/
 .claude/worktrees/
 *.tokensaver-bak
 .claude/.tokensaver-status
+model/synthetic-run/

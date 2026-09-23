@@ -1,0 +1,35 @@
+{
+  "requests": 100,
+  "statuses": {
+    "done": 100
+  },
+  "threads": 2,
+  "max_len": 512,
+  "bundle": "/home/user/Tokensaver/examples/laya-lite/model/dist",
+  "bundle_weights_mb": 313,
+  "peak_mb": {
+    "worker": 361.4,
+    "supervisor_and_ui": 37.4,
+    "total": 398.8,
+    "limit": 500
+  },
+  "worker_memory_at_end_mb": {
+    "rss_now": 344.8,
+    "anon_now": 153.4,
+    "file_backed_now": 191.4
+  },
+  "worker_imports_torch": false,
+  "worker_restarts": 0,
+  "cold_start_s": 2.09,
+  "model_latency_ms": {
+    "p50": 851.5,
+    "p95": 7048.25
+  },
+  "end_to_end_ms": {
+    "p50": 854.2,
+    "p95": 7059.7
+  },
+  "passed": true,
+  "platform": "linux",
+  "label": "input cap 512 (current); base model, stage-A; 16 GB dev container, 2 threads"
+}

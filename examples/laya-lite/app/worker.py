@@ -93,10 +93,10 @@ class FakeModel:
 
 
 class RealModel:
-    def __init__(self, bundle, threads):
+    def __init__(self, bundle, threads, max_len=None):
         from app.ort_model import OrtModel
 
-        self.m = OrtModel(bundle, threads=threads)
+        self.m = OrtModel(bundle, threads=threads, max_len=max_len)
 
     def predict(self, req):
         return self.m.predict(req["state"], req["questions"], allow_truncate=req.get("allow_truncate", False))
@@ -136,11 +136,12 @@ def main():
     ap.add_argument("--fake", action="store_true")
     ap.add_argument("--fake-delay", type=float, default=0.0)
     ap.add_argument("--threads", type=int, default=2)
+    ap.add_argument("--max-len", type=int, help="tokens per question sequence; default: the bundle's")
     args = ap.parse_args()
     # The protocol owns stdout; anything a library prints goes to stderr instead.
     out = os.fdopen(os.dup(sys.stdout.fileno()), "w", encoding="utf-8")
     os.dup2(sys.stderr.fileno(), sys.stdout.fileno())
-    model = FakeModel(args.fake_delay) if args.fake else RealModel(args.bundle, args.threads)
+    model = FakeModel(args.fake_delay) if args.fake else RealModel(args.bundle, args.threads, args.max_len)
     serve(model, out)
 
 

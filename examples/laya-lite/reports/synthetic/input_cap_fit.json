@@ -1,0 +1,35 @@
+{
+  "512": {
+    "room_for_ticket_tokens": 448,
+    "refused_too_long": {
+      "hi": 7,
+      "hinglish": 1
+    },
+    "refused_share": 0.0067
+  },
+  "384": {
+    "room_for_ticket_tokens": 320,
+    "refused_too_long": {
+      "hi": 21,
+      "en": 4,
+      "hinglish": 10
+    },
+    "refused_share": 0.0292
+  },
+  "256": {
+    "room_for_ticket_tokens": 192,
+    "refused_too_long": {
+      "hi": 33,
+      "en": 20,
+      "hinglish": 27
+    },
+    "refused_share": 0.0667
+  },
+  "ticket_tokens": {
+    "p50": 20,
+    "p90": 52,
+    "p99": 394,
+    "max": 523
+  },
+  "note": "SYNTHETIC tickets; ~10% are deliberately long 'story' tickets. Real ticket lengths decide this."
+}

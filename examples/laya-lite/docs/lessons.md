@@ -20,6 +20,10 @@ for detail. Keep it scannable — a ledger nobody reads protects nothing.
 
 <!-- Add newest at the top. -->
 
+- **2026-09-23 — A "wait until the benchmark ends" loop never ended.** `pgrep -f "tests.measure_app"`
+  matched the loop's own command line, so it waited on itself. *Rule:* wait on a PID, or use a
+  pattern the waiting command cannot contain (`tests[.]measure_app`), and check the loop has exited.
+
 - **2026-09-23 — Same bundle measured 398 MB and 502 MB.** Linux RSS of memory-mapped weights depends
   on page-cache state (a just-written file maps in larger chunks). *Rule:* repeat memory measurements,
   include one right after a build, gate on the worst run. See DECISIONS.md, G2.
