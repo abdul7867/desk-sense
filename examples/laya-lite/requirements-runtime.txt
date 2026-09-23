@@ -1,0 +1,5 @@
+# What the shipped app needs (plan §10.1): no torch, no transformers.
+onnxruntime==1.30.0
+tokenizers==0.23.2
+numpy==2.4.6
+psutil==7.2.2

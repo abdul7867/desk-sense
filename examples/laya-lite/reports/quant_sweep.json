@@ -1,0 +1,38 @@
+{
+  "embeddings": {
+    "size_mb": 699,
+    "worst": 0.165131,
+    "argmax_agreement": 0.983,
+    "over_tol": 60
+  },
+  "enc_attn_qkv": {
+    "size_mb": 1172,
+    "worst": 0.473132,
+    "argmax_agreement": 0.9261,
+    "over_tol": 119
+  },
+  "enc_attn_out": {
+    "size_mb": 1250,
+    "worst": 0.120473,
+    "argmax_agreement": 0.9943,
+    "over_tol": 67
+  },
+  "enc_mlp_in": {
+    "size_mb": 1172,
+    "worst": 0.511353,
+    "argmax_agreement": 0.9545,
+    "over_tol": 107
+  },
+  "enc_mlp_out": {
+    "size_mb": 1230,
+    "worst": 0.956817,
+    "argmax_agreement": 0.7443,
+    "over_tol": 153
+  },
+  "decision_head": {
+    "size_mb": 1244,
+    "worst": 0.010894,
+    "argmax_agreement": 1.0,
+    "over_tol": 1
+  }
+}

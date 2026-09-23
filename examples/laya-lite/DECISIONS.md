@@ -1,0 +1,41 @@
+# Decisions
+
+Plan §14.2 format. Newest last. Every number here was **measured** in the Day-1 dev container:
+16 GB RAM, 4 vCPU, Linux 6.18, Python 3.11, no GPU. It is **not** the 4 GB target machine.
+Evidence files are in `reports/`.
+
+| Date | Decision | Why | Alternatives considered | Owner |
+|---|---|---|---|---|
+| 2026-09-23 | **Use case: support-ticket triage. Languages: Hindi, plus English including Hinglish.** Five questions: `department` (choice, 5), `urgency` (score, 3), `refund_requested` (noul), `sentiment` (choice, 3), `needs_human` (noul). Source of truth: `schema.json`. | The owner left the use case open. This is the plan's own sanity-check example, it covers all three question types, and the base model already routes such tickets sensibly. | Email intent; a placeholder-only schema | Sprint lead |
+| 2026-09-23 | **G4/G5 thresholds set before any results:** accuracy ≥ 75% and ECE ≤ 0.10 per language; peak ≤ 500 MB and p95 ≤ 2.0 s. | Plan M15: thresholds come before results. | — | Sprint lead |
+| 2026-09-23 | **Pinned by Hugging Face revision `052592a1…`, the sha256 of `model.safetensors`, and `laya==0.3.6`. The upstream GitHub fork is still to do.** | GitHub returns 403 from this environment, so the repo can't be forked here. The weights and code are pinned anyway (plan M4). | Wait for GitHub access | ML dev |
+| 2026-09-23 | **G1: export the whole model, with the decision head's two attention layers replaced by export-only equivalents (same weights, same maths).** Result: worst probability difference **0.000052** over 200 requests / 609 questions (limit 0.01). Top answer matches everywhere and the tokens match exactly. **PASS** (`reports/g1_summary.json`). | `nn.MultiheadAttention`'s ONNX trace fixed the sequence length at its trace-time value. The first export only worked at 300 tokens, which is the plan's §8.2 failure mode. | Encoder-only ONNX plus a numpy head; the dynamo exporter | ML dev |
+| 2026-09-23 | **int8 is weight-only:** block-32 int8 `MatMulNBits` for the encoder and head, plus our own block-32 int8 for the embedding table. The plan's `quantize_dynamic` is **rejected**. | Evidence below. The layer sweep puts the damage in `mlp.Wo` (74% agreement alone), which points at activation outliers: dynamic int8 also squeezes activations into one 8-bit range per tensor. Weight-only keeps activations in fp32. | See the table below | ML dev |
+| 2026-09-23 | **Vocab trim stage A (drop tokens in scripts the guard refuses) is always on.** 256k → 197k tokens. Tokenizer file 34 → 13 MB; int8 weights 364 → 313 MB. | Lossless for any input the guard accepts: G1 still passes against the *untrimmed* torch model (0.000052), and 19/19 hand-picked hard strings (names, codes, Hinglish, emoji) tokenize the same. | — | ML dev |
+| 2026-09-23 | **Stage B (lossy) trim must be corpus-based (plan §8.4). The merge-rank cap is rejected.** | At 37k tokens a rank cap brings whole-app memory to **362.5 MB**, but only **60.5%** of decisive answers still match fp32. Global merge rank isn't our tickets' distribution, and the model never saw those token splits. | Rank cap (rejected); fine-tune after trimming (breaks R6 order) | ML dev |
+| 2026-09-23 | **Weights ship as ONNX external data (`model.onnx` + `model.data`).** | ORT memory-maps external data. The session costs **161 MB** RSS right after creation, against 575 MB with weights inside the protobuf. Load peak drops from 732 to 437 MB. | ORT format (1,041 MB peak: worse) | App dev |
+| 2026-09-23 | **Worker memory settings:** ORT arena **on** (against plan §10.1); questions batched up to **512 tokens** (one at a time on long tickets); `malloc_trim` after tokenizer load and after every request; `MALLOC_ARENA_MAX=1` with large blocks via mmap. | Worker peak on a 512-token ticket: 5-question batch without arena 811 MB; one at a time without arena 561; **one at a time with arena 416**; 5-question batch with arena 726. Without the arena, glibc fragments on per-operation allocations. | Plan's arena-off setting (measured worse) | App dev |
+| 2026-09-23 | **The watchdog reads private memory (Linux anonymous, Windows private bytes), not RSS. The limit stays 450 MB.** | Clean pages from the memory-mapped weights count in RSS but the OS can reclaim them. On RSS, a healthy worker crosses 450 MB once enough embedding rows are paged in, and gets killed in a loop. The R1 gate still uses peak RSS. | RSS watchdog (would kill healthy workers) | App dev |
+| 2026-09-23 | **G2: FAIL by 2 MB in the worst measured case; stage B corpus trim is required (plan Day 5 rule).** Same bundle, same code: **397.7–398.9 MB** (5 runs), but **502.2 MB** when measured straight after the bundle file was written. | The gap is entirely file-backed weight pages (195 vs 298 MB). A freshly written file sits in the page cache in large blocks, so mapping one block maps all of it; a byte-identical rebuild reproduced 471 MB in the worker. We gate on the worst measured value. The stage B proxy measures 362.5 MB even in the freshly-written state. | Report 398 as a pass (rejected: not robust) | Sprint lead |
+| 2026-09-23 | **G5 latency: FAIL expected for long tickets; decide on Day 5 with real ticket lengths.** Model p50 **0.83 s**, p95 **6.9 s** on 2 threads. The benchmark makes every 10th request a full 512-token ticket. | Laya re-reads the ticket once per question: 5 × 512 tokens is about 7 s here and will be slower on an i3. Short tickets meet 2 s. | Cap input at 256 tokens; fewer questions per call; one-question fast path | Sprint lead |
+| 2026-09-23 | **Zone confidence = top calibrated probability**, not Laya's entropy-based `confidence`. | Temperature calibration makes probabilities honest; the entropy score isn't a probability, so 0.85 wouldn't mean "85% right". | Laya `confidence` | App dev |
+| 2026-09-23 | **Worker talks JSON lines over stdin/stdout; the HTTP API is only on 127.0.0.1 (R7).** | Nothing else can reach the worker. A crash surfaces as end-of-file, which the supervisor turns into a replay (R8). | Local socket to the worker | App dev |
+| 2026-09-23 | **CLI, not Tkinter,** for Week 1. | Plan M10 and the solo guidance. | Tkinter | App dev |
+| 2026-09-23 | **We wrote our own fine-tune script** (`model/finetune/finetune.py`) on laya 0.3.6's model and sequence code. It saves checkpoints `laya.load()` can read. Smoke-tested on CPU only. | The author's notebook is on GitHub, which is unreachable here. | Wait for the notebook | ML dev |
+| 2026-09-23 | **Language guard:** scripts allowed = Latin + Devanagari; up to 10% of letters may come from other scripts; the language label goes by majority script per *word*. Tamil is refused (not on our list). | Counting letters labeled "मेरा OTP नहीं आ रहा, login blocked है" as English, because Devanagari packs more sound into fewer letters. | Letter-count majority | App dev |
+
+## int8 evidence (drift against the ONNX fp32 model; 60–200 generated requests)
+
+"Decisive" means answers where fp32's top-two margin is at least 0.2, the ones the act zone relies on.
+
+| Method | Weights | Agreement (all) | Agreement (decisive) | Worst Δp |
+|---|---|---|---|---|
+| `quantize_dynamic`, per-tensor | 323 MB | 72.4% | 79.7% | 0.94 |
+| `quantize_dynamic`, per-channel | 324 MB | 72.0% | — | 0.96 |
+| weight-only int8, embeddings fp32 | 929 MB | 99.0% | 100% | 0.08 |
+| weight-only int8, embeddings int8 per row | 340 MB | 97.7% | 98.6% | 0.12 |
+| **weight-only int8, embeddings int8 block 32 (chosen)** | **364 → 313 MB after trim** | **99.0%** | **100%** (478/478) | 0.26 |
+| same, `accuracy_level=4` (int8 compute) | 364 MB | 97.4% | 98.9% | 0.25 |
+
+Layer sweep with `quantize_dynamic`, one group at a time (`reports/quant_sweep.json`): mlp.Wo 74.4%,
+attn.Wqkv 92.6%, mlp.Wi 95.5%, embeddings 98.3%, attn.Wo 99.4%, decision head 100%.

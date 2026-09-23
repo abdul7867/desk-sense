@@ -1,0 +1,27 @@
+{
+  "requests": 100,
+  "statuses": {
+    "done": 100
+  },
+  "threads": 2,
+  "bundle": "model/artifacts/int8 (byte-identical rebuild of model/dist)",
+  "peak_mb": {
+    "worker": 465.1,
+    "supervisor_and_ui": 37.1,
+    "total": 502.2,
+    "limit": 500
+  },
+  "worker_imports_torch": false,
+  "cold_start_s": 1.77,
+  "model_latency_ms": {
+    "p50": 790.5,
+    "p95": 6704.5
+  },
+  "end_to_end_ms": {
+    "p50": 793.4,
+    "p95": 6715.5
+  },
+  "passed": false,
+  "platform": "linux",
+  "label": "Same configuration as g2_memory.json, measured right after the bundle was written (page-cache state maps more weight pages). 100 requests. 16 GB dev container."
+}

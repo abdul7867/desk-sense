@@ -1,0 +1,39 @@
+name: Laya Lite
+
+# Tests on the fake worker with runtime dependencies only: proves the app and the pipeline tooling
+# need no torch. Model tests skip here (no model/dist in git); they run where the model is built.
+
+on:
+  push:
+    paths:
+      - 'examples/laya-lite/**'
+      - '.github/workflows/laya-lite.yml'
+  pull_request:
+    paths:
+      - 'examples/laya-lite/**'
+      - '.github/workflows/laya-lite.yml'
+  workflow_dispatch:
+
+defaults:
+  run:
+    working-directory: examples/laya-lite
+
+jobs:
+  test:
+    name: Tests (no torch, no model)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+          cache-dependency-path: examples/laya-lite/requirements-runtime.txt
+
+      - run: pip install -r requirements-runtime.txt pytest==9.1.1
+
+      - name: No torch in the runtime
+        run: python -c "import importlib.util as u, sys; sys.exit(u.find_spec('torch') is not None)"
+
+      - run: python -m pytest -q

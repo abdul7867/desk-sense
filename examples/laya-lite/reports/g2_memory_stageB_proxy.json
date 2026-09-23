@@ -1,0 +1,27 @@
+{
+  "requests": 100,
+  "statuses": {
+    "done": 100
+  },
+  "threads": 2,
+  "bundle": "scratch (not kept)",
+  "peak_mb": {
+    "worker": 325.3,
+    "supervisor_and_ui": 37.2,
+    "total": 362.5,
+    "limit": 500
+  },
+  "worker_imports_torch": false,
+  "cold_start_s": 0.76,
+  "model_latency_ms": {
+    "p50": 1097.0,
+    "p95": 7795.15
+  },
+  "end_to_end_ms": {
+    "p50": 1100.1,
+    "p95": 7831.5
+  },
+  "passed": true,
+  "platform": "linux",
+  "label": "MEMORY PROXY ONLY: stage-B trim by merge-rank cap (37,398 tokens). Accuracy is unusable (60.5% decisive agreement with fp32), so this is not shippable; it shows what a ~37k-token corpus trim would cost in memory. 16 GB dev container."
+}

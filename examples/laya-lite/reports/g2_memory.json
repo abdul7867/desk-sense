@@ -1,0 +1,28 @@
+{
+  "requests": 200,
+  "statuses": {
+    "done": 200
+  },
+  "threads": 2,
+  "bundle": "model/dist",
+  "bundle_weights_mb": 313,
+  "peak_mb": {
+    "worker": 361.1,
+    "supervisor_and_ui": 37.8,
+    "total": 398.9,
+    "limit": 500
+  },
+  "worker_imports_torch": false,
+  "cold_start_s": 1.91,
+  "model_latency_ms": {
+    "p50": 831.0,
+    "p95": 6928.299999999999
+  },
+  "end_to_end_ms": {
+    "p50": 834.0,
+    "p95": 6965.2
+  },
+  "passed": true,
+  "platform": "linux",
+  "label": "base model, stage-A trim, int8 weight-only; 16 GB dev container"
+}

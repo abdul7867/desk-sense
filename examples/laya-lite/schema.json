@@ -1,0 +1,48 @@
+{
+  "use_case": "Support-ticket triage: route an incoming customer ticket, rate its urgency, and flag refunds, sentiment and tickets that need a person.",
+  "languages": {
+    "hi": "Hindi (Devanagari)",
+    "en": "English, including Hinglish (Hindi in Latin script) - script detection cannot separate these (plan M7)"
+  },
+  "allowed_scripts": ["latin", "devanagari"],
+  "max_state_tokens": 512,
+  "zones": {"act": 0.85, "confirm": 0.60},
+  "gates": {
+    "g4_min_accuracy": 0.75,
+    "g4_max_ece": 0.10,
+    "g5_max_peak_mb": 500,
+    "g5_max_p95_s": 2.0,
+    "_set": "2026-09-23 (Day 1), before any results. Change only with a DECISIONS.md entry."
+  },
+  "questions": {
+    "department": {
+      "type": "choice",
+      "instructions": "Which team should handle this ticket?",
+      "criteria": {
+        "billing": "invoices, payments, charges, refunds",
+        "technical": "bugs, crashes, errors, outages, slowness",
+        "account": "login, password, OTP, profile, access",
+        "sales": "pricing, plans, quotes, upgrades",
+        "other": "anything else"
+      }
+    },
+    "urgency": {
+      "type": "score",
+      "instructions": "How urgent is this ticket?",
+      "criteria": ["not urgent", "soon", "blocking work"]
+    },
+    "refund_requested": {
+      "type": "noul",
+      "instructions": "The customer is asking for money back."
+    },
+    "sentiment": {
+      "type": "choice",
+      "instructions": "What is the customer's mood?",
+      "criteria": {"angry": "upset, frustrated, complaining", "neutral": "matter of fact", "happy": "pleased, thankful"}
+    },
+    "needs_human": {
+      "type": "noul",
+      "instructions": "A person must reply to this ticket; an automatic reply is not enough."
+    }
+  }
+}

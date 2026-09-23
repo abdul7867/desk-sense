@@ -1,0 +1,41 @@
+{
+  "checkpoint": "base (pinned)",
+  "trim": "A (script)",
+  "steps": {
+    "g1": {
+      "cases": 200,
+      "questions": 609,
+      "tolerance": 0.01,
+      "worst_max_prob_diff": 5.2e-05,
+      "failures": 0,
+      "mean_max_prob_diff": 3.5e-05,
+      "argmax_agreement": 1.0,
+      "decisive_questions": 478,
+      "decisive_agreement": 1.0,
+      "token_parity_failures": 0,
+      "candidate_latency_ms_p50": 241.9,
+      "candidate_latency_ms_p95": 590.1,
+      "passed": true
+    },
+    "int8_drift_proxy": {
+      "cases": 200,
+      "questions": 609,
+      "tolerance": 0.01,
+      "worst_max_prob_diff": 0.264985,
+      "failures": 221,
+      "mean_max_prob_diff": 0.011301,
+      "argmax_agreement": 0.9901,
+      "decisive_questions": 478,
+      "decisive_agreement": 1.0,
+      "token_parity_failures": 0,
+      "candidate_latency_ms_p50": 408.4,
+      "candidate_latency_ms_p95": 859.1,
+      "passed": false
+    },
+    "val_accuracy": "no validation split: accuracy per step not measured",
+    "calibration": "no calib split: shipped uncalibrated (temperature 1.0)"
+  },
+  "failures": [],
+  "minutes": 7.3,
+  "passed": true
+}

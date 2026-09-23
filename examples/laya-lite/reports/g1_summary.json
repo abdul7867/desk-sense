@@ -1,0 +1,17 @@
+{
+  "cases": 200,
+  "questions": 609,
+  "tolerance": 0.01,
+  "worst_max_prob_diff": 5.2e-05,
+  "failures": 0,
+  "mean_max_prob_diff": 3.5e-05,
+  "argmax_agreement": 1.0,
+  "decisive_questions": 478,
+  "decisive_agreement": 1.0,
+  "token_parity_failures": 0,
+  "candidate_latency_ms_p50": 226.9,
+  "candidate_latency_ms_p95": 566.4,
+  "passed": true,
+  "candidate": "model/artifacts/fp32",
+  "reference": "torch original (laya 0.3.6)"
+}

@@ -1,0 +1,19 @@
+# Model binaries: rebuilt by model/build_model.py from the pinned checkpoint (model/pin.py).
+model/artifacts/
+model/dist/
+# Real user text never goes in git.
+data/raw/*
+data/labeled/*
+data/splits/*
+!data/*/.gitkeep
+# Runtime state
+*.db
+*.db-wal
+*.db-shm
+*.worker.log
+__pycache__/
+.pytest_cache/
+.venv/
+.claude/worktrees/
+*.tokensaver-bak
+.claude/.tokensaver-status

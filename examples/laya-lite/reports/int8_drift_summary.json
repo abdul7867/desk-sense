@@ -1,0 +1,17 @@
+{
+  "cases": 200,
+  "questions": 609,
+  "tolerance": 0.01,
+  "worst_max_prob_diff": 0.264985,
+  "failures": 221,
+  "mean_max_prob_diff": 0.011301,
+  "argmax_agreement": 0.9901,
+  "decisive_questions": 478,
+  "decisive_agreement": 1.0,
+  "token_parity_failures": 0,
+  "candidate_latency_ms_p50": 410.9,
+  "candidate_latency_ms_p95": 723.7,
+  "passed": false,
+  "candidate": "model/artifacts/int8",
+  "reference": "model/artifacts/fp32"
+}
