@@ -105,6 +105,9 @@ def trim(tok_json, allowed=("latin", "devanagari"), max_merges=None, corpus=None
 
     keep = {t for t in vocab if t in KEEP_ADDED or is_byte_token(t) or t == model.get("unk_token")}
     keep |= {t for t in vocab if t not in produced and t not in added and letters_allowed(t, allowed)}
+    # Added tokens match literally before BPE runs: "\n", "\n\n", tabs and runs of spaces are added
+    # tokens here. Dropping them turned every newline into a byte token (DECISIONS.md 2026-09-24).
+    keep |= {t for t in added if t in vocab and letters_allowed(t, allowed)}
 
     allowed_merges = [(r, a, b) for r, (a, b) in enumerate(merges) if (a + b) in vocab and letters_allowed(a + b, allowed)]
     if max_merges is not None:

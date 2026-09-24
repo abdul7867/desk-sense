@@ -16,6 +16,9 @@ STATES = [
     "app bahut slow chal raha hai kal se, kuch karo please",
     {"subject": "Invoice #4471 wrong amount", "body": "The invoice shows ₹12,400 but we agreed ₹9,800."},
     {"subject": "सर्वर डाउन", "body": "हमारा डैशबोर्ड पिछले एक घंटे से लोड नहीं हो रहा है। 503 error आ रहा है।"},
+    # Newlines, blank lines, tabs and space runs: pasted emails and browser-agent states look like this.
+    "Hi team,\n\nMy invoice is wrong.\n\tAmount:  ₹12,400\n\nThanks,\nAsha",
+    "goal: Search flights from Zurich to London\nnow: type From ← \"Zurich\"\ndone: click #3 Search\npage: flights.example · Find flights",
 ]
 
 WORDS = ["billing", "technical", "account", "sales", "shipping", "returns", "security", "privacy",

@@ -131,6 +131,25 @@ def test_trim_keeps_bytes_and_base_chars_and_drops_other_scripts():
     assert list(keep) == sorted(keep) and out["model"]["vocab"]["ab"] == list(keep).index(4)
 
 
+def test_trim_keeps_whitespace_added_tokens():
+    """Regression: '\\n' is an added token in mmBERT's tokenizer; dropping it turned every newline
+    into a byte token, so multi-line tickets and browser states read differently than in training."""
+    from model.trim.trim_vocab import trim
+
+    tok = {
+        "model": {"type": "BPE", "byte_fallback": True, "unk_token": "<unk>",
+                  "vocab": {"<unk>": 0, "\n": 1, "\n\n": 2, "\t": 3, "<unused0>": 4, "中文": 5, "a": 6},
+                  "merges": []},
+        "added_tokens": [{"id": 0, "content": "<unk>"}, {"id": 1, "content": "\n"}, {"id": 2, "content": "\n\n"},
+                         {"id": 3, "content": "\t"}, {"id": 4, "content": "<unused0>"}, {"id": 5, "content": "中文"}],
+        "post_processor": None,
+    }
+    out, _ = trim(tok)
+    kept = set(out["model"]["vocab"])
+    assert {"\n", "\n\n", "\t", "<unused0>", "a"} <= kept and "中文" not in kept
+    assert {a["content"] for a in out["added_tokens"]} == {"<unk>", "\n", "\n\n", "\t", "<unused0>"}
+
+
 def test_group_split_keeps_phrasings_apart_and_covers_every_stratum(tmp_path, monkeypatch):
     import model.data as d
     from model.synthetic import make_ticket
