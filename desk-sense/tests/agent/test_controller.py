@@ -202,6 +202,22 @@ def test_repeating_the_same_action_brings_in_the_thinker(make_ctl):
     assert "thinker" in sources and ctl.tasks[tid].cursor == 0
 
 
+def test_several_different_detours_bring_in_the_thinker(make_ctl):
+    """Review finding: distinct wrong picks never repeated exactly, so the loop guard never fired."""
+    ctl, _, thinkers, _ = make_ctl(plans=[{"op": "click", "target": "Help"}])
+    page = {"host": "x.example", "title": "t", "elements": [el(0, "button", "Help"), el(1, "button", "Menu")]}
+    a = ctl.start("go", None, page)
+    tid = a["task"]
+    a = ctl.step(tid, page, {"ok": False})  # "Help" failed: later non-matching picks are detours
+    sources = []
+    for n in range(2, 8):  # each page offers one new, different element
+        a = ctl.step(tid, dict(page, elements=[el(n, "button", "Item %d" % n)]), {"ok": True, "changed": True})
+        sources.append(a.get("source"))
+        if a.get("source") == "thinker":
+            break
+    assert "thinker" in sources and len(sources) <= 4
+
+
 def test_card_numbers_never_reach_the_thinker_or_the_log(make_ctl, tmp_path):
     seen = []
 

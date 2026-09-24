@@ -78,7 +78,10 @@ def evaluate_multi(prob_fn, rows, keys, questions=None):
 def majority_baseline(train_rows, eval_rows, questions=None):
     """G3's yardstick: always answer the most common training label."""
     questions = questions or load_schema()["questions"]
-    if any("questions" in r for r in eval_rows):
+    browser = ["questions" in r for r in eval_rows]
+    if any(browser) and not all(browser):
+        raise ValueError("eval rows mix tickets and browser steps; their baselines differ, score them separately")
+    if all(browser) and browser:
         # Browser steps: options differ per page, so "most common label" means nothing. The yardstick
         # is the deterministic ranker's first choice, i.e. option 0.
         def top_of_ranker(state, qs):

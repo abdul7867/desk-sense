@@ -113,10 +113,13 @@ def element(cand, tree):
     tag = cand["tag"]
     role = role_of(tag, a)
     text = squash(own_text(n)) if n is not None else ""
-    name = squash(a.get("aria_label") or a.get("placeholder") or a.get("title") or a.get("alt") or text
-                  or (label_near(n) if n is not None else "") or (a.get("value") if role == "button" else ""))
-    if role in ("textbox", "searchbox", "textarea", "select", "combobox") and n is not None:
-        name = squash(a.get("aria_label") or label_near(n) or a.get("placeholder") or a.get("title") or name)
+    # Same precedence as extension/content.js nameOf(): aria-label, label, an input button's value,
+    # then placeholder / own text / title / alt. A different order here would train on names the
+    # live page never shows.
+    label = label_near(n) if n is not None and tag in ("input", "select", "textarea") else ""
+    button_value = a.get("value") if tag == "input" and role == "button" else ""
+    name = squash(a.get("aria_label") or label or button_value or a.get("placeholder") or text
+                  or a.get("title") or a.get("alt") or "")
     value = ""
     if a.get("type") == "password":
         value = "(filled)" if a.get("input_value") else ""

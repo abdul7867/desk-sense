@@ -20,6 +20,7 @@ from thinker.base import ThinkerError
 from thinker.budget import Budgeted
 
 MAX_RECURSION = 4
+MAX_DETOURS = 3
 ACTING_OPS = ("click", "type", "select")
 
 
@@ -28,7 +29,7 @@ class Task:
         self.id, self.goal, self.sites, self.thinker = tid, goal, list(sites), thinker
         self.subgoals, self.cursor = [], 0
         self.history, self.failed = [], set()
-        self.fail_streak, self.page_offset = 0, 0
+        self.fail_streak, self.page_offset, self.detours = 0, 0, 0
         self.last, self.n, self.over = None, 0, False
         self.lock = threading.Lock()
 
@@ -39,7 +40,7 @@ class Task:
     def advance(self, note):
         self.history.append(note)
         self.cursor += 1
-        self.fail_streak, self.page_offset = 0, 0
+        self.fail_streak, self.page_offset, self.detours = 0, 0, 0
         self.failed.clear()
 
 
@@ -120,8 +121,10 @@ class Controller:
                 task.fail_streak = 0
                 task.advance(describe(prev))
             elif ok and not repeat:
-                task.fail_streak = 0
+                task.detours += 1
                 task.history.append(describe(prev))
+                if task.detours >= MAX_DETOURS:  # several different wrong turns: ask for help
+                    task.fail_streak = max(task.fail_streak, 2)
             elif ok:  # the same detour again: no progress, so it counts as a failure
                 task.failed.add(prev.get("index"))
                 task.fail_streak += 1
@@ -236,7 +239,7 @@ class Controller:
         except ThinkerError as e:
             return self._end(task, {"op": "blocked", "why": "%s; the planner could not help: %s" % (reason, e),
                                     "source": "engine"})
-        task.fail_streak = 0
+        task.fail_streak, task.detours = 0, 0
         if r["kind"] == "pick":
             el = next((e for e in cands if e["i"] == r["index"]), None)
             if el is None:

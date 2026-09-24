@@ -38,6 +38,8 @@ thinker/             # planners behind one interface: Claude (Haiku default, laz
 extension/           # Chrome MV3: content.js element table, background.js loop + chrome.debugger input, side panel
 bench/               # offline agent benchmark: pages/, tasks.jsonl, run.mjs (Playwright + real extension)
 app/systemone.py     # Jev/Laya /v1/systemone wire format, validated
+model/browser/       # browser training: convert_mind2web (steps -> runtime questions), split_browser (by site),
+                     #   evaluate_browser (gate B3). Use LAYA_DATA_DIR=data/browser, LAYA_MODEL_OUT=model/browser-run
 tests/               # fake-worker tests + measure_app.py (the G2/G5 measurement); tests/agent/ for the agent
 reports/             # measured gate results; DECISIONS.md explains the choices
 ```
