@@ -66,8 +66,15 @@
     return squash(el.placeholder || el.innerText || el.title || el.alt || el.getAttribute("name") || "");
   }
 
-  function valueOf(el, role) {
-    if (el.type === "password") return el.value ? "(filled)" : "";
+  // Secrets never leave the page: passwords, card data, one-time codes, ID numbers.
+  const SENSITIVE = /card|cvv|cvc|expiry|otp|one.time|pin\b|iban|account.number|ssn|aadhaar|pan\b/i;
+  function isSensitive(el, name) {
+    const ac = el.getAttribute("autocomplete") || "";
+    return el.type === "password" || ac.startsWith("cc-") || ac === "one-time-code" || SENSITIVE.test(name + " " + ac);
+  }
+
+  function valueOf(el, role, name) {
+    if (isSensitive(el, name)) return (el.value || el.innerText || "").trim() ? "(filled)" : "";
     if (role === "checkbox" || role === "radio" || role === "switch")
       return (el.checked ?? el.getAttribute("aria-checked") === "true") ? "checked" : "unchecked";
     if (el.tagName === "SELECT") return squash(el.selectedOptions[0]?.text || "");
@@ -108,7 +115,7 @@
       const name = nameOf(el);
       const key = role + "|" + name;
       nextSeen.add(key);
-      const row = { i: els.length, role, name, value: valueOf(el, role), region: regionOf(el) };
+      const row = { i: els.length, role, name, value: valueOf(el, role, name), region: regionOf(el) };
       if (disabled(el)) row.disabled = true;
       if (el.type === "password") row.type = "password";
       if (el.type === "submit" || (el.tagName === "BUTTON" && el.type === "submit" && el.form)) {

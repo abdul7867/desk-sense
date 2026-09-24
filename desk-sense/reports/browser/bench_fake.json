@@ -3,7 +3,7 @@
   "runs": 3,
   "measured_on": "dev container, 4 vCPU, 15 GB RAM, Linux, headless Chromium, fake model",
   "success": "15/15",
-  "median_seconds": 0.897,
+  "median_seconds": 0.852,
   "results": [
     {
       "task": "flights",
@@ -11,7 +11,7 @@
       "success": true,
       "end": "finish",
       "why": "all steps done",
-      "seconds": 1.089,
+      "seconds": 1.081,
       "steps": 6,
       "sources": {
         "fastpath": 5,
@@ -25,7 +25,7 @@
       "success": true,
       "end": "finish",
       "why": "all steps done",
-      "seconds": 1.064,
+      "seconds": 1.068,
       "steps": 6,
       "sources": {
         "fastpath": 5,
@@ -39,7 +39,7 @@
       "success": true,
       "end": "finish",
       "why": "all steps done",
-      "seconds": 1.069,
+      "seconds": 1.01,
       "steps": 6,
       "sources": {
         "fastpath": 5,
@@ -53,7 +53,7 @@
       "success": true,
       "end": "finish",
       "why": "all steps done",
-      "seconds": 1.28,
+      "seconds": 1.279,
       "steps": 7,
       "sources": {
         "fastpath": 6,
@@ -69,7 +69,7 @@
       "success": true,
       "end": "finish",
       "why": "all steps done",
-      "seconds": 1.287,
+      "seconds": 1.282,
       "steps": 7,
       "sources": {
         "fastpath": 6,
@@ -85,7 +85,7 @@
       "success": true,
       "end": "finish",
       "why": "all steps done",
-      "seconds": 1.281,
+      "seconds": 1.27,
       "steps": 7,
       "sources": {
         "fastpath": 6,
@@ -98,6 +98,20 @@
     {
       "task": "settings",
       "run": 1,
+      "success": true,
+      "end": "finish",
+      "why": "all steps done",
+      "seconds": 0.69,
+      "steps": 4,
+      "sources": {
+        "fastpath": 3,
+        "engine": 1
+      },
+      "asked": []
+    },
+    {
+      "task": "settings",
+      "run": 2,
       "success": true,
       "end": "finish",
       "why": "all steps done",
@@ -111,25 +125,11 @@
     },
     {
       "task": "settings",
-      "run": 2,
-      "success": true,
-      "end": "finish",
-      "why": "all steps done",
-      "seconds": 0.691,
-      "steps": 4,
-      "sources": {
-        "fastpath": 3,
-        "engine": 1
-      },
-      "asked": []
-    },
-    {
-      "task": "settings",
       "run": 3,
       "success": true,
       "end": "finish",
       "why": "all steps done",
-      "seconds": 0.689,
+      "seconds": 0.688,
       "steps": 4,
       "sources": {
         "fastpath": 3,
@@ -157,7 +157,7 @@
       "success": true,
       "end": "finish",
       "why": "all steps done",
-      "seconds": 0.897,
+      "seconds": 0.852,
       "steps": 5,
       "sources": {
         "fastpath": 4,
@@ -171,7 +171,7 @@
       "success": true,
       "end": "finish",
       "why": "all steps done",
-      "seconds": 0.9,
+      "seconds": 0.902,
       "steps": 5,
       "sources": {
         "fastpath": 4,
@@ -185,7 +185,7 @@
       "success": true,
       "end": "stop",
       "why": "you declined the action",
-      "seconds": 0.639,
+      "seconds": 0.637,
       "steps": 4,
       "sources": {
         "fastpath": 3,
@@ -202,7 +202,7 @@
       "success": true,
       "end": "stop",
       "why": "you declined the action",
-      "seconds": 0.648,
+      "seconds": 0.657,
       "steps": 4,
       "sources": {
         "fastpath": 3,
@@ -219,7 +219,7 @@
       "success": true,
       "end": "stop",
       "why": "you declined the action",
-      "seconds": 0.641,
+      "seconds": 0.649,
       "steps": 4,
       "sources": {
         "fastpath": 3,

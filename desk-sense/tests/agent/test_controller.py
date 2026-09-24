@@ -172,6 +172,22 @@ def test_a_detour_click_does_not_complete_the_step(make_ctl):
     assert task.cursor == 0
 
 
+def test_card_numbers_never_reach_the_thinker_or_the_log(make_ctl, tmp_path):
+    seen = []
+
+    def spy(state, candidates, reason):
+        seen.append(json.dumps(candidates))
+        return {"kind": "ask_user", "message": "?"}
+
+    page = {"host": "shop.example", "title": "Pay", "elements": [
+        el(1, "textbox", "Card number", value="4111 1111 1111 1111"), el(2, "button", "ស្វែងរក")]}
+    ctl, _, _, log = make_ctl(plans=[{"op": "click", "target": "search"}], script=spy)
+    ctl.start("go", None, page)
+    log.flush()
+    logged = json.dumps(sqlite3.connect(str(tmp_path / "steps.db")).execute("SELECT * FROM steps").fetchall())
+    assert seen and all("4111" not in s for s in seen) and "4111" not in logged
+
+
 def test_steps_are_logged_for_training(make_ctl, tmp_path):
     ctl, _, _, log = make_ctl(plans=[{"op": "click", "target": "search button"}])
     ctl.start("go", None, flights_page())

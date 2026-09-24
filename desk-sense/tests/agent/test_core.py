@@ -104,9 +104,28 @@ def test_dialog_breaks_a_tie():
     (el(1, "textbox", "Card number"), "type", None, "card"),
     (el(1, "button", "Next", type="submit", form_host="evil.example"), "click", None, "another site"),
     (el(1, "button", "Next"), "click", {"irreversible": True}, "irreversible"),
+    (el(1, "select", "Bulk action"), ("select", "Delete selected"), None, "buys"),
+    (el(1, "select", "Card expiry month"), ("select", "04"), None, "card"),
+    (el(1, "textbox", "Code", autocomplete="one-time-code"), "type", None, "card"),
 ])
 def test_risky_actions_need_confirmation(element, action, sub, expect):
-    assert expect in safety.risky({"op": action}, element, sub, PAGE)
+    op, value = action if isinstance(action, tuple) else (action, None)
+    assert expect in safety.risky({"op": op, "value": value}, element, sub, PAGE)
+
+
+def test_ordinary_select_passes():
+    assert safety.risky({"op": "select", "value": "Hindi"}, el(1, "select", "Language"), None, PAGE) is None
+
+
+def test_redact_masks_secrets_only():
+    page = dict(PAGE, elements=[el(1, "textbox", "Card number", value="4111 1111 1111 1111"),
+                                el(2, "textbox", "OTP", value="123456"),
+                                el(3, "textbox", "Security code", autocomplete="cc-csc", value="999"),
+                                el(4, "textbox", "Password", type="password", value=""),
+                                el(5, "textbox", "City", value="Pune")])
+    values = [e["value"] for e in safety.redact(page)["elements"]]
+    assert values == ["(filled)", "(filled)", "(filled)", "", "Pune"]
+    assert page["elements"][0]["value"] == "4111 1111 1111 1111"  # the caller's copy is untouched
 
 
 @pytest.mark.parametrize("element, action", [

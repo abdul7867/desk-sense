@@ -61,6 +61,7 @@ class Controller:
     # public -------------------------------------------------------------------
 
     def start(self, goal, sites, page):
+        page = safety.redact(page)
         g = guard.check_fields([goal], self.allowed)
         if not g.ok:
             return {"op": "refused", "why": g.message}
@@ -84,7 +85,9 @@ class Controller:
         return dict(action, task=tid, plan=task.subgoals)
 
     def step(self, tid, page, last=None):
-        task = self.tasks.get(tid)
+        page = safety.redact(page)
+        with self._lock:
+            task = self.tasks.get(tid)
         if task is None:
             return {"op": "blocked", "why": "unknown task %r" % tid}
         with task.lock:
@@ -98,6 +101,9 @@ class Controller:
     def stop(self, tid):
         with self._lock:
             task = self.tasks.pop(tid, None)
+        if task is not None:
+            with task.lock:
+                task.over = True
         return {"op": "stop", "task": tid, "existed": task is not None}
 
     # step logic ---------------------------------------------------------------
