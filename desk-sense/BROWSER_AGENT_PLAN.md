@@ -77,8 +77,9 @@ Chrome side panel (goal) ─► extension ──fetch 127.0.0.1──► engine 
   - `compose(field, context)` → text to type.
 - **Claude provider** (`thinker/anthropic_provider.py`): official `anthropic` SDK.
   - Structured output via pydantic schemas.
-  - Model is a config value. Default is the latest capable model (`claude-opus-5-5`); a faster or cheaper model is chosen
-    only after benchmarking.
+  - Model is a config value (`THINKER_MODEL`). Default is **Claude Haiku 4.5** (`claude-haiku-4-5`), the fastest
+    and cheapest, chosen by the owner. Models that take an effort level run at `THINKER_EFFORT` (default `low`,
+    `medium` if the benchmark shows it's needed).
   - Cached fixed system prompt, 20 s timeout, one retry.
 - **Test provider:** `thinker/fake.py`, a scripted provider for tests. OpenRouter or a local model can be added later behind
   the same interface.

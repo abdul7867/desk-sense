@@ -1,0 +1,4 @@
+# Browser agent thinker (supervisor process only, never the worker). Optional: the engine and the
+# local model run without it; install to let Claude plan tasks and settle hard steps.
+anthropic==1.8.0
+pydantic==2.13.5
