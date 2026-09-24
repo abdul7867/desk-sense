@@ -53,13 +53,13 @@ def main():
     ap.add_argument("--threads", type=int, default=2)
     ap.add_argument("--fake", action="store_true", help="fake model (deterministic: picks the ranker's top)")
     ap.add_argument("--thinker", default="claude", help="claude (default) or fake")
-    ap.add_argument("--thinker-script", help="fake thinker only: JSON file {goal: [subgoal, ...]}")
+    ap.add_argument("--thinker-script", help='fake thinker only: JSON {"plans": {goal: [subgoal]}, "texts": {field: text}}')
     ap.add_argument("--extension-id", action="append", default=[], help="Chrome extension id allowed to call")
     args = ap.parse_args()
 
     token = os.environ.get("DESK_SENSE_TOKEN") or secrets.token_urlsafe(24)
     sup = Supervisor(args.db, bundle=args.bundle, fake=args.fake, fake_policy="first", threads=args.threads)
-    cfg = {"plans": json.loads(Path(args.thinker_script).read_text(encoding="utf-8"))} if args.thinker_script else {}
+    cfg = json.loads(Path(args.thinker_script).read_text(encoding="utf-8")) if args.thinker_script else {}
     Path(args.steps_db).parent.mkdir(parents=True, exist_ok=True)
     steplog = StepLog(args.steps_db)
     ctl = Controller(sup, lambda: thinker.make(args.thinker, **cfg), steplog,

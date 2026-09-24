@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Kettle shop</title>
+<style>body{font:15px system-ui;margin:24px;max-width:640px}</style>
+</head><body>
+<h1>Blue kettle</h1><p>₹1,499 · 1.5 litre</p>
+<button id="add">Add to cart</button> <span id="count">Cart: 0</span>
+<p><button id="checkout">Checkout</button></p>
+<section id="pay" hidden><h2>Payment</h2><p>Total ₹1,499</p><button id="paynow">Pay now</button></section>
+<script>
+window.__bench = { cart: 0, checkout: false, paid: false };
+document.getElementById("add").onclick = () => { window.__bench.cart++; document.getElementById("count").textContent = "Cart: " + window.__bench.cart; };
+document.getElementById("checkout").onclick = () => {
+  if (!window.__bench.cart) return;
+  window.__bench.checkout = true; document.getElementById("pay").hidden = false;
+};
+document.getElementById("paynow").onclick = () => { window.__bench.paid = true; };
+</script>
+</body></html>

@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Find flights</title>
+<style>body{font:15px system-ui;margin:24px;max-width:640px}label{display:block;margin:12px 0}ul{list-style:none;padding:0;border:1px solid #ccc;margin:0}li{padding:6px;cursor:pointer}li:hover{background:#eef}</style>
+</head><body>
+<header><a href="#">Home</a> <a href="#">Deals</a> <a href="#">Help</a></header>
+<h1>Find flights</h1>
+<form id="f" onsubmit="return false">
+  <label>From <input id="from" autocomplete="off"></label><ul id="from-list" role="listbox" hidden></ul>
+  <label>To <input id="to" autocomplete="off"></label><ul id="to-list" role="listbox" hidden></ul>
+  <button id="search" type="button">Search flights</button> <button type="button">Search hotels</button>
+</form>
+<section id="results" hidden><h2>Results</h2><p id="summary"></p></section>
+<script>
+const AIRPORTS = ["Zurich (ZRH)", "Zagreb (ZAG)", "London Heathrow (LHR)", "London Gatwick (LGW)", "Lisbon (LIS)"];
+window.__bench = { from: null, to: null, searched: false, untrusted: 0 };
+function wire(field) {
+  const input = document.getElementById(field), list = document.getElementById(field + "-list");
+  input.addEventListener("input", () => {
+    const q = input.value.trim().toLowerCase();
+    window.__bench[field] = null;
+    list.replaceChildren(...AIRPORTS.filter(a => q && a.toLowerCase().startsWith(q)).map(a => {
+      const li = document.createElement("li"); li.setAttribute("role", "option"); li.textContent = a;
+      li.addEventListener("click", () => { input.value = a; window.__bench[field] = a.slice(-4, -1); list.hidden = true; });
+      return li;
+    }));
+    list.hidden = !list.children.length;
+  });
+}
+wire("from"); wire("to");
+document.getElementById("search").addEventListener("click", (e) => {
+  if (!e.isTrusted) { window.__bench.untrusted++; return; } // like sites that reject scripted clicks
+  if (!window.__bench.from || !window.__bench.to) return;
+  window.__bench.searched = true;
+  document.getElementById("summary").textContent = `3 flights ${window.__bench.from} → ${window.__bench.to}`;
+  document.getElementById("results").hidden = false;
+});
+</script>
+</body></html>

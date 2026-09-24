@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Our offices</title>
+<style>body{font:15px system-ui;margin:24px;max-width:640px}li{height:64px;line-height:64px;border-bottom:1px solid #eee}</style>
+</head><body>
+<h1>Our offices</h1>
+<ul id="list"></ul>
+<section id="detail" hidden><h2 id="city"></h2><p>Open 9–6, Monday to Friday.</p></section>
+<script>
+const CITIES = ["Delhi", "Mumbai", "Chennai", "Kolkata", "Bengaluru", "Hyderabad", "Ahmedabad", "Jaipur", "Lucknow",
+  "Kanpur", "Nagpur", "Indore", "Bhopal", "Patna", "Vadodara", "Ludhiana", "Agra", "Nashik", "Faridabad", "Meerut",
+  "Rajkot", "Varanasi", "Srinagar", "Amritsar", "Ranchi", "Jodhpur", "Raipur", "Kota", "Guwahati", "Chandigarh",
+  "Mysuru", "Kochi", "Dehradun", "Surat", "Madurai", "Coimbatore", "Visakhapatnam", "Thane", "Noida", "Pune"];
+window.__bench = { opened: null };
+document.getElementById("list").replaceChildren(...CITIES.map((c) => {
+  const li = document.createElement("li"), a = document.createElement("a");
+  a.href = "#" + c.toLowerCase(); a.textContent = c + " office";
+  a.onclick = () => { window.__bench.opened = c; document.getElementById("city").textContent = c;
+                      document.getElementById("detail").hidden = false; };
+  li.append(a); return li;
+}));
+</script>
+</body></html>

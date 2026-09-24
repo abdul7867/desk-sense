@@ -115,8 +115,30 @@ Each is measured, and each has a row in `DECISIONS.md`.
 4. Day 5 on the 4 GB machine: `tests.measure_app`, then decide the input cap for G5.
 5. Day 7: `pytest -m day7 --run-day7`, once.
 
+## Browser agent (second use of the same engine)
+
+A local, Jev-style agent that drives your own Chrome. For each step the local model picks the next
+action from a shortlist of the page's elements, and obvious steps skip the model entirely. Claude
+(Haiku 4.5 by default) plans the task and handles hard steps, about 2 calls per task. Buying,
+paying, sending or deleting always waits for your OK. Plan and gates: [`BROWSER_AGENT_PLAN.md`](BROWSER_AGENT_PLAN.md).
+
+```bash
+pip install -r requirements-runtime.txt -r requirements-browser.txt
+export ANTHROPIC_API_KEY=...                       # or `ant auth login`
+python -m browser.serve --extension-id <id>        # prints a pairing token
+# Chrome → chrome://extensions → Developer mode → Load unpacked → desk-sense/extension
+# Open the side panel, paste the token, type a goal, press Start.
+
+node bench/run.mjs --runs 3                        # offline bench (fake model): 15/15, gate B1
+python -m browser.serve --fake --thinker fake      # engine without model or API key
+```
+
+Status: plumbing gate **B1 passes**. The model has not been fine-tuned on browser steps yet (B3), so
+real steps rely on fast paths and Claude. Speed and RAM gates B4/B5 need a model build and the 4 GB PC.
+
 ## Layout
 
-`app/` runtime (no torch) · `model/` build pipeline · `tests/` · `reports/` measured results ·
+`app/` runtime (no torch) · `model/` build pipeline · `browser/` agent loop · `thinker/` Claude and
+other planners · `extension/` Chrome MV3 extension · `bench/` offline agent benchmark · `tests/` · `reports/` measured results ·
 `schema.json` the use case · `data/` gitignored (real text never goes in git) · model binaries gitignored,
 rebuilt from the pinned checkpoint (`model/pin.py`).

@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>desk-sense agent</title>
+<link rel="stylesheet" href="sidepanel.css">
+</head>
+<body>
+<header><h1>desk-sense agent</h1><span id="status" class="pill">idle</span></header>
+
+<details id="pairing">
+  <summary>Engine</summary>
+  <label>Engine URL <input id="engineUrl" value="http://127.0.0.1:8765"></label>
+  <label>Pairing token <input id="token" type="password" autocomplete="off"></label>
+  <button id="save" type="button">Save</button>
+</details>
+
+<form id="task">
+  <label>What should I do on this page?
+    <textarea id="goal" rows="3" placeholder="e.g. search flights from Zurich to London on 12 Oct" required></textarea>
+  </label>
+  <label>Allowed sites <input id="sites" placeholder="this site only"></label>
+  <div class="row"><button id="start" type="submit">Start</button><button id="stop" type="button">Stop</button></div>
+</form>
+
+<section id="confirm" hidden>
+  <p><strong>Check before I continue:</strong> <span id="confirmReason"></span></p>
+  <p id="confirmAction" class="muted"></p>
+  <div class="row"><button id="allow" type="button">Do it</button><button id="decline" type="button">Don't</button></div>
+</section>
+
+<ol id="log"></ol>
+<script src="sidepanel.js"></script>
+</body>
+</html>

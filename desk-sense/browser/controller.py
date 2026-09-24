@@ -91,7 +91,7 @@ class Controller:
             if task.over:
                 return {"op": "finish", "why": "task already ended"}
             if last and last.get("declined"):
-                return self._end(task, {"op": "stop", "why": "you declined the action"})
+                return self._end(task, {"op": "stop", "why": "you declined the action", "source": "engine"})
             self._absorb(task, last or {})
             return dict(self._next(task, page), task=tid)
 
@@ -197,8 +197,12 @@ class Controller:
 
     def _target(self, task, page, sub, el, source, depth, meta=None, value=None):
         op = question.op_for(el)
+        fits = op == sub["op"] or (sub["op"] == "select" and op == "click")
+        want = rank.words(sub.get("target"))
+        # A step is done only when its own target was acted on; any other click is a detour.
+        on_target = source == "thinker" or not want or bool(want & (rank.words(el.get("name")) | rank.words(el.get("value"))))
         a = {"op": op, "index": el["i"], "name": question.clean(el.get("name"), 40), "source": source,
-             "advance": op == sub["op"] or (sub["op"] == "select" and op == "click")}
+             "advance": fits and on_target}
         if op in ("type", "select"):
             a["value"] = value if value is not None else sub.get("value")
             if op == "type" and a["value"] is None:

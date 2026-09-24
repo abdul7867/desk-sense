@@ -32,7 +32,13 @@ model/               # BUILD. torch allowed.
   trim/ export/ quantize/ calibrate/ finetune/   # pipeline steps, each runnable alone
   build_model.py     # runs them in the fixed order and fails loudly
   data.py evaluate.py
-tests/               # fake-worker tests + measure_app.py (the G2/G5 measurement)
+browser/             # AGENT (supervisor process): controller loop, rank shortlist, fastpath, safety,
+                     #   question (one Choice per step), steplog (training data), serve.py (entry point)
+thinker/             # planners behind one interface: Claude (Haiku default, lazy SDK import), scripted fake
+extension/           # Chrome MV3: content.js element table, background.js loop + chrome.debugger input, side panel
+bench/               # offline agent benchmark: pages/, tasks.jsonl, run.mjs (Playwright + real extension)
+app/systemone.py     # Jev/Laya /v1/systemone wire format, validated
+tests/               # fake-worker tests + measure_app.py (the G2/G5 measurement); tests/agent/ for the agent
 reports/             # measured gate results; DECISIONS.md explains the choices
 ```
 
@@ -67,6 +73,15 @@ reports/             # measured gate results; DECISIONS.md explains the choices
 - Vocabulary trim stage A (script) is lossless and always on. Stage B needs a real-text corpus; a
   merge-rank cap looked fine on memory and destroyed accuracy.
 - Zone confidence is the top calibrated probability, not laya's entropy `confidence`.
+
+## Browser agent data flow
+
+1. The extension reads the page (numbered element table) and posts it to `/v1/agent/start|step`.
+2. `browser/controller.py`: allowlist → `fastpath` (no model) → `rank.shortlist` (top 12) → one
+   `Supervisor.decide` call (no SQLite-first, no replay, `strict` options) → thinker only on flag,
+   two failures, unreadable labels or text to write → `safety.risky` on every action.
+3. The extension performs the action with `chrome.debugger` input, reports `{ok, changed}`, repeats.
+   Risky actions come back with `confirm` and wait for the person.
 
 ## Known rough edges
 

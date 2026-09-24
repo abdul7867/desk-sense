@@ -1,0 +1,12 @@
+{
+  "manifest_version": 3,
+  "name": "desk-sense browser agent",
+  "version": "0.1.0",
+  "description": "Fast local browser agent: a small on-device model picks each step, Claude plans.",
+  "permissions": ["debugger", "scripting", "tabs", "storage", "sidePanel"],
+  "host_permissions": ["http://127.0.0.1/*", "http://localhost/*"],
+  "optional_host_permissions": ["https://*/*", "http://*/*"],
+  "background": { "service_worker": "background.js" },
+  "side_panel": { "default_path": "sidepanel.html" },
+  "action": { "default_title": "desk-sense agent" }
+}

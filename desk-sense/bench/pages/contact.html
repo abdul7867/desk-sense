@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Contact support</title>
+<style>body{font:15px system-ui;margin:24px;max-width:640px}label{display:block;margin:12px 0}input,select,textarea{display:block;width:100%}
+dialog{border:1px solid #888;padding:16px}</style>
+</head><body>
+<dialog id="cookies" open aria-modal="true"><p>We use cookies to run this site.</p>
+  <button id="accept">Accept all</button> <button id="reject">Reject</button></dialog>
+<h1>Contact support</h1>
+<form id="f">
+  <label>Name <input id="name"></label>
+  <label>Email <input id="email" type="email"></label>
+  <label>Topic <select id="topic"><option value="">Choose…</option><option value="billing">Billing</option>
+    <option value="tech">Technical problem</option><option value="other">Something else</option></select></label>
+  <label>Message <textarea id="message" rows="4"></textarea></label>
+  <button type="submit">Send message</button>
+</form>
+<p id="thanks" hidden>Thanks, we got your message.</p>
+<script>
+window.__bench = { cookies: null, submitted: null };
+const dlg = document.getElementById("cookies");
+document.getElementById("accept").onclick = () => { window.__bench.cookies = "accepted"; dlg.close(); };
+document.getElementById("reject").onclick = () => { window.__bench.cookies = "rejected"; dlg.close(); };
+document.getElementById("f").addEventListener("submit", (e) => {
+  e.preventDefault();
+  if (dlg.open) return;
+  const v = (id) => document.getElementById(id).value;
+  window.__bench.submitted = { name: v("name"), email: v("email"), topic: v("topic"), message: v("message") };
+  document.getElementById("thanks").hidden = false;
+});
+</script>
+</body></html>

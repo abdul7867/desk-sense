@@ -35,4 +35,8 @@ def decide(elements, subgoal, page, failed=()):
                 and want <= words(el.get("name"))]
         if len(sugg) == 1:
             return {"op": "click", "index": sugg[0]["i"], "why": "single matching suggestion"}
+    want = words(subgoal.get("target"))
+    if want and page.get("more_below") and not any(
+            want <= (words(el.get("name")) | words(el.get("placeholder"))) for el in elements if usable(el)):
+        return {"op": "scroll", "why": "target not on screen yet"}  # cheap and reversible, unlike a wrong click
     return None

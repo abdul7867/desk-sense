@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Account settings</title>
+<style>body{font:15px system-ui;margin:24px;max-width:640px}label{display:block;margin:12px 0}</style>
+</head><body>
+<nav><a href="#">Profile</a> <a href="#">Security</a> <a href="#">Billing</a></nav>
+<h1>Settings</h1>
+<label><input type="checkbox" id="email" checked> Email notifications</label>
+<label><input type="checkbox" id="sms"> SMS alerts</label>
+<label>Language <select id="lang"><option value="en">English</option><option value="hi">Hindi</option><option value="ta">Tamil</option></select></label>
+<button id="save">Save changes</button> <button>Reset to defaults</button>
+<p id="saved" role="status" hidden>Saved.</p>
+<script>
+window.__bench = { saved: null };
+document.getElementById("save").onclick = () => {
+  window.__bench.saved = { email: document.getElementById("email").checked, sms: document.getElementById("sms").checked,
+                           lang: document.getElementById("lang").value };
+  document.getElementById("saved").hidden = false;
+};
+</script>
+</body></html>

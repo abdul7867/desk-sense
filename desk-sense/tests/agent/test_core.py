@@ -84,6 +84,13 @@ def test_fastpath_waits_and_picks_single_suggestion():
     assert fastpath.decide(sugg, {"op": "click", "target": "London"}, PAGE)["index"] == 7
 
 
+def test_fastpath_scrolls_when_target_is_off_screen():
+    sub = {"op": "click", "target": "Pune office"}
+    assert fastpath.decide(TABLE, sub, dict(PAGE, more_below=True))["op"] == "scroll"
+    assert fastpath.decide(TABLE, sub, PAGE) is None  # bottom of the page: let the model judge wording
+    assert fastpath.decide(TABLE, {"op": "click", "target": "Search"}, dict(PAGE, more_below=True)) is None
+
+
 def test_dialog_breaks_a_tie():
     dup = [el(1, "button", "Accept"), el(2, "button", "Accept", region="dialog")]
     assert fastpath.decide(dup, {"op": "click", "target": "Accept"}, PAGE)["index"] == 2

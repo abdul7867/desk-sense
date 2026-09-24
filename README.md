@@ -91,6 +91,7 @@ One command (`model/build_model.py`) runs it and stops if any step costs more th
 | Path | What it is |
 |---|---|
 | [`desk-sense/`](desk-sense/) | The app: runtime, model pipeline, tests, reports ([app README](desk-sense/README.md)) |
+| [`desk-sense/BROWSER_AGENT_PLAN.md`](desk-sense/BROWSER_AGENT_PLAN.md) | A local, Jev-style browser agent on the same engine: `browser/`, `thinker/`, `extension/`, `bench/`. Plumbing gate B1 passes |
 | `claude/`, `install.sh`, `profiles/`, `templates/` | **Tokensaver**, the Claude Code setup this was built with ([docs/TOKENSAVER.md](docs/TOKENSAVER.md)) |
 | `docs/` | Tokensaver documentation: measuring, memory, research |
 | [`docs/claude-in-chrome.md`](docs/claude-in-chrome.md) | Making Claude in Chrome faster on a 4 GB PC: speed shortcut, settings, low-RAM Chrome setup |

@@ -159,6 +159,19 @@ def test_thinker_budget_ends_task_as_blocked(make_ctl):
     assert a["op"] == "blocked"
 
 
+def test_a_detour_click_does_not_complete_the_step(make_ctl):
+    """Regression: the fallback click on 'Checkout' was counted as finishing 'Add to cart'."""
+    page = {"host": "shop.example", "title": "Kettle", "elements": [el(0, "button", "Add to cart"),
+                                                                     el(1, "button", "Checkout")]}
+    ctl, _, _, _ = make_ctl(plans=[{"op": "click", "target": "Add to cart"}, {"op": "click", "target": "Checkout"}])
+    a = ctl.start("go", None, page)
+    assert a["index"] == 0 and a["advance"] is True
+    a = ctl.step(a["task"], page, {"ok": True, "changed": False})  # nothing happened: try another way
+    assert a["index"] == 1 and a["advance"] is False
+    task = ctl.tasks[a["task"]]
+    assert task.cursor == 0
+
+
 def test_steps_are_logged_for_training(make_ctl, tmp_path):
     ctl, _, _, log = make_ctl(plans=[{"op": "click", "target": "search button"}])
     ctl.start("go", None, flights_page())
