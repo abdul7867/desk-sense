@@ -30,7 +30,7 @@ def items_for(agent, rows, questions, max_len):
     head = agent.cfg.get("head_max_len", 192)
     out = []
     for r in rows:
-        for qid, qdef in questions.items():
+        for qid, qdef in (r.get("questions") or questions).items():
             y = target_index(qdef, r["labels"].get(qid))
             if y is None:
                 continue

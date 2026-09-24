@@ -29,15 +29,21 @@ def ece(conf, correct, bins=ECE_BINS):
     return float(total)
 
 
+def row_questions(r, questions):
+    """Tickets share the schema's questions; a browser step carries its own (its options are the page)."""
+    return r.get("questions") or questions
+
+
 def predictions(prob_fn, rows, questions):
-    """prob_fn(state, questions) -> {qid: probs}. Yields (row, qid, probs, target)."""
+    """prob_fn(state, questions) -> {qid: probs}. Yields (row, qid, qtype, probs, target)."""
     for r in rows:
-        qs = {q: questions[q] for q in questions if target_index(questions[q], r["labels"].get(q)) is not None}
+        rq = row_questions(r, questions)
+        qs = {q: rq[q] for q in rq if target_index(rq[q], r["labels"].get(q)) is not None}
         if not qs:
             continue
         probs = prob_fn(r["state"], qs)
         for qid in qs:
-            yield r, qid, np.asarray(probs[qid]), target_index(questions[qid], r["labels"][qid])
+            yield r, qid, qs[qid]["type"], np.asarray(probs[qid]), target_index(qs[qid], r["labels"][qid])
 
 
 def score(records):
@@ -58,8 +64,7 @@ def score(records):
 
 def evaluate(prob_fn, rows, questions=None, key="language"):
     questions = questions or load_schema()["questions"]
-    records = [(r.get(key, r["language"]), qid, questions[qid]["type"], p, t)
-               for r, qid, p, t in predictions(prob_fn, rows, questions)]
+    records = [(r.get(key, r["language"]), qid, qt, p, t) for r, qid, qt, p, t in predictions(prob_fn, rows, questions)]
     return score(records)
 
 
@@ -67,13 +72,19 @@ def evaluate_multi(prob_fn, rows, keys, questions=None):
     """One pass over the model, scored under several groupings (the test split is read once)."""
     questions = questions or load_schema()["questions"]
     preds = list(predictions(prob_fn, rows, questions))
-    return {k: score([(r.get(k, r["language"]), qid, questions[qid]["type"], p, t) for r, qid, p, t in preds])
-            for k in keys}
+    return {k: score([(r.get(k, r["language"]), qid, qt, p, t) for r, qid, qt, p, t in preds]) for k in keys}
 
 
 def majority_baseline(train_rows, eval_rows, questions=None):
     """G3's yardstick: always answer the most common training label."""
     questions = questions or load_schema()["questions"]
+    if any("questions" in r for r in eval_rows):
+        # Browser steps: options differ per page, so "most common label" means nothing. The yardstick
+        # is the deterministic ranker's first choice, i.e. option 0.
+        def top_of_ranker(state, qs):
+            return {qid: np.eye(len(q["criteria"]))[0] for qid, q in qs.items()}
+
+        return evaluate(top_of_ranker, eval_rows, questions)
     majority = {}
     for qid, qdef in questions.items():
         ts = [target_index(qdef, r["labels"].get(qid)) for r in train_rows]

@@ -38,7 +38,8 @@ def op_for(el):
 
 def label(el):
     """What the model sees for one element: action, role, name, and where it is."""
-    parts = [op_for(el), el.get("role", "element"), clean(el.get("name"), NAME_CHARS) or "(no name)"]
+    op, role = op_for(el), el.get("role", "element")
+    parts = [op] + ([] if role == op else [role]) + [clean(el.get("name"), NAME_CHARS) or "(no name)"]
     if el.get("value"):
         parts.append("= " + clean(el["value"], 16))
     elif op_for(el) == "type":
@@ -59,7 +60,7 @@ def build_question(candidates):
 def describe_subgoal(sub):
     if not sub:
         return "finish the task"
-    text = "%s %s" % (sub.get("op", "click"), clean(sub.get("target"), 60))
+    text = " ".join(p for p in (sub.get("op", "click"), clean(sub.get("target"), 60)) if p)
     if sub.get("value"):
         text += ' ← "%s"' % clean(sub["value"], 60)
     return text
