@@ -1,0 +1,58 @@
+{
+  "checkpoint": "model/synthetic-run/ckpt",
+  "trim": "B (corpus)",
+  "steps": {
+    "g1": {
+      "cases": 200,
+      "questions": 609,
+      "tolerance": 0.01,
+      "worst_max_prob_diff": 1.0,
+      "failures": 383,
+      "mean_max_prob_diff": 0.378732,
+      "argmax_agreement": 0.5813,
+      "decisive_questions": 532,
+      "decisive_agreement": 0.5959,
+      "token_parity_failures": 196,
+      "candidate_latency_ms_p50": 411.3,
+      "candidate_latency_ms_p95": 947.0,
+      "passed": false
+    },
+    "val_accuracy": {
+      "torch": {
+        "en": 0.9844,
+        "hi": 0.9633
+      },
+      "onnx_fp32_trimmed": {
+        "en": 0.9844,
+        "hi": 0.9633
+      },
+      "int8": {
+        "en": 0.9756,
+        "hi": 0.9673
+      }
+    },
+    "calibration": {
+      "choice": {
+        "n": 344,
+        "temperature": 1.3841,
+        "ece_before": 0.0119,
+        "ece_after": 0.0121
+      },
+      "score": {
+        "n": 172,
+        "temperature": 1.9137,
+        "ece_before": 0.0255,
+        "ece_after": 0.0287
+      },
+      "noul": {
+        "n": 344,
+        "temperature": 1.7649,
+        "ece_before": 0.0113,
+        "ece_after": 0.0053
+      }
+    }
+  },
+  "failures": [],
+  "minutes": 11.7,
+  "passed": true
+}

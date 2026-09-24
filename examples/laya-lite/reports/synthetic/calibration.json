@@ -1,0 +1,20 @@
+{
+  "choice": {
+    "n": 344,
+    "temperature": 1.3841,
+    "ece_before": 0.0119,
+    "ece_after": 0.0121
+  },
+  "score": {
+    "n": 172,
+    "temperature": 1.9137,
+    "ece_before": 0.0255,
+    "ece_after": 0.0287
+  },
+  "noul": {
+    "n": 344,
+    "temperature": 1.7649,
+    "ece_before": 0.0113,
+    "ece_after": 0.0053
+  }
+}

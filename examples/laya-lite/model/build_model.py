@@ -38,6 +38,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--checkpoint", type=Path, help="fine-tuned checkpoint; default: the pinned base model")
     ap.add_argument("--corpus", type=Path, help="real text for a stage-B vocabulary trim")
+    ap.add_argument("--add-top-merges", type=int, default=0, help="with --corpus: extra top-ranked merges kept")
     ap.add_argument("--g1-cases", type=int, default=200)
     args = ap.parse_args()
 
@@ -49,11 +50,13 @@ def main():
     import numpy as np
 
     started = time.time()
-    report = {"checkpoint": str(args.checkpoint or "base (pinned)"), "trim": "B (corpus)" if args.corpus else "A (script)",
+    report = {"checkpoint": str(args.checkpoint or "base (pinned)"), "trim": ("B (corpus + top %d merges)" % args.add_top_merges if args.add_top_merges else "B (corpus)") if args.corpus else "A (script)",
               "steps": {}, "failures": []}
     trim, fp32, int8 = ARTIFACTS / "trim", ARTIFACTS / "fp32", ARTIFACTS / "int8"
 
     trim_args = ["model.trim.trim_vocab", "--out", str(trim)] + (["--corpus", str(args.corpus)] if args.corpus else [])
+    if args.corpus and args.add_top_merges:
+        trim_args += ["--add-top-merges", str(args.add_top_merges)]
     run("trim", *trim_args)
     export_args = ["model.export.export_onnx", "--out", str(fp32), "--trim", str(trim)]
     run("export", *export_args + (["--checkpoint", str(args.checkpoint)] if args.checkpoint else []))

@@ -96,7 +96,7 @@ def lossless_on(src_path, out_json, keep_ids, lines):
     return bad
 
 
-def trim(tok_json, allowed=("latin", "devanagari"), max_merges=None, corpus=None):
+def trim(tok_json, allowed=("latin", "devanagari"), max_merges=None, corpus=None, add_top_merges=0):
     model = tok_json["model"]
     assert model["type"] == "BPE" and model.get("byte_fallback"), "expects a byte-fallback BPE tokenizer"
     vocab, merges = model["vocab"], [merge_pair(m) for m in model["merges"]]
@@ -110,8 +110,11 @@ def trim(tok_json, allowed=("latin", "devanagari"), max_merges=None, corpus=None
     if max_merges is not None:
         allowed_merges = allowed_merges[:max_merges]
     if corpus is not None:
+        # Corpus tokens, plus (optionally) the most common allowed-script merges as a safety net
+        # for words the corpus never saw.
         wanted = build_closure(corpus, merges)
-        allowed_merges = [(r, a, b) for r, a, b in allowed_merges if a + b in wanted]
+        allowed_merges = [(r, a, b) for i, (r, a, b) in enumerate(allowed_merges)
+                          if a + b in wanted or i < add_top_merges]
     kept_ranks = set()
     changed = True
     while changed:  # fixpoint: a few merges list their inputs after themselves
@@ -139,6 +142,8 @@ def main():
     ap.add_argument("--out", type=Path, default=ARTIFACTS / "trim")
     ap.add_argument("--corpus", type=Path, help="real text, one item per line (stage B)")
     ap.add_argument("--max-merges", type=int, default=None, help="corpus-free stage B fallback")
+    ap.add_argument("--add-top-merges", type=int, default=0,
+                    help="with --corpus: also keep this many top-ranked allowed merges (unseen-word safety net)")
     args = ap.parse_args()
     args.src = args.src or snapshot_dir() / "tokenizer" / "tokenizer.json"
     src = json.loads(args.src.read_text(encoding="utf-8"))
@@ -149,7 +154,7 @@ def main():
         lines = [ln for ln in args.corpus.read_text(encoding="utf-8").splitlines() if ln.strip()]
         lines += schema_lines(load_schema())
     corpus = corpus_tokens(args.src, lines) if lines else None
-    out, keep_ids = trim(src, max_merges=args.max_merges, corpus=corpus)
+    out, keep_ids = trim(src, max_merges=args.max_merges, corpus=corpus, add_top_merges=args.add_top_merges)
     if lines:
         bad = lossless_on(args.src, out, keep_ids, lines)
         if bad:
