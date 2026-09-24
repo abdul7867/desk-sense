@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Orders</title>
+<style>body{font:15px system-ui;margin:24px;max-width:720px}td,th{padding:6px 10px;text-align:left}</style>
+</head><body>
+<h1>Orders</h1>
+<label>Filter orders <input id="q" placeholder="Search by city or number"></label>
+<table><thead><tr><th>Order</th><th>City</th><th></th></tr></thead><tbody id="rows"></tbody></table>
+<p id="detail"></p>
+<script>
+const ORDERS = [["4815", "Mumbai"], ["4816", "Delhi"], ["4817", "Pune"], ["4818", "Chennai"], ["4819", "Jaipur"], ["4820", "Kochi"]];
+window.__bench = { opened: null };
+function render(q) {
+  document.getElementById("rows").replaceChildren(...ORDERS.filter(([n, c]) => !q || n.includes(q) || c.toLowerCase().includes(q.toLowerCase())).map(([n, c]) => {
+    const tr = document.createElement("tr"), b = document.createElement("button");
+    b.textContent = "Open order " + n;
+    b.onclick = () => { window.__bench.opened = n; document.getElementById("detail").textContent = "Order " + n + " to " + c; };
+    tr.innerHTML = `<td>${n}</td><td>${c}</td><td></td>`; tr.lastChild.append(b); return tr;
+  }));
+}
+document.getElementById("q").addEventListener("input", (e) => render(e.target.value));
+render("");
+</script>
+</body></html>

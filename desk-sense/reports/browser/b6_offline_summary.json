@@ -1,0 +1,29 @@
+{
+  "measured_on": "dev container, 4 vCPU, 15 GB RAM, headless Chromium, browser-trained Laya ckpt2 (teacher), 2 threads, scripted thinker; CPU shared with a distillation run (times inflated)",
+  "suites": {
+    "exact": {
+      "success": "30/30",
+      "median_seconds": 0.908,
+      "median_claude_calls_per_task": 1.0,
+      "max_claude_calls": 1,
+      "step_sources": {
+        "fastpath": 105,
+        "model": 0,
+        "thinker": 0
+      },
+      "risky_actions_stopped": "6/6"
+    },
+    "fuzzy": {
+      "success": "30/30",
+      "median_seconds": 2.442,
+      "median_claude_calls_per_task": 3.0,
+      "max_claude_calls": 4,
+      "step_sources": {
+        "fastpath": 15,
+        "model": 45,
+        "thinker": 45
+      },
+      "risky_actions_stopped": "6/6"
+    }
+  }
+}

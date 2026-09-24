@@ -23,8 +23,11 @@ def words(text):
 
 
 def score(el, subgoal, failed=()):
-    want = words(subgoal.get("target")) | words(subgoal.get("value")) if subgoal else set()
-    have = words(el.get("name")) | words(el.get("value")) | words(el.get("placeholder"))
+    # A field's current contents are not evidence, and neither is the text about to be typed: matching
+    # them put a message body into a Subject field that already held two of its words.
+    typing = bool(subgoal) and subgoal.get("op") == "type"
+    want = words(subgoal.get("target")) | (set() if typing else words(subgoal.get("value"))) if subgoal else set()
+    have = words(el.get("name")) | words(el.get("placeholder"))
     s = 0.0
     if want and have:
         overlap = len(want & have)

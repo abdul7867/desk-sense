@@ -184,3 +184,19 @@ def test_strict_refuses_instead_of_cutting_options():
         build_sequence(StubEncoder(), "state", q, 256, 64, strict=True)
     short = {"t": "choice", "ins": "pick", "crit": {"a": None, "b": None}}
     assert len(build_sequence(StubEncoder(), "state", short, 256, 64, strict=True)[1]) == 2
+
+
+@pytest.mark.parametrize("name, risky_expected", [
+    ("Place order", True), ("Place your order", True), ("Order now", True), ("Confirm order", True),
+    ("Open order 4817", False), ("Sort order", False), ("Track your order", False),
+])
+def test_order_is_risky_only_as_a_purchase(name, risky_expected):
+    assert (safety.risky({"op": "click"}, el(1, "button", name), None, PAGE) is not None) is risky_expected
+
+
+def test_typing_ignores_what_fields_already_contain():
+    """Regression: a message body went into Subject because Subject held 'Report ready'."""
+    table = [el(1, "textbox", "To", value="ravi@example.com"), el(2, "textbox", "Subject", value="Report ready"),
+             el(3, "textarea", "Message", value="")]
+    sub = {"op": "type", "target": "body", "value": "Hi Ravi, the report is ready."}
+    assert rank.shortlist(table, sub)[0]["i"] == 3

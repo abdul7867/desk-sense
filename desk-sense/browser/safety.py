@@ -7,11 +7,13 @@ from browser.rank import words
 
 RISKY_WORDS = {
     # English
-    "buy", "pay", "purchase", "order", "checkout", "delete", "remove", "send", "submit", "post", "publish",
+    "buy", "pay", "purchase", "checkout", "delete", "remove", "send", "submit", "post", "publish",
     "transfer", "confirm", "book", "subscribe", "unsubscribe", "withdraw", "donate",
     # Hindi
     "खरीदें", "ख़रीदें", "भुगतान", "भेजें", "हटाएं", "हटाएँ", "मिटाएं", "ऑर्डर", "पुष्टि", "जमा",
 }
+# Words that are risky only in a phrase: "Place order" buys, "Open order 4817" only looks.
+RISKY_PHRASES = re.compile(r"\b(place|confirm|submit|complete)\s+(your\s+)?order\b|\border\s+now\b", re.I)
 SENSITIVE_FIELDS = re.compile(r"card|cvv|cvc|expiry|otp|one.time|pin\b|iban|account.number|ssn|aadhaar|pan\b", re.I)
 SENSITIVE_TYPES = {"password"}
 MASK = "(filled)"
@@ -39,7 +41,7 @@ def risky(action, el, subgoal, page):
         return "the plan marks this step as irreversible"
     if el is None:
         return None
-    if op == "click" and words(el.get("name")) & RISKY_WORDS:
+    if op == "click" and (words(el.get("name")) & RISKY_WORDS or RISKY_PHRASES.search(el.get("name") or "")):
         return "the button looks like it buys, sends or deletes something"
     if op == "select" and (words(el.get("name")) | words(action.get("value"))) & RISKY_WORDS:
         return "the choice looks like it buys, sends or deletes something"

@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Support chat</title>
+<style>body{font:15px system-ui;margin:24px;max-width:640px}</style>
+</head><body>
+<h1>Help centre</h1>
+<chat-launcher></chat-launcher>
+<script>
+window.__bench = { chat: false };
+customElements.define("chat-launcher", class extends HTMLElement {
+  connectedCallback() {
+    const root = this.attachShadow({ mode: "open" });
+    root.innerHTML = '<button part="b">Start a chat with support</button>';
+    root.querySelector("button").onclick = () => {
+      window.__bench.chat = true;
+      document.body.insertAdjacentHTML("beforeend", '<section aria-label="Chat"><p>You are chatting with support.</p></section>');
+    };
+  }
+});
+</script>
+</body></html>

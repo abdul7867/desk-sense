@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>New message</title>
+<style>body{font:15px system-ui;margin:24px;max-width:640px}label{display:block;margin:10px 0}input,textarea{display:block;width:100%}</style>
+</head><body>
+<nav><a href="#">Inbox</a> <a href="#">Sent</a> <a href="#">Drafts</a></nav>
+<h1>New message</h1>
+<label>To <input id="to" type="email"></label>
+<label>Subject <input id="subject"></label>
+<label>Message <textarea id="body" rows="5"></textarea></label>
+<button id="send">Send</button> <button id="draft">Save draft</button>
+<script>
+window.__bench = { sent: null, draft: false };
+document.getElementById("draft").onclick = () => { window.__bench.draft = true; };
+document.getElementById("send").onclick = () => {
+  const v = (id) => document.getElementById(id).value;
+  window.__bench.sent = { to: v("to"), subject: v("subject"), body: v("body") };
+  document.body.insertAdjacentHTML("beforeend", '<p role="status">Message sent.</p>');
+};
+</script>
+</body></html>

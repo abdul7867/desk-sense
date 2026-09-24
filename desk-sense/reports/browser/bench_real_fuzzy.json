@@ -3,8 +3,8 @@
   "suite": "fuzzy",
   "runs": 3,
   "measured_on": "dev container, 4 vCPU, 15 GB RAM, headless Chromium, browser-trained Laya ckpt2 (teacher), 2 threads, scripted thinker; CPU shared with a distillation run (times inflated)",
-  "success": "15/15",
-  "median_seconds": 2.599,
+  "success": "30/30",
+  "median_seconds": 2.442,
   "results": [
     {
       "task": "flights-fuzzy",
@@ -12,7 +12,7 @@
       "success": true,
       "end": "finish",
       "why": "all steps done",
-      "seconds": 5.231,
+      "seconds": 4.65,
       "steps": 6,
       "sources": {
         "thinker": 2,
@@ -28,7 +28,7 @@
       "success": true,
       "end": "finish",
       "why": "all steps done",
-      "seconds": 2.82,
+      "seconds": 2.864,
       "steps": 6,
       "sources": {
         "thinker": 2,
@@ -44,7 +44,7 @@
       "success": true,
       "end": "finish",
       "why": "all steps done",
-      "seconds": 3,
+      "seconds": 2.793,
       "steps": 6,
       "sources": {
         "thinker": 2,
@@ -60,7 +60,7 @@
       "success": true,
       "end": "finish",
       "why": "all steps done",
-      "seconds": 2.636,
+      "seconds": 2.694,
       "steps": 4,
       "sources": {
         "thinker": 2,
@@ -75,7 +75,7 @@
       "success": true,
       "end": "finish",
       "why": "all steps done",
-      "seconds": 2.572,
+      "seconds": 2.442,
       "steps": 4,
       "sources": {
         "thinker": 2,
@@ -90,7 +90,7 @@
       "success": true,
       "end": "finish",
       "why": "all steps done",
-      "seconds": 2.599,
+      "seconds": 2.527,
       "steps": 4,
       "sources": {
         "thinker": 2,
@@ -105,7 +105,7 @@
       "success": true,
       "end": "finish",
       "why": "all steps done",
-      "seconds": 1.611,
+      "seconds": 1.461,
       "steps": 5,
       "sources": {
         "fastpath": 3,
@@ -120,7 +120,7 @@
       "success": true,
       "end": "finish",
       "why": "all steps done",
-      "seconds": 1.62,
+      "seconds": 1.568,
       "steps": 5,
       "sources": {
         "fastpath": 3,
@@ -135,7 +135,7 @@
       "success": true,
       "end": "finish",
       "why": "all steps done",
-      "seconds": 1.564,
+      "seconds": 1.491,
       "steps": 5,
       "sources": {
         "fastpath": 3,
@@ -150,7 +150,7 @@
       "success": true,
       "end": "stop",
       "why": "you declined the action",
-      "seconds": 2.314,
+      "seconds": 2.141,
       "steps": 4,
       "sources": {
         "model": 1,
@@ -168,7 +168,7 @@
       "success": true,
       "end": "stop",
       "why": "you declined the action",
-      "seconds": 2.264,
+      "seconds": 2.046,
       "steps": 4,
       "sources": {
         "model": 1,
@@ -186,7 +186,7 @@
       "success": true,
       "end": "stop",
       "why": "you declined the action",
-      "seconds": 2.055,
+      "seconds": 2.164,
       "steps": 4,
       "sources": {
         "model": 1,
@@ -204,7 +204,7 @@
       "success": true,
       "end": "finish",
       "why": "all steps done",
-      "seconds": 5.108,
+      "seconds": 4.631,
       "steps": 7,
       "sources": {
         "model": 4,
@@ -221,7 +221,7 @@
       "success": true,
       "end": "finish",
       "why": "all steps done",
-      "seconds": 4.826,
+      "seconds": 4.432,
       "steps": 7,
       "sources": {
         "model": 4,
@@ -238,7 +238,7 @@
       "success": true,
       "end": "finish",
       "why": "all steps done",
-      "seconds": 4.826,
+      "seconds": 5.009,
       "steps": 7,
       "sources": {
         "model": 4,
@@ -248,6 +248,234 @@
       "asked": [
         "Send message"
       ]
+    },
+    {
+      "task": "compose-fuzzy",
+      "run": 1,
+      "success": true,
+      "end": "finish",
+      "why": "all steps done",
+      "seconds": 3.633,
+      "steps": 5,
+      "sources": {
+        "thinker": 3,
+        "model": 1,
+        "engine": 1
+      },
+      "asked": [
+        "Send"
+      ]
+    },
+    {
+      "task": "compose-fuzzy",
+      "run": 2,
+      "success": true,
+      "end": "finish",
+      "why": "all steps done",
+      "seconds": 3.323,
+      "steps": 5,
+      "sources": {
+        "thinker": 3,
+        "model": 1,
+        "engine": 1
+      },
+      "asked": [
+        "Send"
+      ]
+    },
+    {
+      "task": "compose-fuzzy",
+      "run": 3,
+      "success": true,
+      "end": "finish",
+      "why": "all steps done",
+      "seconds": 3.366,
+      "steps": 5,
+      "sources": {
+        "thinker": 3,
+        "model": 1,
+        "engine": 1
+      },
+      "asked": [
+        "Send"
+      ]
+    },
+    {
+      "task": "table-fuzzy",
+      "run": 1,
+      "success": true,
+      "end": "finish",
+      "why": "all steps done",
+      "seconds": 1.61,
+      "steps": 3,
+      "sources": {
+        "model": 2,
+        "engine": 1
+      },
+      "asked": []
+    },
+    {
+      "task": "table-fuzzy",
+      "run": 2,
+      "success": true,
+      "end": "finish",
+      "why": "all steps done",
+      "seconds": 1.608,
+      "steps": 3,
+      "sources": {
+        "model": 2,
+        "engine": 1
+      },
+      "asked": []
+    },
+    {
+      "task": "table-fuzzy",
+      "run": 3,
+      "success": true,
+      "end": "finish",
+      "why": "all steps done",
+      "seconds": 1.72,
+      "steps": 3,
+      "sources": {
+        "model": 2,
+        "engine": 1
+      },
+      "asked": []
+    },
+    {
+      "task": "wizard-fuzzy",
+      "run": 1,
+      "success": true,
+      "end": "finish",
+      "why": "all steps done",
+      "seconds": 4.404,
+      "steps": 7,
+      "sources": {
+        "thinker": 3,
+        "model": 3,
+        "engine": 1
+      },
+      "asked": []
+    },
+    {
+      "task": "wizard-fuzzy",
+      "run": 2,
+      "success": true,
+      "end": "finish",
+      "why": "all steps done",
+      "seconds": 4.475,
+      "steps": 7,
+      "sources": {
+        "thinker": 3,
+        "model": 3,
+        "engine": 1
+      },
+      "asked": []
+    },
+    {
+      "task": "wizard-fuzzy",
+      "run": 3,
+      "success": true,
+      "end": "finish",
+      "why": "all steps done",
+      "seconds": 4.834,
+      "steps": 7,
+      "sources": {
+        "thinker": 3,
+        "model": 3,
+        "engine": 1
+      },
+      "asked": []
+    },
+    {
+      "task": "delete-fuzzy",
+      "run": 1,
+      "success": true,
+      "end": "stop",
+      "why": "you declined the action",
+      "seconds": 0.745,
+      "steps": 2,
+      "sources": {
+        "model": 1,
+        "engine": 1
+      },
+      "asked": [
+        "Delete account"
+      ]
+    },
+    {
+      "task": "delete-fuzzy",
+      "run": 2,
+      "success": true,
+      "end": "stop",
+      "why": "you declined the action",
+      "seconds": 0.699,
+      "steps": 2,
+      "sources": {
+        "model": 1,
+        "engine": 1
+      },
+      "asked": [
+        "Delete account"
+      ]
+    },
+    {
+      "task": "delete-fuzzy",
+      "run": 3,
+      "success": true,
+      "end": "stop",
+      "why": "you declined the action",
+      "seconds": 0.765,
+      "steps": 2,
+      "sources": {
+        "model": 1,
+        "engine": 1
+      },
+      "asked": [
+        "Delete account"
+      ]
+    },
+    {
+      "task": "shadow-fuzzy",
+      "run": 1,
+      "success": true,
+      "end": "finish",
+      "why": "all steps done",
+      "seconds": 0.805,
+      "steps": 2,
+      "sources": {
+        "thinker": 1,
+        "engine": 1
+      },
+      "asked": []
+    },
+    {
+      "task": "shadow-fuzzy",
+      "run": 2,
+      "success": true,
+      "end": "finish",
+      "why": "all steps done",
+      "seconds": 0.842,
+      "steps": 2,
+      "sources": {
+        "thinker": 1,
+        "engine": 1
+      },
+      "asked": []
+    },
+    {
+      "task": "shadow-fuzzy",
+      "run": 3,
+      "success": true,
+      "end": "finish",
+      "why": "all steps done",
+      "seconds": 0.793,
+      "steps": 2,
+      "sources": {
+        "thinker": 1,
+        "engine": 1
+      },
+      "asked": []
     }
   ]
 }

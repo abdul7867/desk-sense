@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Set up your workspace</title>
+<style>body{font:15px system-ui;margin:24px;max-width:640px}dialog{border:1px solid #888;padding:16px}label{display:block;margin:10px 0}</style>
+</head><body>
+<h1>Welcome</h1><button id="open">Set up workspace</button>
+<dialog id="d" aria-modal="true"><h2 id="title">Step 1 of 3</h2><div id="step"></div>
+  <button id="back">Back</button> <button id="next">Next</button></dialog>
+<script>
+window.__bench = { name: null, team: null, finished: false };
+const d = document.getElementById("d"); let step = 1;
+function show() {
+  document.getElementById("title").textContent = "Step " + step + " of 3";
+  const s = document.getElementById("step");
+  if (step === 1) s.innerHTML = '<label>Workspace name <input id="name"></label>';
+  if (step === 2) s.innerHTML = '<label>Team size <select id="team"><option>Just me</option><option>2-10</option><option>11-50</option></select></label>';
+  if (step === 3) s.innerHTML = '<p>All set.</p>';
+  document.getElementById("next").textContent = step === 3 ? "Finish" : "Next";
+}
+document.getElementById("open").onclick = () => { d.showModal(); show(); };
+document.getElementById("back").onclick = () => { if (step > 1) { step--; show(); } };
+document.getElementById("next").onclick = () => {
+  if (step === 1) window.__bench.name = document.getElementById("name").value;
+  if (step === 2) window.__bench.team = document.getElementById("team").value;
+  if (step === 3) { window.__bench.finished = true; d.close(); return; }
+  step++; show();
+};
+</script>
+</body></html>

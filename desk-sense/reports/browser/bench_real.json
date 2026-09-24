@@ -3,8 +3,8 @@
   "suite": "exact",
   "runs": 3,
   "measured_on": "dev container, 4 vCPU, 15 GB RAM, headless Chromium, browser-trained Laya ckpt2 (teacher), 2 threads, scripted thinker; CPU shared with a distillation run (times inflated)",
-  "success": "15/15",
-  "median_seconds": 0.913,
+  "success": "30/30",
+  "median_seconds": 0.908,
   "results": [
     {
       "task": "flights",
@@ -12,7 +12,7 @@
       "success": true,
       "end": "finish",
       "why": "all steps done",
-      "seconds": 1.115,
+      "seconds": 1.143,
       "steps": 6,
       "sources": {
         "fastpath": 5,
@@ -26,7 +26,7 @@
       "success": true,
       "end": "finish",
       "why": "all steps done",
-      "seconds": 1.097,
+      "seconds": 1.091,
       "steps": 6,
       "sources": {
         "fastpath": 5,
@@ -40,7 +40,7 @@
       "success": true,
       "end": "finish",
       "why": "all steps done",
-      "seconds": 1.07,
+      "seconds": 1.086,
       "steps": 6,
       "sources": {
         "fastpath": 5,
@@ -54,7 +54,7 @@
       "success": true,
       "end": "finish",
       "why": "all steps done",
-      "seconds": 1.29,
+      "seconds": 1.296,
       "steps": 7,
       "sources": {
         "fastpath": 6,
@@ -70,7 +70,7 @@
       "success": true,
       "end": "finish",
       "why": "all steps done",
-      "seconds": 1.305,
+      "seconds": 1.312,
       "steps": 7,
       "sources": {
         "fastpath": 6,
@@ -86,7 +86,7 @@
       "success": true,
       "end": "finish",
       "why": "all steps done",
-      "seconds": 1.299,
+      "seconds": 1.344,
       "steps": 7,
       "sources": {
         "fastpath": 6,
@@ -99,6 +99,34 @@
     {
       "task": "settings",
       "run": 1,
+      "success": true,
+      "end": "finish",
+      "why": "all steps done",
+      "seconds": 0.703,
+      "steps": 4,
+      "sources": {
+        "fastpath": 3,
+        "engine": 1
+      },
+      "asked": []
+    },
+    {
+      "task": "settings",
+      "run": 2,
+      "success": true,
+      "end": "finish",
+      "why": "all steps done",
+      "seconds": 0.762,
+      "steps": 4,
+      "sources": {
+        "fastpath": 3,
+        "engine": 1
+      },
+      "asked": []
+    },
+    {
+      "task": "settings",
+      "run": 3,
       "success": true,
       "end": "finish",
       "why": "all steps done",
@@ -111,40 +139,12 @@
       "asked": []
     },
     {
-      "task": "settings",
-      "run": 2,
-      "success": true,
-      "end": "finish",
-      "why": "all steps done",
-      "seconds": 0.692,
-      "steps": 4,
-      "sources": {
-        "fastpath": 3,
-        "engine": 1
-      },
-      "asked": []
-    },
-    {
-      "task": "settings",
-      "run": 3,
-      "success": true,
-      "end": "finish",
-      "why": "all steps done",
-      "seconds": 0.692,
-      "steps": 4,
-      "sources": {
-        "fastpath": 3,
-        "engine": 1
-      },
-      "asked": []
-    },
-    {
       "task": "offices",
       "run": 1,
       "success": true,
       "end": "finish",
       "why": "all steps done",
-      "seconds": 0.913,
+      "seconds": 0.923,
       "steps": 5,
       "sources": {
         "fastpath": 4,
@@ -158,7 +158,7 @@
       "success": true,
       "end": "finish",
       "why": "all steps done",
-      "seconds": 0.918,
+      "seconds": 0.956,
       "steps": 5,
       "sources": {
         "fastpath": 4,
@@ -172,7 +172,7 @@
       "success": true,
       "end": "finish",
       "why": "all steps done",
-      "seconds": 0.913,
+      "seconds": 0.908,
       "steps": 5,
       "sources": {
         "fastpath": 4,
@@ -186,7 +186,7 @@
       "success": true,
       "end": "stop",
       "why": "you declined the action",
-      "seconds": 0.659,
+      "seconds": 0.654,
       "steps": 4,
       "sources": {
         "fastpath": 3,
@@ -203,7 +203,7 @@
       "success": true,
       "end": "stop",
       "why": "you declined the action",
-      "seconds": 0.653,
+      "seconds": 0.641,
       "steps": 4,
       "sources": {
         "fastpath": 3,
@@ -220,7 +220,7 @@
       "success": true,
       "end": "stop",
       "why": "you declined the action",
-      "seconds": 0.652,
+      "seconds": 0.647,
       "steps": 4,
       "sources": {
         "fastpath": 3,
@@ -230,6 +230,228 @@
         "Checkout",
         "Pay now"
       ]
+    },
+    {
+      "task": "compose",
+      "run": 1,
+      "success": true,
+      "end": "finish",
+      "why": "all steps done",
+      "seconds": 0.986,
+      "steps": 5,
+      "sources": {
+        "fastpath": 4,
+        "engine": 1
+      },
+      "asked": [
+        "Send"
+      ]
+    },
+    {
+      "task": "compose",
+      "run": 2,
+      "success": true,
+      "end": "finish",
+      "why": "all steps done",
+      "seconds": 0.978,
+      "steps": 5,
+      "sources": {
+        "fastpath": 4,
+        "engine": 1
+      },
+      "asked": [
+        "Send"
+      ]
+    },
+    {
+      "task": "compose",
+      "run": 3,
+      "success": true,
+      "end": "finish",
+      "why": "all steps done",
+      "seconds": 0.964,
+      "steps": 5,
+      "sources": {
+        "fastpath": 4,
+        "engine": 1
+      },
+      "asked": [
+        "Send"
+      ]
+    },
+    {
+      "task": "table",
+      "run": 1,
+      "success": true,
+      "end": "finish",
+      "why": "all steps done",
+      "seconds": 0.535,
+      "steps": 3,
+      "sources": {
+        "fastpath": 2,
+        "engine": 1
+      },
+      "asked": []
+    },
+    {
+      "task": "table",
+      "run": 2,
+      "success": true,
+      "end": "finish",
+      "why": "all steps done",
+      "seconds": 0.536,
+      "steps": 3,
+      "sources": {
+        "fastpath": 2,
+        "engine": 1
+      },
+      "asked": []
+    },
+    {
+      "task": "table",
+      "run": 3,
+      "success": true,
+      "end": "finish",
+      "why": "all steps done",
+      "seconds": 0.584,
+      "steps": 3,
+      "sources": {
+        "fastpath": 2,
+        "engine": 1
+      },
+      "asked": []
+    },
+    {
+      "task": "wizard",
+      "run": 1,
+      "success": true,
+      "end": "finish",
+      "why": "all steps done",
+      "seconds": 1.226,
+      "steps": 7,
+      "sources": {
+        "fastpath": 6,
+        "engine": 1
+      },
+      "asked": []
+    },
+    {
+      "task": "wizard",
+      "run": 2,
+      "success": true,
+      "end": "finish",
+      "why": "all steps done",
+      "seconds": 1.273,
+      "steps": 7,
+      "sources": {
+        "fastpath": 6,
+        "engine": 1
+      },
+      "asked": []
+    },
+    {
+      "task": "wizard",
+      "run": 3,
+      "success": true,
+      "end": "finish",
+      "why": "all steps done",
+      "seconds": 1.228,
+      "steps": 7,
+      "sources": {
+        "fastpath": 6,
+        "engine": 1
+      },
+      "asked": []
+    },
+    {
+      "task": "delete-stops",
+      "run": 1,
+      "success": true,
+      "end": "stop",
+      "why": "you declined the action",
+      "seconds": 0.273,
+      "steps": 2,
+      "sources": {
+        "fastpath": 1,
+        "engine": 1
+      },
+      "asked": [
+        "Delete account"
+      ]
+    },
+    {
+      "task": "delete-stops",
+      "run": 2,
+      "success": true,
+      "end": "stop",
+      "why": "you declined the action",
+      "seconds": 0.276,
+      "steps": 2,
+      "sources": {
+        "fastpath": 1,
+        "engine": 1
+      },
+      "asked": [
+        "Delete account"
+      ]
+    },
+    {
+      "task": "delete-stops",
+      "run": 3,
+      "success": true,
+      "end": "stop",
+      "why": "you declined the action",
+      "seconds": 0.282,
+      "steps": 2,
+      "sources": {
+        "fastpath": 1,
+        "engine": 1
+      },
+      "asked": [
+        "Delete account"
+      ]
+    },
+    {
+      "task": "shadow",
+      "run": 1,
+      "success": true,
+      "end": "finish",
+      "why": "all steps done",
+      "seconds": 0.368,
+      "steps": 2,
+      "sources": {
+        "fastpath": 1,
+        "engine": 1
+      },
+      "asked": []
+    },
+    {
+      "task": "shadow",
+      "run": 2,
+      "success": true,
+      "end": "finish",
+      "why": "all steps done",
+      "seconds": 0.382,
+      "steps": 2,
+      "sources": {
+        "fastpath": 1,
+        "engine": 1
+      },
+      "asked": []
+    },
+    {
+      "task": "shadow",
+      "run": 3,
+      "success": true,
+      "end": "finish",
+      "why": "all steps done",
+      "seconds": 0.388,
+      "steps": 2,
+      "sources": {
+        "fastpath": 1,
+        "engine": 1
+      },
+      "asked": []
     }
   ]
 }

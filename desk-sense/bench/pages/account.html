@@ -1,0 +1,15 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Account</title>
+<style>body{font:15px system-ui;margin:24px;max-width:640px}</style>
+</head><body>
+<h1>Account</h1>
+<p>Plan: Free</p>
+<button id="export">Download my data</button>
+<h2>Danger zone</h2>
+<button id="delete">Delete account</button>
+<script>
+window.__bench = { exported: false, deleted: false };
+document.getElementById("export").onclick = () => { window.__bench.exported = true; };
+document.getElementById("delete").onclick = () => { window.__bench.deleted = true; };
+</script>
+</body></html>
