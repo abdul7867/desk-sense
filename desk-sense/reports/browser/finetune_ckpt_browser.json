@@ -1,0 +1,48 @@
+{
+  "epochs": 3,
+  "lr": 2e-05,
+  "batch": 16,
+  "train_rows": 3892,
+  "freeze_embeddings": true,
+  "minutes": 132.9,
+  "peak_rss_mb": 7020,
+  "train_items": 3892,
+  "device": "cpu",
+  "log": [
+    {
+      "epoch": 1,
+      "train_loss": 1.2193,
+      "val": {
+        "en": 0.7386
+      },
+      "minutes": 43.7
+    },
+    {
+      "epoch": 2,
+      "train_loss": 0.4528,
+      "val": {
+        "en": 0.7298
+      },
+      "minutes": 88.3
+    },
+    {
+      "epoch": 3,
+      "train_loss": 0.1496,
+      "val": {
+        "en": 0.7386
+      },
+      "minutes": 132.9
+    }
+  ],
+  "g3": {
+    "en": {
+      "model": 0.7386,
+      "majority": 0.6231,
+      "margin": 0.1155,
+      "passed": true
+    }
+  },
+  "versions": {
+    "torch": "2.14.0+cpu"
+  }
+}

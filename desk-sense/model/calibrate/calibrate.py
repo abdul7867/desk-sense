@@ -28,12 +28,13 @@ def collect(model, rows, questions):
     """{qtype: [(logits, target), ...]} from uncalibrated logits."""
     out = {name: [] for name in QTYPES}
     for r in rows:
-        qs = {q: questions[q] for q in questions if target_index(questions[q], r["labels"].get(q)) is not None}
+        rq = r.get("questions") or questions  # browser steps carry their own options
+        qs = {q: rq[q] for q in rq if target_index(rq[q], r["labels"].get(q)) is not None}
         if not qs:
             continue
         raw = model.raw(r["state"], qs)
         for qid, z in raw.items():
-            out[questions[qid]["type"]].append((z, target_index(questions[qid], r["labels"][qid])))
+            out[qs[qid]["type"]].append((z, target_index(qs[qid], r["labels"][qid])))
     return out
 
 

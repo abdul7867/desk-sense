@@ -19,3 +19,4 @@ __pycache__/
 *.tokensaver-bak
 .claude/.tokensaver-status
 model/synthetic-run/
+model/browser-run/
