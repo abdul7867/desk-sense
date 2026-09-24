@@ -50,6 +50,20 @@ def rank(elements, subgoal, failed=()):
     return sorted(pool, key=lambda el: -score(el, subgoal, failed))
 
 
+def distinct(ranked):
+    """Drop elements whose option label repeats a better-ranked one (a button and its inner span,
+    say). The model cannot tell identical labels apart, and each copy would take a shortlist slot."""
+    from browser.question import label
+
+    seen, out = set(), []
+    for el in ranked:
+        key = label(el)
+        if key not in seen:
+            seen.add(key)
+            out.append(el)
+    return out
+
+
 def shortlist(elements, subgoal, failed=(), page=0, k=SHORTLIST):
-    ranked = rank(elements, subgoal, failed)
+    ranked = distinct(rank(elements, subgoal, failed))
     return ranked[page * k: (page + 1) * k]

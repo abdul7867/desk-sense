@@ -60,6 +60,13 @@ def test_shortlist_pages_and_skips_disabled_and_failed():
     assert rank.shortlist(TABLE, {"op": "click", "target": "Search flights"}, failed={3})[0]["i"] != 3
 
 
+def test_shortlist_drops_identical_labels():
+    dup = [el(1, "button", "Boston NY"), el(2, "button", "Boston NY"), el(3, "button", "Boston MA"),
+           el(4, "button", "Boston NY", region="dialog")]
+    ids = [e["i"] for e in rank.shortlist(dup, {"op": "click", "target": "Boston NY"})]
+    assert ids.count(1) + ids.count(2) == 1 and 4 in ids and 3 in ids  # a dialog copy is a different option
+
+
 def test_words_keep_devanagari_whole():
     assert rank.words("अभी खरीदें!") == {"अभी", "खरीदें"}
 

@@ -192,8 +192,12 @@ def convert_task(task, rng_seed):
         op = OPS.get(act["operation"]["op"], "click")
         mode, sub = subgoal_for(op, act["operation"].get("value"), pos, rng)
         public = [{k2: v for k2, v in e.items() if not k2.startswith("_")} for e in els]
-        ranked = rank.rank(public, sub)
-        r = next(j for j, e in enumerate(ranked) if e["i"] == pos["i"])
+        # Same ranking as the runtime shortlist, duplicates removed. If the target was a duplicate,
+        # its kept copy (identical label, so the same thing to the model) is the answer.
+        ranked = rank.distinct(rank.rank(public, sub))
+        pos_label = question.label(next(e for e in public if e["i"] == pos["i"]))
+        r = next(j for j, e in enumerate(ranked) if question.label(e) == pos_label)
+        pos = dict(pos, i=ranked[r]["i"])
         stats["rank"].append(r)
         short = ranked[: rank.SHORTLIST]
         label = str(pos["i"]) if r < rank.SHORTLIST else "none_of_these"

@@ -1,0 +1,76 @@
+{
+  "bundle": "model/browser-run/dist",
+  "split": "val",
+  "zones": {
+    "act": 0.85,
+    "confirm": 0.6
+  },
+  "result": {
+    "all": {
+      "n": 459,
+      "accuracy": 0.7386,
+      "ranker_first_choice": 0.6231,
+      "act_coverage": 0.5969,
+      "act_precision": 0.9197,
+      "confirm_or_act_coverage": 0.7168,
+      "ece": 0.0634
+    },
+    "wording:exact": {
+      "n": 181,
+      "accuracy": 0.8232,
+      "ranker_first_choice": 0.7348,
+      "act_coverage": 0.7017,
+      "act_precision": 0.9685,
+      "confirm_or_act_coverage": 0.779,
+      "ece": 0.0646
+    },
+    "wording:partial": {
+      "n": 243,
+      "accuracy": 0.6872,
+      "ranker_first_choice": 0.6132,
+      "act_coverage": 0.5679,
+      "act_precision": 0.8768,
+      "confirm_or_act_coverage": 0.7037,
+      "ece": 0.0947
+    },
+    "wording:none": {
+      "n": 35,
+      "accuracy": 0.6571,
+      "ranker_first_choice": 0.1143,
+      "act_coverage": 0.2571,
+      "act_precision": 0.8889,
+      "confirm_or_act_coverage": 0.4857,
+      "ece": 0.2231
+    }
+  },
+  "act_threshold_sweep": {
+    "0.85": {
+      "coverage": 0.5969,
+      "precision": 0.9197
+    },
+    "0.9": {
+      "coverage": 0.5599,
+      "precision": 0.9222
+    },
+    "0.93": {
+      "coverage": 0.5054,
+      "precision": 0.9353
+    },
+    "0.95": {
+      "coverage": 0.4444,
+      "precision": 0.9363
+    },
+    "0.97": {
+      "coverage": 0.3617,
+      "precision": 0.9398
+    },
+    "0.98": {
+      "coverage": 0.2288,
+      "precision": 0.9619
+    },
+    "0.99": {
+      "coverage": 0.0261,
+      "precision": 1.0
+    }
+  }
+}

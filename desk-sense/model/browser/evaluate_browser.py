@@ -57,7 +57,15 @@ def main():
         probs[r["id"]] = np.asarray(model.probs(r["state"], {"next": q})["next"])
         if i % 100 == 0:
             print("%d/%d" % (i, len(rows)), file=sys.stderr, flush=True)
-    report = {"bundle": str(args.bundle), "split": args.split, "zones": ZONES, "result": score(rows, probs)}
+    top = np.array([probs[r["id"]].max() for r in rows])
+    right = np.array([probs[r["id"]].argmax() == r["_y"] for r in rows])
+    sweep = {}
+    for t in (0.85, 0.90, 0.93, 0.95, 0.97, 0.98, 0.99):
+        sel = top >= t
+        sweep[str(t)] = {"coverage": round(float(sel.mean()), 4),
+                         "precision": round(float(right[sel].mean()), 4) if sel.any() else None}
+    report = {"bundle": str(args.bundle), "split": args.split, "zones": ZONES, "result": score(rows, probs),
+              "act_threshold_sweep": sweep}
     out = args.out or REPORTS / ("b3_%s.json" % args.split)
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(json.dumps(report, indent=2) + "\n")
