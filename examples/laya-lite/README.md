@@ -49,7 +49,7 @@ It does **not** show real-world accuracy.
 | G3 learnability | **PASS**: en 96.7% / hi 95.1% vs ~54% baseline |
 | G2 memory, fine-tuned + 38k-token vocabulary | **PASS**: 343 MB whole app, worst case |
 | G4 on the locked test split (run once) | English **97.3%** (ECE 0.024) PASS · Hindi 84.7% but ECE **0.117** FAIL → disabled |
-| G5 | 60-minute soak in `reports/synthetic/g5_soak_60min.json`; long tickets still ~8 s p95 |
+| G5 | 1-hour soak **PASS**: 2,012 requests, 0 crashes, 344.7 MB flat · long tickets still ~8 s p95 (fails 2 s) |
 
 The weakest point is Hindi department routing on phrasings the model hasn't seen (43%). The fix is
 real, varied Hindi tickets.

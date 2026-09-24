@@ -1,0 +1,36 @@
+{
+  "requests": 2012,
+  "minutes": 60.0,
+  "statuses": {
+    "done": 2012
+  },
+  "threads": 2,
+  "max_len": 512,
+  "bundle": "model/synthetic-run/hybrid/dist",
+  "bundle_weights_mb": 175,
+  "peak_mb": {
+    "worker": 306.2,
+    "supervisor_and_ui": 38.5,
+    "total": 344.7,
+    "limit": 500
+  },
+  "worker_memory_at_end_mb": {
+    "rss_now": 296.8,
+    "anon_now": 113.8,
+    "file_backed_now": 183.0
+  },
+  "worker_imports_torch": false,
+  "worker_restarts": 0,
+  "cold_start_s": 0.8,
+  "model_latency_ms": {
+    "p50": 1060.0,
+    "p95": 8033.0
+  },
+  "end_to_end_ms": {
+    "p50": 1062.3,
+    "p95": 8057.6
+  },
+  "passed": true,
+  "platform": "linux",
+  "label": "SOAK 60 min; SYNTHETIC fine-tune, corpus+top-merge trim, int8, calibrated; 16 GB dev container, 2 threads"
+}

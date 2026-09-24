@@ -33,4 +33,4 @@ The fix is more varied Hindi training text (real tickets), not tuning on this te
 | Whole-app peak, right after the build (worst case) | **343.2 MB** (worker 306.2 + supervisor/CLI 37.0) |
 | Cold start | 0.79 s |
 | Model latency, 200 requests (every 10th is a 512-token ticket) | p50 1.09 s · p95 7.9 s |
-| 60-minute soak | see `g5_soak_60min.json` |
+| 60-minute soak | 60 min, **2,012 requests, all done, 0 restarts**, peak **344.7 MB** (vs 343.2 MB in a 200-request run: no growth), p50 1.06 s / p95 8.0 s |

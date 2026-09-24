@@ -1,6 +1,6 @@
 ## Days 2–7 — dry run on SYNTHETIC data (2026-09-23 → 2026-09-24)
 
-**Gates (dummy data):** G1 [x] · G2 [x] 343 MB · G3 [x] · G4 [~] English pass, Hindi fail (ECE) · G5 [~] no crashes (soak), long tickets too slow
+**Gates (dummy data):** G1 [x] · G2 [x] 343 MB · G3 [x] · G4 [~] English pass, Hindi fail (ECE) · G5 [~] 1-hour soak PASS (0 crashes), long tickets too slow (p95 8 s)
 
 Real tickets didn't exist yet, so every step ran on 1,200 generated tickets (`model/synthetic.py`).
 Test phrasings are never in training. All numbers were measured in the 16 GB / 4-vCPU dev container,
@@ -16,7 +16,7 @@ Test phrasings are never in training. All numbers were measured in the 16 GB / 4
 | 4 | Calibration, one temperature per question type | Temperatures 1.38 / 1.91 / 1.76; ECE on calib stays ≤ 0.03 |
 | 5 | **G2** memory, worst page-cache case | **343.2 MB** whole app (38k vocabulary) · 328.6 MB (8.5k) · 398–502 MB (untrimmed) |
 | 5 | Input cap | 512: p95 7.0 s · 256: p95 3.0 s (refuses ~7% of dummy tickets) |
-| 5 | **G5** 60-minute soak | `g5_soak_60min.json` |
+| 5 | **G5** 60-minute soak | **PASS**: 60 min, **2,012 requests, all done, 0 restarts**, peak **344.7 MB** (vs 343.2 MB in a 200-request run: no growth), p50 1.06 s / p95 8.0 s |
 | 5 | Out-of-vocabulary risk of trimming | English −5 pt (38k) / −10 pt (8.5k) on unfamiliar words (`out_of_corpus_compare.json`) |
 | 7 | **G4** test split, run once | English 97.3% / ECE 0.024 **PASS**; Hindi 84.7% / ECE 0.117 **FAIL → disable** (`results.md`) |
 | 7 | Known limits | `known-limits.md` |
