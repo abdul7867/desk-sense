@@ -1,9 +1,10 @@
 {
   "mode": "fake-model",
+  "suite": "exact",
   "runs": 3,
   "measured_on": "dev container, 4 vCPU, 15 GB RAM, Linux, headless Chromium, fake model",
   "success": "15/15",
-  "median_seconds": 0.852,
+  "median_seconds": 0.906,
   "results": [
     {
       "task": "flights",
@@ -11,7 +12,7 @@
       "success": true,
       "end": "finish",
       "why": "all steps done",
-      "seconds": 1.081,
+      "seconds": 1.053,
       "steps": 6,
       "sources": {
         "fastpath": 5,
@@ -25,7 +26,7 @@
       "success": true,
       "end": "finish",
       "why": "all steps done",
-      "seconds": 1.068,
+      "seconds": 1.06,
       "steps": 6,
       "sources": {
         "fastpath": 5,
@@ -39,7 +40,7 @@
       "success": true,
       "end": "finish",
       "why": "all steps done",
-      "seconds": 1.01,
+      "seconds": 1.065,
       "steps": 6,
       "sources": {
         "fastpath": 5,
@@ -50,22 +51,6 @@
     {
       "task": "contact",
       "run": 1,
-      "success": true,
-      "end": "finish",
-      "why": "all steps done",
-      "seconds": 1.279,
-      "steps": 7,
-      "sources": {
-        "fastpath": 6,
-        "engine": 1
-      },
-      "asked": [
-        "Send message"
-      ]
-    },
-    {
-      "task": "contact",
-      "run": 2,
       "success": true,
       "end": "finish",
       "why": "all steps done",
@@ -81,11 +66,27 @@
     },
     {
       "task": "contact",
+      "run": 2,
+      "success": true,
+      "end": "finish",
+      "why": "all steps done",
+      "seconds": 1.273,
+      "steps": 7,
+      "sources": {
+        "fastpath": 6,
+        "engine": 1
+      },
+      "asked": [
+        "Send message"
+      ]
+    },
+    {
+      "task": "contact",
       "run": 3,
       "success": true,
       "end": "finish",
       "why": "all steps done",
-      "seconds": 1.27,
+      "seconds": 1.305,
       "steps": 7,
       "sources": {
         "fastpath": 6,
@@ -115,7 +116,7 @@
       "success": true,
       "end": "finish",
       "why": "all steps done",
-      "seconds": 0.688,
+      "seconds": 0.683,
       "steps": 4,
       "sources": {
         "fastpath": 3,
@@ -129,7 +130,7 @@
       "success": true,
       "end": "finish",
       "why": "all steps done",
-      "seconds": 0.688,
+      "seconds": 0.686,
       "steps": 4,
       "sources": {
         "fastpath": 3,
@@ -143,7 +144,7 @@
       "success": true,
       "end": "finish",
       "why": "all steps done",
-      "seconds": 0.846,
+      "seconds": 0.91,
       "steps": 5,
       "sources": {
         "fastpath": 4,
@@ -157,7 +158,7 @@
       "success": true,
       "end": "finish",
       "why": "all steps done",
-      "seconds": 0.852,
+      "seconds": 0.906,
       "steps": 5,
       "sources": {
         "fastpath": 4,
@@ -171,7 +172,7 @@
       "success": true,
       "end": "finish",
       "why": "all steps done",
-      "seconds": 0.902,
+      "seconds": 0.855,
       "steps": 5,
       "sources": {
         "fastpath": 4,
@@ -185,7 +186,7 @@
       "success": true,
       "end": "stop",
       "why": "you declined the action",
-      "seconds": 0.637,
+      "seconds": 0.641,
       "steps": 4,
       "sources": {
         "fastpath": 3,
@@ -202,7 +203,7 @@
       "success": true,
       "end": "stop",
       "why": "you declined the action",
-      "seconds": 0.657,
+      "seconds": 0.633,
       "steps": 4,
       "sources": {
         "fastpath": 3,
@@ -219,7 +220,7 @@
       "success": true,
       "end": "stop",
       "why": "you declined the action",
-      "seconds": 0.649,
+      "seconds": 0.646,
       "steps": 4,
       "sources": {
         "fastpath": 3,

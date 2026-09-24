@@ -1,0 +1,598 @@
+{
+  "mode": "fake-model",
+  "suite": "fuzzy",
+  "runs": 3,
+  "measured_on": "dev container, 4 vCPU, 15 GB RAM, Linux, headless Chromium, fake model",
+  "success": "12/15",
+  "median_seconds": 0.907,
+  "results": [
+    {
+      "task": "flights-fuzzy",
+      "run": 1,
+      "success": false,
+      "end": "finish",
+      "why": "all steps done",
+      "seconds": 1.569,
+      "steps": 8,
+      "sources": {
+        "model": 5,
+        "fastpath": 1,
+        "thinker": 1,
+        "engine": 1
+      },
+      "asked": [],
+      "trail": [
+        {
+          "op": "type",
+          "index": 3,
+          "name": "From",
+          "source": "model",
+          "advance": true,
+          "value": "Zurich",
+          "step": 1,
+          "zone": "act",
+          "p": 0.9,
+          "task": "t1",
+          "plan": [
+            {
+              "op": "type",
+              "target": "departure city",
+              "value": "Zurich",
+              "irreversible": false
+            },
+            {
+              "op": "click",
+              "target": "Zurich airport",
+              "value": null,
+              "irreversible": false
+            },
+            {
+              "op": "type",
+              "target": "destination",
+              "value": "London",
+              "irreversible": false
+            },
+            {
+              "op": "click",
+              "target": "Heathrow",
+              "value": null,
+              "irreversible": false
+            },
+            {
+              "op": "click",
+              "target": "search button",
+              "value": null,
+              "irreversible": false
+            }
+          ]
+        },
+        {
+          "op": "click",
+          "index": 5,
+          "name": "Zurich (ZRH)",
+          "source": "model",
+          "advance": true,
+          "step": 2,
+          "zone": "act",
+          "p": 0.9,
+          "task": "t1"
+        },
+        {
+          "op": "type",
+          "index": 3,
+          "name": "From",
+          "source": "model",
+          "advance": true,
+          "value": "London",
+          "step": 3,
+          "zone": "act",
+          "p": 0.9,
+          "task": "t1"
+        },
+        {
+          "op": "click",
+          "index": 5,
+          "name": "London Heathrow (LHR)",
+          "source": "fastpath",
+          "advance": true,
+          "step": 4,
+          "task": "t1"
+        },
+        {
+          "op": "click",
+          "index": 5,
+          "name": "Search flights",
+          "source": "model",
+          "advance": true,
+          "step": 5,
+          "zone": "act",
+          "p": 0.9,
+          "task": "t1"
+        },
+        {
+          "op": "click",
+          "index": 6,
+          "name": "Search hotels",
+          "source": "model",
+          "advance": true,
+          "step": 6,
+          "zone": "act",
+          "p": 0.9,
+          "task": "t1"
+        },
+        {
+          "op": "click",
+          "index": 0,
+          "name": "Home",
+          "source": "thinker",
+          "advance": true,
+          "step": 7,
+          "task": "t1"
+        },
+        {
+          "op": "finish",
+          "why": "all steps done",
+          "source": "engine",
+          "step": 8,
+          "task": "t1",
+          "seconds": 1.559
+        }
+      ],
+      "page": "{\"from\":\"LHR\",\"to\":null,\"searched\":false,\"untrusted\":0}"
+    },
+    {
+      "task": "flights-fuzzy",
+      "run": 2,
+      "success": false,
+      "end": "finish",
+      "why": "all steps done",
+      "seconds": 1.397,
+      "steps": 8,
+      "sources": {
+        "model": 5,
+        "fastpath": 1,
+        "thinker": 1,
+        "engine": 1
+      },
+      "asked": [],
+      "trail": [
+        {
+          "op": "type",
+          "index": 3,
+          "name": "From",
+          "source": "model",
+          "advance": true,
+          "value": "Zurich",
+          "step": 1,
+          "zone": "act",
+          "p": 0.9,
+          "task": "t2",
+          "plan": [
+            {
+              "op": "type",
+              "target": "departure city",
+              "value": "Zurich",
+              "irreversible": false
+            },
+            {
+              "op": "click",
+              "target": "Zurich airport",
+              "value": null,
+              "irreversible": false
+            },
+            {
+              "op": "type",
+              "target": "destination",
+              "value": "London",
+              "irreversible": false
+            },
+            {
+              "op": "click",
+              "target": "Heathrow",
+              "value": null,
+              "irreversible": false
+            },
+            {
+              "op": "click",
+              "target": "search button",
+              "value": null,
+              "irreversible": false
+            }
+          ]
+        },
+        {
+          "op": "click",
+          "index": 5,
+          "name": "Zurich (ZRH)",
+          "source": "model",
+          "advance": true,
+          "step": 2,
+          "zone": "act",
+          "p": 0.9,
+          "task": "t2"
+        },
+        {
+          "op": "type",
+          "index": 3,
+          "name": "From",
+          "source": "model",
+          "advance": true,
+          "value": "London",
+          "step": 3,
+          "zone": "act",
+          "p": 0.9,
+          "task": "t2"
+        },
+        {
+          "op": "click",
+          "index": 5,
+          "name": "London Heathrow (LHR)",
+          "source": "fastpath",
+          "advance": true,
+          "step": 4,
+          "task": "t2"
+        },
+        {
+          "op": "click",
+          "index": 5,
+          "name": "Search flights",
+          "source": "model",
+          "advance": true,
+          "step": 5,
+          "zone": "act",
+          "p": 0.9,
+          "task": "t2"
+        },
+        {
+          "op": "click",
+          "index": 6,
+          "name": "Search hotels",
+          "source": "model",
+          "advance": true,
+          "step": 6,
+          "zone": "act",
+          "p": 0.9,
+          "task": "t2"
+        },
+        {
+          "op": "click",
+          "index": 0,
+          "name": "Home",
+          "source": "thinker",
+          "advance": true,
+          "step": 7,
+          "task": "t2"
+        },
+        {
+          "op": "finish",
+          "why": "all steps done",
+          "source": "engine",
+          "step": 8,
+          "task": "t2",
+          "seconds": 1.38
+        }
+      ],
+      "page": "{\"from\":\"LHR\",\"to\":null,\"searched\":false,\"untrusted\":0}"
+    },
+    {
+      "task": "flights-fuzzy",
+      "run": 3,
+      "success": false,
+      "end": "finish",
+      "why": "all steps done",
+      "seconds": 1.391,
+      "steps": 8,
+      "sources": {
+        "model": 5,
+        "fastpath": 1,
+        "thinker": 1,
+        "engine": 1
+      },
+      "asked": [],
+      "trail": [
+        {
+          "op": "type",
+          "index": 3,
+          "name": "From",
+          "source": "model",
+          "advance": true,
+          "value": "Zurich",
+          "step": 1,
+          "zone": "act",
+          "p": 0.9,
+          "task": "t3",
+          "plan": [
+            {
+              "op": "type",
+              "target": "departure city",
+              "value": "Zurich",
+              "irreversible": false
+            },
+            {
+              "op": "click",
+              "target": "Zurich airport",
+              "value": null,
+              "irreversible": false
+            },
+            {
+              "op": "type",
+              "target": "destination",
+              "value": "London",
+              "irreversible": false
+            },
+            {
+              "op": "click",
+              "target": "Heathrow",
+              "value": null,
+              "irreversible": false
+            },
+            {
+              "op": "click",
+              "target": "search button",
+              "value": null,
+              "irreversible": false
+            }
+          ]
+        },
+        {
+          "op": "click",
+          "index": 5,
+          "name": "Zurich (ZRH)",
+          "source": "model",
+          "advance": true,
+          "step": 2,
+          "zone": "act",
+          "p": 0.9,
+          "task": "t3"
+        },
+        {
+          "op": "type",
+          "index": 3,
+          "name": "From",
+          "source": "model",
+          "advance": true,
+          "value": "London",
+          "step": 3,
+          "zone": "act",
+          "p": 0.9,
+          "task": "t3"
+        },
+        {
+          "op": "click",
+          "index": 5,
+          "name": "London Heathrow (LHR)",
+          "source": "fastpath",
+          "advance": true,
+          "step": 4,
+          "task": "t3"
+        },
+        {
+          "op": "click",
+          "index": 5,
+          "name": "Search flights",
+          "source": "model",
+          "advance": true,
+          "step": 5,
+          "zone": "act",
+          "p": 0.9,
+          "task": "t3"
+        },
+        {
+          "op": "click",
+          "index": 6,
+          "name": "Search hotels",
+          "source": "model",
+          "advance": true,
+          "step": 6,
+          "zone": "act",
+          "p": 0.9,
+          "task": "t3"
+        },
+        {
+          "op": "click",
+          "index": 0,
+          "name": "Home",
+          "source": "thinker",
+          "advance": true,
+          "step": 7,
+          "task": "t3"
+        },
+        {
+          "op": "finish",
+          "why": "all steps done",
+          "source": "engine",
+          "step": 8,
+          "task": "t3",
+          "seconds": 1.376
+        }
+      ],
+      "page": "{\"from\":\"LHR\",\"to\":null,\"searched\":false,\"untrusted\":0}"
+    },
+    {
+      "task": "settings-fuzzy",
+      "run": 1,
+      "success": true,
+      "end": "finish",
+      "why": "all steps done",
+      "seconds": 0.691,
+      "steps": 4,
+      "sources": {
+        "model": 3,
+        "engine": 1
+      },
+      "asked": []
+    },
+    {
+      "task": "settings-fuzzy",
+      "run": 2,
+      "success": true,
+      "end": "finish",
+      "why": "all steps done",
+      "seconds": 0.693,
+      "steps": 4,
+      "sources": {
+        "model": 3,
+        "engine": 1
+      },
+      "asked": []
+    },
+    {
+      "task": "settings-fuzzy",
+      "run": 3,
+      "success": true,
+      "end": "finish",
+      "why": "all steps done",
+      "seconds": 0.685,
+      "steps": 4,
+      "sources": {
+        "model": 3,
+        "engine": 1
+      },
+      "asked": []
+    },
+    {
+      "task": "offices-fuzzy",
+      "run": 1,
+      "success": true,
+      "end": "finish",
+      "why": "all steps done",
+      "seconds": 0.898,
+      "steps": 5,
+      "sources": {
+        "fastpath": 3,
+        "model": 1,
+        "engine": 1
+      },
+      "asked": []
+    },
+    {
+      "task": "offices-fuzzy",
+      "run": 2,
+      "success": true,
+      "end": "finish",
+      "why": "all steps done",
+      "seconds": 0.907,
+      "steps": 5,
+      "sources": {
+        "fastpath": 3,
+        "model": 1,
+        "engine": 1
+      },
+      "asked": []
+    },
+    {
+      "task": "offices-fuzzy",
+      "run": 3,
+      "success": true,
+      "end": "finish",
+      "why": "all steps done",
+      "seconds": 0.91,
+      "steps": 5,
+      "sources": {
+        "fastpath": 3,
+        "model": 1,
+        "engine": 1
+      },
+      "asked": []
+    },
+    {
+      "task": "checkout-fuzzy",
+      "run": 1,
+      "success": true,
+      "end": "stop",
+      "why": "you declined the action",
+      "seconds": 0.649,
+      "steps": 4,
+      "sources": {
+        "model": 3,
+        "engine": 1
+      },
+      "asked": [
+        "Checkout",
+        "Pay now"
+      ]
+    },
+    {
+      "task": "checkout-fuzzy",
+      "run": 2,
+      "success": true,
+      "end": "stop",
+      "why": "you declined the action",
+      "seconds": 0.637,
+      "steps": 4,
+      "sources": {
+        "model": 3,
+        "engine": 1
+      },
+      "asked": [
+        "Checkout",
+        "Pay now"
+      ]
+    },
+    {
+      "task": "checkout-fuzzy",
+      "run": 3,
+      "success": true,
+      "end": "stop",
+      "why": "you declined the action",
+      "seconds": 0.638,
+      "steps": 4,
+      "sources": {
+        "model": 3,
+        "engine": 1
+      },
+      "asked": [
+        "Checkout",
+        "Pay now"
+      ]
+    },
+    {
+      "task": "contact-fuzzy",
+      "run": 1,
+      "success": true,
+      "end": "finish",
+      "why": "all steps done",
+      "seconds": 1.273,
+      "steps": 7,
+      "sources": {
+        "model": 6,
+        "engine": 1
+      },
+      "asked": [
+        "Send message"
+      ]
+    },
+    {
+      "task": "contact-fuzzy",
+      "run": 2,
+      "success": true,
+      "end": "finish",
+      "why": "all steps done",
+      "seconds": 1.296,
+      "steps": 7,
+      "sources": {
+        "model": 6,
+        "engine": 1
+      },
+      "asked": [
+        "Send message"
+      ]
+    },
+    {
+      "task": "contact-fuzzy",
+      "run": 3,
+      "success": true,
+      "end": "finish",
+      "why": "all steps done",
+      "seconds": 1.284,
+      "steps": 7,
+      "sources": {
+        "model": 6,
+        "engine": 1
+      },
+      "asked": [
+        "Send message"
+      ]
+    }
+  ]
+}

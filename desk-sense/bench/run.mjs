@@ -2,6 +2,7 @@
 //
 //   node bench/run.mjs                    # fake model + scripted thinker: checks the plumbing (gate B1)
 //   node bench/run.mjs --real --runs 5    # real model bundle (model/dist) + scripted thinker
+//   node bench/run.mjs --tasks tasks_fuzzy.jsonl   # plans that don't name the exact labels: the model must decide
 //
 // Needs Playwright (npm i -g playwright, or set NODE_PATH). Writes reports/browser/bench_<mode>.json.
 import { execSync, spawn } from "node:child_process";
@@ -19,6 +20,8 @@ const REAL = args.includes("--real");
 const RUNS = Number(flag("--runs", 1));
 const ONLY = flag("--only", null);
 const HEADED = args.includes("--headed");
+const TASKS = flag("--tasks", "tasks.jsonl");
+const SUITE = TASKS.replace(/^tasks_?|\.jsonl$/g, "") || "exact";
 
 function loadPlaywright() {
   const require = createRequire(import.meta.url);
@@ -55,7 +58,7 @@ async function waitHealthy(url, token, proc, ms = 60000) {
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 async function main() {
-  const tasks = readFileSync(join(ROOT, "bench", "tasks.jsonl"), "utf8").split("\n").filter(Boolean).map(JSON.parse)
+  const tasks = readFileSync(join(ROOT, "bench", TASKS), "utf8").split("\n").filter(Boolean).map(JSON.parse)
     .filter((t) => !ONLY || t.id === ONLY);
   const tmp = mkdtempSync(join(tmpdir(), "ds-bench-"));
   const pages = await servePages(join(ROOT, "bench", "pages"));
@@ -137,11 +140,12 @@ async function main() {
   }
   const median = (xs) => { const s = [...xs].sort((a, b) => a - b); return s.length ? s[Math.floor(s.length / 2)] : null; };
   const report = {
-    mode: REAL ? "real-model" : "fake-model", runs: RUNS, measured_on: process.env.BENCH_MACHINE || "unlabelled machine",
+    mode: REAL ? "real-model" : "fake-model", suite: SUITE, runs: RUNS, measured_on: process.env.BENCH_MACHINE || "unlabelled machine",
     success: `${ok}/${results.length}`, median_seconds: median(results.map((r) => r.seconds)), results,
   };
   mkdirSync(join(ROOT, "reports", "browser"), { recursive: true });
-  writeFileSync(join(ROOT, "reports", "browser", `bench_${REAL ? "real" : "fake"}.json`), JSON.stringify(report, null, 2) + "\n");
+  const name = `bench_${REAL ? "real" : "fake"}${SUITE === "exact" ? "" : "_" + SUITE}.json`;
+  writeFileSync(join(ROOT, "reports", "browser", name), JSON.stringify(report, null, 2) + "\n");
   console.log(`\n${ok}/${results.length} passed, median ${report.median_seconds?.toFixed(2)} s per task`);
   process.exit(ok === results.length ? 0 : 1);
 }

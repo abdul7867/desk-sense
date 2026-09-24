@@ -92,7 +92,7 @@ class Controller:
             return {"op": "blocked", "why": "unknown task %r" % tid}
         with task.lock:
             if task.over:
-                return {"op": "finish", "why": "task already ended"}
+                return {"op": "finish", "why": "task already ended", "source": "engine"}
             if last and last.get("declined"):
                 return self._end(task, {"op": "stop", "why": "you declined the action", "source": "engine"})
             self._absorb(task, last or {})
@@ -115,12 +115,16 @@ class Controller:
             return
         if prev["op"] in ACTING_OPS:
             ok = last.get("ok") and (last.get("changed") or prev["op"] != "click")
-            if ok:
+            repeat = task.history and task.history[-1] == describe(prev)
+            if ok and prev.get("advance"):
                 task.fail_streak = 0
-                if prev.get("advance"):
-                    task.advance(describe(prev))
-                else:
-                    task.history.append(describe(prev))
+                task.advance(describe(prev))
+            elif ok and not repeat:
+                task.fail_streak = 0
+                task.history.append(describe(prev))
+            elif ok:  # the same detour again: no progress, so it counts as a failure
+                task.failed.add(prev.get("index"))
+                task.fail_streak += 1
             else:
                 task.failed.add(prev.get("index"))
                 task.fail_streak += 1
@@ -205,8 +209,11 @@ class Controller:
         op = question.op_for(el)
         fits = op == sub["op"] or (sub["op"] == "select" and op == "click")
         want = rank.words(sub.get("target"))
-        # A step is done only when its own target was acted on; any other click is a detour.
-        on_target = source == "thinker" or not want or bool(want & (rank.words(el.get("name")) | rank.words(el.get("value"))))
+        # Mapping the plan's wording to the page's labels ("departure city" → "From") is the model's
+        # job, so its pick completes the step. Once this step has failed, a pick that shares no word
+        # with the target is a detour (clicking "Checkout" because "Add to cart" did nothing).
+        on_target = (source == "thinker" or not want or not task.failed
+                     or bool(want & (rank.words(el.get("name")) | rank.words(el.get("value")))))
         a = {"op": op, "index": el["i"], "name": question.clean(el.get("name"), 40), "source": source,
              "advance": fits and on_target}
         if op in ("type", "select"):

@@ -170,6 +170,36 @@ def test_a_detour_click_does_not_complete_the_step(make_ctl):
     assert a["index"] == 1 and a["advance"] is False
     task = ctl.tasks[a["task"]]
     assert task.cursor == 0
+    a = ctl.step(a["task"], page, {"ok": True, "changed": True})  # the detour worked but the step isn't done
+    a = ctl.step(a["task"], page, {"ok": True, "changed": True})  # same detour again: no progress
+    assert a["source"] == "thinker" or task.fail_streak >= 1
+
+
+def test_model_maps_plan_wording_to_labels_and_moves_on(make_ctl):
+    """Regression: 'departure city' → the 'From' field was retyped forever because no word matched."""
+    ctl, sup, _, _ = make_ctl(plans=[{"op": "type", "target": "departure city", "value": "Zurich"},
+                                     {"op": "click", "target": "Search flights"}])
+    a = ctl.start("go", None, flights_page())
+    assert (a["op"], a["index"], a["source"], a["advance"]) == ("type", 1, "model", True)
+    a = ctl.step(a["task"], flights_page(frm="Zurich"), {"ok": True, "changed": True})
+    assert (a["op"], a["index"], a["source"]) == ("click", 3, "fastpath")
+
+
+def test_repeating_the_same_action_brings_in_the_thinker(make_ctl):
+    page = {"host": "x.example", "title": "t", "elements": [el(0, "button", "Help"), el(1, "button", "Menu")]}
+    only_menu = dict(page, elements=[el(1, "button", "Menu")])
+    ctl, _, thinkers, _ = make_ctl(plans=[{"op": "click", "target": "Help"}])
+    a = ctl.start("go", None, page)
+    tid = a["task"]
+    a = ctl.step(tid, only_menu, {"ok": False})  # "Help" failed and vanished: "Menu" is a detour
+    assert (a["index"], a["advance"]) == (1, False)
+    sources = []
+    for _ in range(4):
+        a = ctl.step(tid, only_menu, {"ok": True, "changed": True})
+        sources.append(a.get("source"))
+        if a["op"] != "click" or a["source"] == "thinker":
+            break
+    assert "thinker" in sources and ctl.tasks[tid].cursor == 0
 
 
 def test_card_numbers_never_reach_the_thinker_or_the_log(make_ctl, tmp_path):

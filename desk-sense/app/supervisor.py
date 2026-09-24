@@ -264,7 +264,8 @@ class Supervisor:
         if "too_long" in reply:
             return {"status": "refused", "reason": "too_long", "tokens": reply["too_long"]["state_tokens"]}
         zone = zones.assign(reply["answers"], self.schema["zones"])
-        return {"status": "done", "zone": zone, "answers": reply["answers"], "latency_ms": reply.get("latency_ms")}
+        return {"status": "done", "zone": zone, "answers": reply["answers"], "latency_ms": reply.get("latency_ms"),
+                "usage": reply.get("usage")}
 
     def warm(self):
         """Start the worker now, so the first step does not pay the cold start."""
