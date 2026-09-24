@@ -93,6 +93,7 @@ One command (`model/build_model.py`) runs it and stops if any step costs more th
 | [`desk-sense/`](desk-sense/) | The app: runtime, model pipeline, tests, reports ([app README](desk-sense/README.md)) |
 | `claude/`, `install.sh`, `profiles/`, `templates/` | **Tokensaver**, the Claude Code setup this was built with ([docs/TOKENSAVER.md](docs/TOKENSAVER.md)) |
 | `docs/` | Tokensaver documentation: measuring, memory, research |
+| [`docs/claude-in-chrome.md`](docs/claude-in-chrome.md) | Making Claude in Chrome faster on a 4 GB PC: speed shortcut, settings, low-RAM Chrome setup |
 
 ## Credits
 
