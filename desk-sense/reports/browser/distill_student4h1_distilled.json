@@ -1,0 +1,41 @@
+{
+  "teacher": "model/artifacts/ckpt_browser2",
+  "student": "model/artifacts/student4h1",
+  "epochs": 3,
+  "lr": 5e-05,
+  "alpha": 0.5,
+  "temperature": 2.0,
+  "train_items": 3948,
+  "teacher_pass_minutes": 22.5,
+  "minutes": 60.9,
+  "peak_rss_mb": 4414,
+  "log": [
+    {
+      "epoch": 1,
+      "loss": 2.3763,
+      "val": {
+        "en": 0.7106
+      },
+      "minutes": 35.4
+    },
+    {
+      "epoch": 2,
+      "loss": 1.2282,
+      "val": {
+        "en": 0.7447
+      },
+      "minutes": 48.2
+    },
+    {
+      "epoch": 3,
+      "loss": 0.8707,
+      "val": {
+        "en": 0.7468
+      },
+      "minutes": 60.9
+    }
+  ],
+  "versions": {
+    "torch": "2.14.0+cpu"
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "steps": 300,
+  "statuses": {
+    "done": 300
+  },
+  "zones_untrained_or_trained": {
+    "flag": 126,
+    "act": 46,
+    "confirm": 128
+  },
+  "threads": 2,
+  "bundle": "model/browser-run-student/dist",
+  "bundle_weights_mb": 203,
+  "tokens_per_step": {
+    "p50": 231.5,
+    "p95": 250.1,
+    "max": 260
+  },
+  "model_latency_ms": {
+    "p50": 143.0,
+    "p95": 170.1
+  },
+  "end_to_end_ms": {
+    "p50": 144.0,
+    "p95": 170.7
+  },
+  "peak_mb": {
+    "worker": 351.3,
+    "supervisor": 37.4,
+    "total": 388.7
+  },
+  "worker_imports_torch": false,
+  "worker_restarts": 0,
+  "cold_start_s": 1.28,
+  "platform": "linux",
+  "label": "dev container, 4 vCPU, 15 GB RAM; distilled student 4 enc + 1 head, int8, 2 threads"
+}

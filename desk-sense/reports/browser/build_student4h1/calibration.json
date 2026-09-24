@@ -1,0 +1,16 @@
+{
+  "choice": {
+    "n": 564,
+    "temperature": 1.685,
+    "ece_before": 0.0879,
+    "ece_after": 0.0404
+  },
+  "score": {
+    "n": 0,
+    "skipped": "fewer than 30 items; temperature left at 1.000"
+  },
+  "noul": {
+    "n": 0,
+    "skipped": "fewer than 30 items; temperature left at 1.000"
+  }
+}
