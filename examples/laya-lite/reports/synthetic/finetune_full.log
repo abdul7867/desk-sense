@@ -1,0 +1,19 @@
+{"epoch": 1, "train_loss": 0.2856, "val": {"en": 0.9689, "hi": 0.9796}, "minutes": 21.5}
+{"epoch": 2, "train_loss": 0.0162, "val": {"en": 0.9844, "hi": 0.9714}, "minutes": 43.2}
+{
+  "g3": {
+    "en": {
+      "model": 0.9844,
+      "majority": 0.5622,
+      "margin": 0.4222,
+      "passed": true
+    },
+    "hi": {
+      "model": 0.9714,
+      "majority": 0.5224,
+      "margin": 0.449,
+      "passed": true
+    }
+  }
+}
+finetune exit=0
