@@ -1,0 +1,36 @@
+{
+  "requests": 200,
+  "minutes": 6.0,
+  "statuses": {
+    "done": 200
+  },
+  "threads": 2,
+  "max_len": 512,
+  "bundle": "model/synthetic-run/hybrid/dist",
+  "bundle_weights_mb": 175,
+  "peak_mb": {
+    "worker": 306.2,
+    "supervisor_and_ui": 37.0,
+    "total": 343.2,
+    "limit": 500
+  },
+  "worker_memory_at_end_mb": {
+    "rss_now": 296.7,
+    "anon_now": 113.7,
+    "file_backed_now": 183.0
+  },
+  "worker_imports_torch": false,
+  "worker_restarts": 0,
+  "cold_start_s": 0.79,
+  "model_latency_ms": {
+    "p50": 1086.0,
+    "p95": 7915.899999999999
+  },
+  "end_to_end_ms": {
+    "p50": 1089.5,
+    "p95": 7926.8
+  },
+  "passed": true,
+  "platform": "linux",
+  "label": "SYNTHETIC fine-tune, corpus + top-100k-merge trim (38,317 tokens), int8, calibrated; right after build (worst case); 16 GB dev container, 2 threads"
+}

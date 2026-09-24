@@ -38,6 +38,22 @@ Details: [`reports/day-1.md`](reports/day-1.md). Reasons: [`DECISIONS.md`](DECIS
 | R7 127.0.0.1 only | **PASS** (tested) |
 | R8 no lost requests | **PASS**: worker killed mid-request, crash loops, watchdog kills and supervisor restarts all tested |
 
+### Days 2–7 dry run on dummy data
+
+Real tickets aren't in yet, so the whole plan was run on 1,200 generated Hindi, English and Hinglish
+tickets ([`reports/day-2-7-dryrun.md`](reports/day-2-7-dryrun.md)). It proves the pipeline and gates work.
+It does **not** show real-world accuracy.
+
+| Gate | Dummy-data result |
+|---|---|
+| G3 learnability | **PASS**: en 96.7% / hi 95.1% vs ~54% baseline |
+| G2 memory, fine-tuned + 38k-token vocabulary | **PASS**: 343 MB whole app, worst case |
+| G4 on the locked test split (run once) | English **97.3%** (ECE 0.024) PASS · Hindi 84.7% but ECE **0.117** FAIL → disabled |
+| G5 | 60-minute soak in `reports/synthetic/g5_soak_60min.json`; long tickets still ~8 s p95 |
+
+The weakest point is Hindi department routing on phrasings the model hasn't seen (43%). The fix is
+real, varied Hindi tickets.
+
 ## Run it
 
 ```bash

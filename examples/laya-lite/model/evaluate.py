@@ -63,6 +63,14 @@ def evaluate(prob_fn, rows, questions=None, key="language"):
     return score(records)
 
 
+def evaluate_multi(prob_fn, rows, keys, questions=None):
+    """One pass over the model, scored under several groupings (the test split is read once)."""
+    questions = questions or load_schema()["questions"]
+    preds = list(predictions(prob_fn, rows, questions))
+    return {k: score([(r.get(k, r["language"]), qid, questions[qid]["type"], p, t) for r, qid, p, t in preds])
+            for k in keys}
+
+
 def majority_baseline(train_rows, eval_rows, questions=None):
     """G3's yardstick: always answer the most common training label."""
     questions = questions or load_schema()["questions"]
@@ -100,13 +108,16 @@ def main():
     from app.ort_model import OrtModel
 
     m = OrtModel(args.bundle)
-    result = evaluate(m.probs, rows, key=args.by)
+    keys = [args.by] + (["variety"] if args.by != "variety" and any("variety" in r for r in rows) else [])
+    scored = evaluate_multi(m.probs, rows, keys)
+    result = scored[args.by]
     print(json.dumps(result, indent=2, ensure_ascii=False))
     if args.split == "test":
         REPORTS.mkdir(exist_ok=True)
         with open(REPORTS / "test_runs.log", "a", encoding="utf-8") as f:
             f.write(json.dumps({"t": time.strftime("%Y-%m-%d %H:%M:%S"), "bundle": str(args.bundle),
-                                "test_sha256": sha256(SPLITS / "test.jsonl"), "result": result},
+                                "test_sha256": sha256(SPLITS / "test.jsonl"), "result": result,
+                                "by_other_keys": {k: v for k, v in scored.items() if k != args.by}},
                                ensure_ascii=False) + "\n")
 
 

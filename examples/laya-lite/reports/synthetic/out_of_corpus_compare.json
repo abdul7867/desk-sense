@@ -2,7 +2,7 @@
   "rows": "data/synthetic/out_of_corpus.jsonl",
   "n": 36,
   "bundles": {
-    "stageA_197k_vocab": {
+    "A_197k": {
       "path": "model/synthetic-run/stageA/dist",
       "vocab": 196996,
       "by_language": {
@@ -145,7 +145,150 @@
         }
       }
     },
-    "stageB_8.5k_vocab": {
+    "hybrid_38k": {
+      "path": "model/synthetic-run/hybrid/dist",
+      "vocab": 38317,
+      "by_language": {
+        "en": {
+          "n": 120,
+          "accuracy": 0.8667,
+          "ece": 0.1268,
+          "per_question": {
+            "department": {
+              "n": 24,
+              "accuracy": 0.7083
+            },
+            "needs_human": {
+              "n": 24,
+              "accuracy": 0.875
+            },
+            "refund_requested": {
+              "n": 24,
+              "accuracy": 1.0
+            },
+            "sentiment": {
+              "n": 24,
+              "accuracy": 1.0
+            },
+            "urgency": {
+              "n": 24,
+              "accuracy": 0.75
+            }
+          }
+        },
+        "hi": {
+          "n": 60,
+          "accuracy": 0.9,
+          "ece": 0.1004,
+          "per_question": {
+            "department": {
+              "n": 12,
+              "accuracy": 0.6667
+            },
+            "needs_human": {
+              "n": 12,
+              "accuracy": 0.9167
+            },
+            "refund_requested": {
+              "n": 12,
+              "accuracy": 1.0
+            },
+            "sentiment": {
+              "n": 12,
+              "accuracy": 1.0
+            },
+            "urgency": {
+              "n": 12,
+              "accuracy": 0.9167
+            }
+          }
+        }
+      },
+      "by_variety": {
+        "en": {
+          "n": 60,
+          "accuracy": 0.8667,
+          "ece": 0.1277,
+          "per_question": {
+            "department": {
+              "n": 12,
+              "accuracy": 0.6667
+            },
+            "needs_human": {
+              "n": 12,
+              "accuracy": 0.9167
+            },
+            "refund_requested": {
+              "n": 12,
+              "accuracy": 1.0
+            },
+            "sentiment": {
+              "n": 12,
+              "accuracy": 1.0
+            },
+            "urgency": {
+              "n": 12,
+              "accuracy": 0.75
+            }
+          }
+        },
+        "hi": {
+          "n": 60,
+          "accuracy": 0.9,
+          "ece": 0.1004,
+          "per_question": {
+            "department": {
+              "n": 12,
+              "accuracy": 0.6667
+            },
+            "needs_human": {
+              "n": 12,
+              "accuracy": 0.9167
+            },
+            "refund_requested": {
+              "n": 12,
+              "accuracy": 1.0
+            },
+            "sentiment": {
+              "n": 12,
+              "accuracy": 1.0
+            },
+            "urgency": {
+              "n": 12,
+              "accuracy": 0.9167
+            }
+          }
+        },
+        "hinglish": {
+          "n": 60,
+          "accuracy": 0.8667,
+          "ece": 0.1259,
+          "per_question": {
+            "department": {
+              "n": 12,
+              "accuracy": 0.75
+            },
+            "needs_human": {
+              "n": 12,
+              "accuracy": 0.8333
+            },
+            "refund_requested": {
+              "n": 12,
+              "accuracy": 1.0
+            },
+            "sentiment": {
+              "n": 12,
+              "accuracy": 1.0
+            },
+            "urgency": {
+              "n": 12,
+              "accuracy": 0.75
+            }
+          }
+        }
+      }
+    },
+    "B_8.5k": {
       "path": "model/synthetic-run/dist",
       "vocab": 8508,
       "by_language": {

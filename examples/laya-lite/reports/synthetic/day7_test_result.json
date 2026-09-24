@@ -1,0 +1,56 @@
+{
+  "en": {
+    "n": 475,
+    "accuracy": 0.9726,
+    "ece": 0.0243,
+    "per_question": {
+      "department": {
+        "n": 95,
+        "accuracy": 0.9895
+      },
+      "needs_human": {
+        "n": 95,
+        "accuracy": 0.9368
+      },
+      "refund_requested": {
+        "n": 95,
+        "accuracy": 1.0
+      },
+      "sentiment": {
+        "n": 95,
+        "accuracy": 1.0
+      },
+      "urgency": {
+        "n": 95,
+        "accuracy": 0.9368
+      }
+    }
+  },
+  "hi": {
+    "n": 255,
+    "accuracy": 0.8471,
+    "ece": 0.1173,
+    "per_question": {
+      "department": {
+        "n": 51,
+        "accuracy": 0.4314
+      },
+      "needs_human": {
+        "n": 51,
+        "accuracy": 0.8824
+      },
+      "refund_requested": {
+        "n": 51,
+        "accuracy": 1.0
+      },
+      "sentiment": {
+        "n": 51,
+        "accuracy": 1.0
+      },
+      "urgency": {
+        "n": 51,
+        "accuracy": 0.9216
+      }
+    }
+  }
+}

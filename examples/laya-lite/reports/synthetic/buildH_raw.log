@@ -1,0 +1,48 @@
+
+== trim: model.trim.trim_vocab --out /home/user/Tokensaver/examples/laya-lite/model/synthetic-run/hybrid/artifacts/trim --corpus data/synthetic/raw/corpus_train_val_calib.txt --add-top-merges 100000
+corpus trim is lossless on all 1074 corpus + schema lines
+vocab 256000 -> 38317, merges 580604 -> 77889
+
+== export: model.export.export_onnx --out /home/user/Tokensaver/examples/laya-lite/model/synthetic-run/hybrid/artifacts/fp32 --trim /home/user/Tokensaver/examples/laya-lite/model/synthetic-run/hybrid/artifacts/trim --checkpoint model/synthetic-run/ckpt
+exportable head matches original, max logit diff 3.58e-07
+  torch.onnx.export(
+  if (padding_length := kv_length + kv_offset - attention_mask.shape[-1]) > 0:
+  is_causal = q_length > 1 and attention_mask is None and is_causal
+  if detach_encoder:
+  if p.size(-1) >= 2:
+exported /home/user/Tokensaver/examples/laya-lite/model/synthetic-run/hybrid/artifacts/fp32/model.onnx 619 MB of weights
+
+== int8: model.quantize.quantize --src /home/user/Tokensaver/examples/laya-lite/model/synthetic-run/hybrid/artifacts/fp32 --dst /home/user/Tokensaver/examples/laya-lite/model/synthetic-run/hybrid/artifacts/int8
+embedding table int8 (block 32), max abs error 1.59e-03
+int8 weight-only /home/user/Tokensaver/examples/laya-lite/model/synthetic-run/hybrid/artifacts/int8 175 MB
+
+== calibrate: model.calibrate.calibrate --bundle /home/user/Tokensaver/examples/laya-lite/model/synthetic-run/hybrid/dist
+{
+  "choice": {
+    "n": 344,
+    "temperature": 1.3841,
+    "ece_before": 0.0119,
+    "ece_after": 0.0121
+  },
+  "score": {
+    "n": 172,
+    "temperature": 1.9137,
+    "ece_before": 0.0255,
+    "ece_after": 0.0287
+  },
+  "noul": {
+    "n": 344,
+    "temperature": 1.7649,
+    "ece_before": 0.0113,
+    "ece_after": 0.0053
+  }
+}
+# Model build
+
+- checkpoint: model/synthetic-run/ckpt
+- vocabulary trim: B (corpus + top 100000 merges)
+- G1: worst diff 0.999983 over 609 questions -> FAIL
+- validation accuracy per step: {"torch": {"en": 0.9844, "hi": 0.9633}, "onnx_fp32_trimmed": {"en": 0.9844, "hi": 0.9633}, "int8": {"en": 0.9756, "hi": 0.9673}}
+- calibration: {"choice": {"n": 344, "temperature": 1.3841, "ece_before": 0.0119, "ece_after": 0.0121}, "score": {"n": 172, "temperature": 1.9137, "ece_before": 0.0255, "ece_after": 0.0287}, "noul": {"n": 344, "temperature": 1.7649, "ece_before": 0.0113, "ece_after": 0.0053}}
+- result: **PASS**
+buildH exit=0
