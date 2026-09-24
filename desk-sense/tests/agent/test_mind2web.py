@@ -74,3 +74,17 @@ def test_evaluate_uses_each_rows_own_questions_and_ranker_baseline():
     base = majority_baseline(rows, rows, {})["en"]["accuracy"]
     first_keys = [list(r["questions"]["next"]["criteria"])[0] for r in rows]
     assert base == np.mean([a == b for a, b in zip(first_keys, labels)])
+
+
+def test_prune_plan_keeps_global_layers_and_their_types():
+    import pytest
+
+    from model.browser.prune_layers import plan
+
+    types = ["full_attention", "sliding_attention", "sliding_attention"] * 7 + ["full_attention"]
+    keep, kept_types = plan({"layer_types": types})
+    assert keep == [0, 3, 6, 9, 12, 15, 18, 21] and set(kept_types) == {"full_attention"}
+    keep, kept_types = plan({"layer_types": types}, [0, 1, 21])
+    assert kept_types == ["full_attention", "sliding_attention", "full_attention"]
+    with pytest.raises(ValueError):
+        plan({"layer_types": types}, [3, 0])
