@@ -32,6 +32,8 @@ See `.claude/skills/codebase-overview`. Invoke it instead of exploring the tree.
 
 ## Working agreements
 
+- No AI co-author or session trailers in commits or PRs (no `Co-Authored-By: Claude`, no
+  `Claude-Session:`). `attribution` is off in `.claude/settings.json` and the Bash hook refuses them.
 - Definition of Done: `DEFINITION-OF-DONE.md`. Run the `ship-it` skill before declaring done.
 - Model binaries (`model/artifacts`, `model/dist`) and real user text (`data/*`) are gitignored.
 - Delegate long runs (build ~7 min, measure ~5 min) and log reading to subagents.

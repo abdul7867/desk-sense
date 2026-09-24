@@ -51,7 +51,7 @@ Profiles: `--profile balanced` (default) or `--profile aggressive`. See
 | `.claude/settings.json` | Sonnet default, Haiku subagents, hooks and status line wired up |
 | `.claude/hooks/situation-report.sh` | **`SessionStart`** — injects branch, test status, matching lessons and TODOs. ~170 tokens, replaces thousands of orientation tokens |
 | `.claude/statusline/cockpit.sh` | Context %, cost, and **prompt-cache countdown**. Runs outside the context window — zero tokens |
-| `.claude/hooks/block-hazards-bash.sh` | **Denies** secret commits, force-push to the default branch, destructive deletes |
+| `.claude/hooks/block-hazards-bash.sh` | **Denies** secret commits, force-push to the default branch, destructive deletes, and AI co-author / session trailers in commits and PRs |
 | `.claude/hooks/block-hazards-write.sh` | **Denies** hand-edited lockfiles, writes into `node_modules`, edits to generated files |
 | `.claude/audit-context.sh` | Reports what this setup costs you at startup |
 | `.claude/agents/test-runner.md` | Runs tests in its own context, returns **only failures** |

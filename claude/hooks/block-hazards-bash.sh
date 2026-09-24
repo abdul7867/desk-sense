@@ -4,8 +4,8 @@
 # This is a DENY hook, not advice. Claude can reason past a CLAUDE.md instruction;
 # it cannot reason past this. Scope is deliberately narrow — a gate that fires on
 # things you legitimately wanted is a gate you will disable, and then it protects
-# nothing. Three categories only: secrets, history rewrites on the default branch,
-# and destructive removals.
+# nothing. Four categories only: secrets, history rewrites on the default branch,
+# destructive removals, and AI co-author / session trailers in commits and PRs.
 #
 # Escape hatch: TOKENSAVER_ALLOW_HAZARD=1 for a single deliberate command.
 set -uo pipefail
@@ -105,6 +105,16 @@ Delete inside the project with an explicit relative path. Override with TOKENSAV
 Override with TOKENSAVER_ALLOW_HAZARD=1 if this is intentional." ;;
     esac
   done
+fi
+
+
+# --- 4. AI co-author / session trailers ------------------------------------
+# Commits and PRs in this project are credited to their human author only. The
+# "attribution" setting turns these off; this catches a message typed by hand.
+if grep -qE '\bgit[[:space:]]+commit\b|\bgh[[:space:]]+pr[[:space:]]+(create|edit)\b' <<<"$cmd" \
+   && grep -qiE 'co-authored-by:.*(claude|anthropic)|claude-session:|generated with \[?claude code' <<<"$cmd"; then
+  deny "Refusing: this commit/PR text credits Claude (Co-Authored-By / Claude-Session / 'Generated with Claude Code').
+This project does not use AI co-author trailers. Remove those lines and run it again."
 fi
 
 exit 0

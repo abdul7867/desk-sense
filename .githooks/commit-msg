@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+# Strip AI co-author and session trailers from every commit message, whoever or whatever wrote it.
+# Enable once per clone:  git config core.hooksPath .githooks
+set -euo pipefail
+msg="$1"
+kept=$(grep -viE '^[[:space:]]*(co-authored-by:.*(claude|anthropic)|claude-session:|.*generated with \[?claude code)' "$msg" || true)
+# Drop the trailing blank lines the removed trailers leave behind.
+printf '%s\n' "$kept" | sed -e ':a' -e '/^\n*$/{$d;N;ba' -e '}' > "$msg"
