@@ -1,6 +1,6 @@
 ---
 name: codebase-overview
-description: The architecture map of Laya Lite — what it does, how it is laid out, where things live, and the conventions that are not obvious from any single file. Use whenever you need to orient in this codebase, before exploring or searching for where something belongs.
+description: The architecture map of desk-sense — what it does, how it is laid out, where things live, and the conventions that are not obvious from any single file. Use whenever you need to orient in this codebase, before exploring or searching for where something belongs.
 ---
 
 # Codebase overview

@@ -1,6 +1,6 @@
-# Laya Lite
+# desk-sense
 
-Offline support-ticket triage (Hindi, English, Hinglish) on Laya's multilingual decision model, built
+Offline support-ticket triage (Hindi, English, Hinglish) on the Laya multilingual decision model, built
 to run on a 4 GB i3/Ryzen machine in ≤ 500 MB. Week-1 sprint: `LAYA_LITE_MASTER_PLAN.md`.
 
 ## Commands

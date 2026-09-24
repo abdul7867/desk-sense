@@ -1,7 +1,7 @@
 ---
 paths:
   - "**/*.py"
-description: Laya Lite Python conventions. Loads only when touching Python files.
+description: desk-sense Python conventions. Loads only when touching Python files.
 ---
 
 # Python rules

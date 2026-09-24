@@ -35,8 +35,8 @@ def show(res, out=sys.stdout):
 
 
 def main(argv=None):
-    ap = argparse.ArgumentParser(prog="laya-lite")
-    ap.add_argument("--db", default=str(ROOT / "laya_lite.db"))
+    ap = argparse.ArgumentParser(prog="desk-sense")
+    ap.add_argument("--db", default=str(ROOT / "desk_sense.db"))
     ap.add_argument("--bundle", default=str(DEFAULT_BUNDLE))
     ap.add_argument("--fake", action="store_true")
     sub = ap.add_subparsers(dest="cmd", required=True)

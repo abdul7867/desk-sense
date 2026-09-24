@@ -1,12 +1,13 @@
-# Laya Lite
+# desk-sense — the app
 
 Offline support-ticket triage in Hindi, English and Hinglish, on the
 [Laya](https://huggingface.co/convaiinnovations/laya) multilingual decision model, built to fit a
 4 GB i3/Ryzen machine in ≤ 500 MB. A ticket goes in; five typed answers come out, each with a
 calibrated probability and a zone: **act**, **confirm** or **flag** for a human.
 
-This is Day 1 of the Week-1 sprint in [`LAYA_LITE_MASTER_PLAN.md`](LAYA_LITE_MASTER_PLAN.md), built
-under [Tokensaver](../../README.md).
+Built in the Week-1 sprint planned in [`LAYA_LITE_MASTER_PLAN.md`](LAYA_LITE_MASTER_PLAN.md) (Day 1 on the real
+base model, Days 2–7 as a dry run on dummy data), with the [Tokensaver](../docs/TOKENSAVER.md) setup.
+The repository front page is [`../README.md`](../README.md).
 
 ```
 $ python -m app.cli ask "मुझसे दो बार शुल्क लिया गया, कृपया रिफंड करें"

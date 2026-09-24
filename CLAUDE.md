@@ -1,7 +1,8 @@
-# Tokensaver repository
+# desk-sense repository
 
-The Tokensaver bundle (`claude/`, `install.sh`, `profiles/`, `templates/`) and the projects built with
-it (`examples/`). Each example has its own CLAUDE.md; read that one when working inside it.
+desk-sense: offline ticket triage in `desk-sense/` (the app), built with the Tokensaver bundle
+(`claude/`, `install.sh`, `profiles/`, `templates/`; see `docs/TOKENSAVER.md`). Each project has its
+own CLAUDE.md; read that one when working inside it.
 
 ## Commits and pull requests
 

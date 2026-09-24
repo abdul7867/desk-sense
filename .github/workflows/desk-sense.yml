@@ -1,4 +1,4 @@
-name: Laya Lite
+name: desk-sense
 
 # Tests on the fake worker with runtime dependencies only: proves the app and the pipeline tooling
 # need no torch. Model tests skip here (no model/dist in git); they run where the model is built.
@@ -6,17 +6,17 @@ name: Laya Lite
 on:
   push:
     paths:
-      - 'examples/laya-lite/**'
-      - '.github/workflows/laya-lite.yml'
+      - 'desk-sense/**'
+      - '.github/workflows/desk-sense.yml'
   pull_request:
     paths:
-      - 'examples/laya-lite/**'
-      - '.github/workflows/laya-lite.yml'
+      - 'desk-sense/**'
+      - '.github/workflows/desk-sense.yml'
   workflow_dispatch:
 
 defaults:
   run:
-    working-directory: examples/laya-lite
+    working-directory: desk-sense
 
 jobs:
   test:
@@ -29,7 +29,7 @@ jobs:
         with:
           python-version: '3.11'
           cache: pip
-          cache-dependency-path: examples/laya-lite/requirements-runtime.txt
+          cache-dependency-path: desk-sense/requirements-runtime.txt
 
       - run: pip install -r requirements-runtime.txt pytest==9.1.1
 

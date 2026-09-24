@@ -279,7 +279,7 @@ def make_server(sup, port=0):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--db", default=str(ROOT / "laya_lite.db"))
+    ap.add_argument("--db", default=str(ROOT / "desk_sense.db"))
     ap.add_argument("--bundle", default=str(DEFAULT_BUNDLE))
     ap.add_argument("--fake", action="store_true")
     ap.add_argument("--port", type=int, default=8765)
