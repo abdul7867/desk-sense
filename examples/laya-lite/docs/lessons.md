@@ -20,6 +20,12 @@ for detail. Keep it scannable — a ledger nobody reads protects nothing.
 
 <!-- Add newest at the top. -->
 
+- **2026-09-24 — Corpus trim cost 28 accuracy points on text that was in the corpus.** The model
+  also reads the question and option text, which was not in the corpus, and the merge closure
+  followed only one way of building each token. *Rule:* the trim always includes `schema_lines()`
+  and follows every producer of each token, and `trim_vocab` refuses to write a tokenizer that
+  changes any corpus line. `build_model`'s per-step accuracy gate is what caught it.
+
 - **2026-09-23 — A "wait until the benchmark ends" loop never ended.** `pgrep -f "tests.measure_app"`
   matched the loop's own command line, so it waited on itself. *Rule:* wait on a PID, or use a
   pattern the waiting command cannot contain (`tests[.]measure_app`), and check the loop has exited.

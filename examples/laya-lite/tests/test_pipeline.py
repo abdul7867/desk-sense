@@ -176,3 +176,21 @@ def test_micro_batches_bound_tokens_and_keep_every_item():
     assert sorted(len(x["ids"]) for p in parts for x in p) == sorted(len(x["ids"]) for x in items)
     for p in parts:
         assert len(p) == 1 or max(len(x["ids"]) for x in p) * len(p) <= 1024
+
+
+def test_closure_follows_every_producer_of_a_token():
+    from model.trim.trim_vocab import build_closure
+
+    # abcd can be built as abc+d or ab+cd; BPE may take either path, so both must survive.
+    merges = [("a", "b"), ("c", "d"), ("ab", "c"), ("abc", "d"), ("ab", "cd")]
+    assert {"a", "b", "c", "d", "ab", "cd", "abc", "abcd"} <= build_closure({"abcd"}, merges)
+
+
+def test_schema_lines_are_what_the_model_reads():
+    from model.data import load_schema
+    from model.trim.trim_vocab import schema_lines
+
+    lines = schema_lines(load_schema())
+    assert "choice question: Which team should handle this ticket?" in lines
+    assert " billing: invoices, payments, charges, refunds" in lines
+    assert " true: yes, the statement holds" in lines

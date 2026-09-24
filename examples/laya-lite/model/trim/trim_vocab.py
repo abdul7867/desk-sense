@@ -48,19 +48,52 @@ def corpus_tokens(tok_path, lines):
 
 
 def build_closure(tokens, merges):
-    """Every token plus the merge inputs needed to build it, recursively (lowest-rank merge wins)."""
-    first = {}
+    """Every token plus the inputs of *every* merge that can build it, recursively.
+
+    BPE reaches a token by whichever merges win on that word, not necessarily the lowest-ranked
+    merge that produces it. Following only one producer dropped real intermediates ("▁account"
+    fell apart into "▁acc ou nt"). All producers is a superset of every path actually taken.
+    """
+    producers = {}
     for a, b in merges:
-        first.setdefault(a + b, (a, b))
+        producers.setdefault(a + b, []).append((a, b))
     out, stack = set(), list(tokens)
     while stack:
         t = stack.pop()
         if t in out:
             continue
         out.add(t)
-        if t in first:
-            stack.extend(first[t])
+        for pair in producers.get(t, ()):
+            stack.extend(pair)
     return out
+
+
+def schema_lines(schema):
+    """The question text and options the model reads with every ticket (build_sequence's format).
+    They must tokenize exactly as in training, so they are always part of the trim corpus."""
+    from app.runtime import render_options, to_internal
+
+    lines = []
+    for qdef in schema["questions"].values():
+        q = to_internal(qdef)
+        lines.append("%s question: %s" % (q["t"], q["ins"]))
+        lines.extend(" " + o for o in render_options(q))
+    return lines
+
+
+def lossless_on(src_path, out_json, keep_ids, lines):
+    """Lines whose tokens change after trimming (should be none for the corpus)."""
+    from tokenizers import Tokenizer
+
+    orig = Tokenizer.from_file(str(src_path))
+    new = Tokenizer.from_str(json.dumps(out_json))
+    bad = []
+    for ln in lines:
+        a = orig.encode(ln, add_special_tokens=False).ids
+        b = [int(keep_ids[i]) for i in new.encode(ln, add_special_tokens=False).ids]
+        if a != b:
+            bad.append(ln)
+    return bad
 
 
 def trim(tok_json, allowed=("latin", "devanagari"), max_merges=None, corpus=None):
@@ -109,8 +142,20 @@ def main():
     args = ap.parse_args()
     args.src = args.src or snapshot_dir() / "tokenizer" / "tokenizer.json"
     src = json.loads(args.src.read_text(encoding="utf-8"))
-    corpus = corpus_tokens(args.src, args.corpus.read_text(encoding="utf-8").splitlines()) if args.corpus else None
+    lines = None
+    if args.corpus:
+        from model.data import load_schema
+
+        lines = [ln for ln in args.corpus.read_text(encoding="utf-8").splitlines() if ln.strip()]
+        lines += schema_lines(load_schema())
+    corpus = corpus_tokens(args.src, lines) if lines else None
     out, keep_ids = trim(src, max_merges=args.max_merges, corpus=corpus)
+    if lines:
+        bad = lossless_on(args.src, out, keep_ids, lines)
+        if bad:
+            raise SystemExit("corpus trim changed the tokens of %d/%d corpus lines, e.g. %r"
+                             % (len(bad), len(lines), bad[0][:80]))
+        print("corpus trim is lossless on all %d corpus + schema lines" % len(lines))
     args.out.mkdir(parents=True, exist_ok=True)
     (args.out / "tokenizer.json").write_text(json.dumps(out, ensure_ascii=False), encoding="utf-8")
     np.save(args.out / "keep_ids.npy", keep_ids)
