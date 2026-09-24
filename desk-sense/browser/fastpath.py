@@ -31,10 +31,16 @@ def decide(elements, subgoal, page, failed=()):
         return {"op": op, "index": el["i"], "value": subgoal.get("value"), "why": "exact name match"}
     if op in ("click", "select"):
         want = words(subgoal.get("target"))
-        sugg = [el for el in elements if usable(el) and el.get("new") and el.get("role") in ("option", "menuitem")
-                and want <= words(el.get("name"))]
+        fresh = [el for el in elements if usable(el) and el.get("new") and el.get("role") in ("option", "menuitem")]
+        sugg = [el for el in fresh if want <= words(el.get("name"))]
         if len(sugg) == 1:
             return {"op": "click", "index": sugg[0]["i"], "why": "single matching suggestion"}
+        # A suggestion list that just appeared: "Heathrow" -> "London Heathrow (LHR)". Only when one
+        # suggestion shares strictly more of the target's words than any other.
+        if want and fresh:
+            scored = sorted(((len(want & words(el.get("name"))), el) for el in fresh), key=lambda x: -x[0])
+            if scored[0][0] > 0 and (len(scored) == 1 or scored[0][0] > scored[1][0]):
+                return {"op": "click", "index": scored[0][1]["i"], "why": "best matching new suggestion"}
     want = words(subgoal.get("target"))
     if want and page.get("more_below") and not any(
             want <= (words(el.get("name")) | words(el.get("placeholder"))) for el in elements if usable(el)):

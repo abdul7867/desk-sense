@@ -31,6 +31,8 @@ def score(el, subgoal, failed=()):
         s += 3.0 * overlap / len(want) + 1.0 * overlap / len(have)
     if subgoal and op_for(el) == subgoal.get("op"):
         s += 1.0
+        if subgoal.get("op") == "type" and not el.get("value") and not (want & have):
+            s += 0.5  # a new value usually goes into a field that is still empty
     if el.get("region") == "dialog":
         s += 0.5
     if el.get("new"):

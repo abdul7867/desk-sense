@@ -2,9 +2,9 @@
   "mode": "real-model",
   "suite": "exact",
   "runs": 3,
-  "measured_on": "dev container, 4 vCPU, 15 GB RAM, Linux, headless Chromium, real base Laya int8 (untrained on browser steps), 2 threads, scripted thinker",
+  "measured_on": "dev container, 4 vCPU, 15 GB RAM, headless Chromium, browser-trained Laya ckpt2 (teacher), 2 threads, scripted thinker; CPU shared with a distillation run (times inflated)",
   "success": "15/15",
-  "median_seconds": 0.904,
+  "median_seconds": 0.913,
   "results": [
     {
       "task": "flights",
@@ -12,7 +12,7 @@
       "success": true,
       "end": "finish",
       "why": "all steps done",
-      "seconds": 1.033,
+      "seconds": 1.115,
       "steps": 6,
       "sources": {
         "fastpath": 5,
@@ -26,7 +26,7 @@
       "success": true,
       "end": "finish",
       "why": "all steps done",
-      "seconds": 1.071,
+      "seconds": 1.097,
       "steps": 6,
       "sources": {
         "fastpath": 5,
@@ -40,7 +40,7 @@
       "success": true,
       "end": "finish",
       "why": "all steps done",
-      "seconds": 1.067,
+      "seconds": 1.07,
       "steps": 6,
       "sources": {
         "fastpath": 5,
@@ -54,7 +54,7 @@
       "success": true,
       "end": "finish",
       "why": "all steps done",
-      "seconds": 1.28,
+      "seconds": 1.29,
       "steps": 7,
       "sources": {
         "fastpath": 6,
@@ -70,7 +70,7 @@
       "success": true,
       "end": "finish",
       "why": "all steps done",
-      "seconds": 1.278,
+      "seconds": 1.305,
       "steps": 7,
       "sources": {
         "fastpath": 6,
@@ -86,7 +86,7 @@
       "success": true,
       "end": "finish",
       "why": "all steps done",
-      "seconds": 1.279,
+      "seconds": 1.299,
       "steps": 7,
       "sources": {
         "fastpath": 6,
@@ -102,7 +102,7 @@
       "success": true,
       "end": "finish",
       "why": "all steps done",
-      "seconds": 0.693,
+      "seconds": 0.698,
       "steps": 4,
       "sources": {
         "fastpath": 3,
@@ -116,7 +116,7 @@
       "success": true,
       "end": "finish",
       "why": "all steps done",
-      "seconds": 0.697,
+      "seconds": 0.692,
       "steps": 4,
       "sources": {
         "fastpath": 3,
@@ -130,7 +130,7 @@
       "success": true,
       "end": "finish",
       "why": "all steps done",
-      "seconds": 0.688,
+      "seconds": 0.692,
       "steps": 4,
       "sources": {
         "fastpath": 3,
@@ -144,7 +144,7 @@
       "success": true,
       "end": "finish",
       "why": "all steps done",
-      "seconds": 0.854,
+      "seconds": 0.913,
       "steps": 5,
       "sources": {
         "fastpath": 4,
@@ -158,7 +158,7 @@
       "success": true,
       "end": "finish",
       "why": "all steps done",
-      "seconds": 0.909,
+      "seconds": 0.918,
       "steps": 5,
       "sources": {
         "fastpath": 4,
@@ -172,7 +172,7 @@
       "success": true,
       "end": "finish",
       "why": "all steps done",
-      "seconds": 0.904,
+      "seconds": 0.913,
       "steps": 5,
       "sources": {
         "fastpath": 4,
@@ -186,7 +186,7 @@
       "success": true,
       "end": "stop",
       "why": "you declined the action",
-      "seconds": 0.647,
+      "seconds": 0.659,
       "steps": 4,
       "sources": {
         "fastpath": 3,
@@ -203,7 +203,7 @@
       "success": true,
       "end": "stop",
       "why": "you declined the action",
-      "seconds": 0.642,
+      "seconds": 0.653,
       "steps": 4,
       "sources": {
         "fastpath": 3,
@@ -220,7 +220,7 @@
       "success": true,
       "end": "stop",
       "why": "you declined the action",
-      "seconds": 0.646,
+      "seconds": 0.652,
       "steps": 4,
       "sources": {
         "fastpath": 3,

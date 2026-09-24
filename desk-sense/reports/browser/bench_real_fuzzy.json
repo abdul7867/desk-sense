@@ -2,348 +2,57 @@
   "mode": "real-model",
   "suite": "fuzzy",
   "runs": 3,
-  "measured_on": "dev container, 4 vCPU, 15 GB RAM, Linux, headless Chromium, browser-trained Laya int8 (ckpt 2, Mind2Web), 2 threads, scripted thinker",
-  "success": "12/15",
-  "median_seconds": 1.857,
+  "measured_on": "dev container, 4 vCPU, 15 GB RAM, headless Chromium, browser-trained Laya ckpt2 (teacher), 2 threads, scripted thinker; CPU shared with a distillation run (times inflated)",
+  "success": "15/15",
+  "median_seconds": 2.599,
   "results": [
     {
       "task": "flights-fuzzy",
       "run": 1,
-      "success": false,
-      "end": "blocked",
-      "why": "the local model is unsure; the planner could not help: thinker resolve budget used up (4)",
-      "seconds": 4.917,
+      "success": true,
+      "end": "finish",
+      "why": "all steps done",
+      "seconds": 5.231,
       "steps": 6,
       "sources": {
-        "thinker": 4,
-        "fastpath": 1,
+        "thinker": 2,
+        "fastpath": 2,
+        "model": 1,
         "engine": 1
       },
-      "asked": [],
-      "trail": [
-        {
-          "op": "type",
-          "index": 3,
-          "name": "From",
-          "source": "thinker",
-          "advance": true,
-          "value": "Zurich",
-          "step": 1,
-          "zone": "flag",
-          "p": 0.5837,
-          "task": "t1",
-          "plan": [
-            {
-              "op": "type",
-              "target": "departure city",
-              "value": "Zurich",
-              "irreversible": false
-            },
-            {
-              "op": "click",
-              "target": "Zurich airport",
-              "value": null,
-              "irreversible": false
-            },
-            {
-              "op": "type",
-              "target": "destination",
-              "value": "London",
-              "irreversible": false
-            },
-            {
-              "op": "click",
-              "target": "Heathrow",
-              "value": null,
-              "irreversible": false
-            },
-            {
-              "op": "click",
-              "target": "search button",
-              "value": null,
-              "irreversible": false
-            }
-          ]
-        },
-        {
-          "op": "click",
-          "index": 5,
-          "name": "Zurich (ZRH)",
-          "source": "thinker",
-          "advance": true,
-          "step": 2,
-          "zone": "confirm",
-          "p": 0.7217,
-          "task": "t1"
-        },
-        {
-          "op": "type",
-          "index": 3,
-          "name": "From",
-          "source": "thinker",
-          "advance": true,
-          "value": "London",
-          "step": 3,
-          "zone": "flag",
-          "p": 0.3049,
-          "task": "t1"
-        },
-        {
-          "op": "click",
-          "index": 5,
-          "name": "London Heathrow (LHR)",
-          "source": "fastpath",
-          "advance": true,
-          "step": 4,
-          "task": "t1"
-        },
-        {
-          "op": "click",
-          "index": 5,
-          "name": "Search flights",
-          "source": "thinker",
-          "advance": true,
-          "step": 5,
-          "zone": "confirm",
-          "p": 0.7055,
-          "task": "t1"
-        },
-        {
-          "op": "blocked",
-          "why": "the local model is unsure; the planner could not help: thinker resolve budget used up (4)",
-          "source": "engine",
-          "step": 6,
-          "task": "t1",
-          "seconds": 4.896
-        }
-      ],
-      "page": "{\"from\":\"LHR\",\"to\":null,\"searched\":false,\"untrusted\":0}"
+      "asked": []
     },
     {
       "task": "flights-fuzzy",
       "run": 2,
-      "success": false,
-      "end": "blocked",
-      "why": "the local model is unsure; the planner could not help: thinker resolve budget used up (4)",
-      "seconds": 2.953,
+      "success": true,
+      "end": "finish",
+      "why": "all steps done",
+      "seconds": 2.82,
       "steps": 6,
       "sources": {
-        "thinker": 4,
-        "fastpath": 1,
+        "thinker": 2,
+        "fastpath": 2,
+        "model": 1,
         "engine": 1
       },
-      "asked": [],
-      "trail": [
-        {
-          "op": "type",
-          "index": 3,
-          "name": "From",
-          "source": "thinker",
-          "advance": true,
-          "value": "Zurich",
-          "step": 1,
-          "zone": "flag",
-          "p": 0.5837,
-          "task": "t2",
-          "plan": [
-            {
-              "op": "type",
-              "target": "departure city",
-              "value": "Zurich",
-              "irreversible": false
-            },
-            {
-              "op": "click",
-              "target": "Zurich airport",
-              "value": null,
-              "irreversible": false
-            },
-            {
-              "op": "type",
-              "target": "destination",
-              "value": "London",
-              "irreversible": false
-            },
-            {
-              "op": "click",
-              "target": "Heathrow",
-              "value": null,
-              "irreversible": false
-            },
-            {
-              "op": "click",
-              "target": "search button",
-              "value": null,
-              "irreversible": false
-            }
-          ]
-        },
-        {
-          "op": "click",
-          "index": 5,
-          "name": "Zurich (ZRH)",
-          "source": "thinker",
-          "advance": true,
-          "step": 2,
-          "zone": "confirm",
-          "p": 0.7217,
-          "task": "t2"
-        },
-        {
-          "op": "type",
-          "index": 3,
-          "name": "From",
-          "source": "thinker",
-          "advance": true,
-          "value": "London",
-          "step": 3,
-          "zone": "flag",
-          "p": 0.3049,
-          "task": "t2"
-        },
-        {
-          "op": "click",
-          "index": 5,
-          "name": "London Heathrow (LHR)",
-          "source": "fastpath",
-          "advance": true,
-          "step": 4,
-          "task": "t2"
-        },
-        {
-          "op": "click",
-          "index": 5,
-          "name": "Search flights",
-          "source": "thinker",
-          "advance": true,
-          "step": 5,
-          "zone": "confirm",
-          "p": 0.7055,
-          "task": "t2"
-        },
-        {
-          "op": "blocked",
-          "why": "the local model is unsure; the planner could not help: thinker resolve budget used up (4)",
-          "source": "engine",
-          "step": 6,
-          "task": "t2",
-          "seconds": 2.933
-        }
-      ],
-      "page": "{\"from\":\"LHR\",\"to\":null,\"searched\":false,\"untrusted\":0}"
+      "asked": []
     },
     {
       "task": "flights-fuzzy",
       "run": 3,
-      "success": false,
-      "end": "blocked",
-      "why": "the local model is unsure; the planner could not help: thinker resolve budget used up (4)",
-      "seconds": 2.92,
+      "success": true,
+      "end": "finish",
+      "why": "all steps done",
+      "seconds": 3,
       "steps": 6,
       "sources": {
-        "thinker": 4,
-        "fastpath": 1,
+        "thinker": 2,
+        "fastpath": 2,
+        "model": 1,
         "engine": 1
       },
-      "asked": [],
-      "trail": [
-        {
-          "op": "type",
-          "index": 3,
-          "name": "From",
-          "source": "thinker",
-          "advance": true,
-          "value": "Zurich",
-          "step": 1,
-          "zone": "flag",
-          "p": 0.5837,
-          "task": "t3",
-          "plan": [
-            {
-              "op": "type",
-              "target": "departure city",
-              "value": "Zurich",
-              "irreversible": false
-            },
-            {
-              "op": "click",
-              "target": "Zurich airport",
-              "value": null,
-              "irreversible": false
-            },
-            {
-              "op": "type",
-              "target": "destination",
-              "value": "London",
-              "irreversible": false
-            },
-            {
-              "op": "click",
-              "target": "Heathrow",
-              "value": null,
-              "irreversible": false
-            },
-            {
-              "op": "click",
-              "target": "search button",
-              "value": null,
-              "irreversible": false
-            }
-          ]
-        },
-        {
-          "op": "click",
-          "index": 5,
-          "name": "Zurich (ZRH)",
-          "source": "thinker",
-          "advance": true,
-          "step": 2,
-          "zone": "confirm",
-          "p": 0.7217,
-          "task": "t3"
-        },
-        {
-          "op": "type",
-          "index": 3,
-          "name": "From",
-          "source": "thinker",
-          "advance": true,
-          "value": "London",
-          "step": 3,
-          "zone": "flag",
-          "p": 0.3049,
-          "task": "t3"
-        },
-        {
-          "op": "click",
-          "index": 5,
-          "name": "London Heathrow (LHR)",
-          "source": "fastpath",
-          "advance": true,
-          "step": 4,
-          "task": "t3"
-        },
-        {
-          "op": "click",
-          "index": 5,
-          "name": "Search flights",
-          "source": "thinker",
-          "advance": true,
-          "step": 5,
-          "zone": "confirm",
-          "p": 0.7055,
-          "task": "t3"
-        },
-        {
-          "op": "blocked",
-          "why": "the local model is unsure; the planner could not help: thinker resolve budget used up (4)",
-          "source": "engine",
-          "step": 6,
-          "task": "t3",
-          "seconds": 2.866
-        }
-      ],
-      "page": "{\"from\":\"LHR\",\"to\":null,\"searched\":false,\"untrusted\":0}"
+      "asked": []
     },
     {
       "task": "settings-fuzzy",
@@ -351,7 +60,7 @@
       "success": true,
       "end": "finish",
       "why": "all steps done",
-      "seconds": 1.917,
+      "seconds": 2.636,
       "steps": 4,
       "sources": {
         "thinker": 2,
@@ -366,7 +75,7 @@
       "success": true,
       "end": "finish",
       "why": "all steps done",
-      "seconds": 1.857,
+      "seconds": 2.572,
       "steps": 4,
       "sources": {
         "thinker": 2,
@@ -381,7 +90,7 @@
       "success": true,
       "end": "finish",
       "why": "all steps done",
-      "seconds": 1.801,
+      "seconds": 2.599,
       "steps": 4,
       "sources": {
         "thinker": 2,
@@ -396,7 +105,7 @@
       "success": true,
       "end": "finish",
       "why": "all steps done",
-      "seconds": 1.326,
+      "seconds": 1.611,
       "steps": 5,
       "sources": {
         "fastpath": 3,
@@ -411,7 +120,7 @@
       "success": true,
       "end": "finish",
       "why": "all steps done",
-      "seconds": 1.334,
+      "seconds": 1.62,
       "steps": 5,
       "sources": {
         "fastpath": 3,
@@ -426,7 +135,7 @@
       "success": true,
       "end": "finish",
       "why": "all steps done",
-      "seconds": 1.279,
+      "seconds": 1.564,
       "steps": 5,
       "sources": {
         "fastpath": 3,
@@ -441,7 +150,7 @@
       "success": true,
       "end": "stop",
       "why": "you declined the action",
-      "seconds": 1.599,
+      "seconds": 2.314,
       "steps": 4,
       "sources": {
         "model": 1,
@@ -459,7 +168,7 @@
       "success": true,
       "end": "stop",
       "why": "you declined the action",
-      "seconds": 1.652,
+      "seconds": 2.264,
       "steps": 4,
       "sources": {
         "model": 1,
@@ -477,7 +186,7 @@
       "success": true,
       "end": "stop",
       "why": "you declined the action",
-      "seconds": 1.609,
+      "seconds": 2.055,
       "steps": 4,
       "sources": {
         "model": 1,
@@ -495,7 +204,7 @@
       "success": true,
       "end": "finish",
       "why": "all steps done",
-      "seconds": 3.811,
+      "seconds": 5.108,
       "steps": 7,
       "sources": {
         "model": 4,
@@ -512,7 +221,7 @@
       "success": true,
       "end": "finish",
       "why": "all steps done",
-      "seconds": 3.84,
+      "seconds": 4.826,
       "steps": 7,
       "sources": {
         "model": 4,
@@ -529,7 +238,7 @@
       "success": true,
       "end": "finish",
       "why": "all steps done",
-      "seconds": 3.777,
+      "seconds": 4.826,
       "steps": 7,
       "sources": {
         "model": 4,

@@ -98,6 +98,24 @@ def test_fastpath_scrolls_when_target_is_off_screen():
     assert fastpath.decide(TABLE, {"op": "click", "target": "Search"}, dict(PAGE, more_below=True)) is None
 
 
+def test_empty_fields_rank_first_for_typing_when_the_label_does_not_match():
+    table = [el(1, "textbox", "From", value="Zurich (ZRH)"), el(2, "textbox", "To", value="")]
+    assert rank.shortlist(table, {"op": "type", "target": "destination", "value": "London"})[0]["i"] == 2
+    # a matching label still wins over emptiness
+    table = [el(1, "textbox", "From", value="Zurich"), el(2, "textbox", "Notes", value="")]
+    assert rank.shortlist(table, {"op": "type", "target": "From", "value": "Basel"})[0]["i"] == 1
+
+
+def test_fastpath_picks_best_new_suggestion_only_when_unambiguous():
+    sugg = TABLE + [el(7, "option", "London Heathrow (LHR)", new=True), el(8, "option", "London Gatwick (LGW)", new=True)]
+    assert fastpath.decide(sugg, {"op": "click", "target": "Heathrow"}, PAGE)["index"] == 7
+    assert fastpath.decide(sugg, {"op": "click", "target": "London airport"}, PAGE) is None  # tie: model decides
+    zrh = TABLE + [el(9, "option", "Zurich (ZRH)", new=True), el(10, "option", "Zagreb (ZAG)", new=True)]
+    assert fastpath.decide(zrh, {"op": "click", "target": "Zurich airport"}, PAGE)["index"] == 9
+    old = TABLE + [el(11, "option", "London Heathrow (LHR)")]  # not new: not a suggestion list
+    assert fastpath.decide(old, {"op": "click", "target": "Heathrow"}, PAGE) is None
+
+
 def test_dialog_breaks_a_tie():
     dup = [el(1, "button", "Accept"), el(2, "button", "Accept", region="dialog")]
     assert fastpath.decide(dup, {"op": "click", "target": "Accept"}, PAGE)["index"] == 2
