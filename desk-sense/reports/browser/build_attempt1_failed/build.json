@@ -1,0 +1,54 @@
+{
+  "checkpoint": "model/artifacts/ckpt_browser",
+  "trim": "A (script)",
+  "steps": {
+    "g1": {
+      "cases": 200,
+      "questions": 609,
+      "tolerance": 0.01,
+      "worst_max_prob_diff": 5.2e-05,
+      "failures": 0,
+      "mean_max_prob_diff": 3.4e-05,
+      "argmax_agreement": 0.9951,
+      "decisive_questions": 517,
+      "decisive_agreement": 1.0,
+      "token_parity_failures": 0,
+      "candidate_latency_ms_p50": 217.8,
+      "candidate_latency_ms_p95": 550.0,
+      "passed": true
+    },
+    "val_accuracy": {
+      "torch": {
+        "en": 0.7386
+      },
+      "onnx_fp32_trimmed": {
+        "en": 0.7168
+      },
+      "int8": {
+        "en": 0.7124
+      }
+    },
+    "calibration": {
+      "choice": {
+        "n": 572,
+        "temperature": 2.7395,
+        "ece_before": 0.18,
+        "ece_after": 0.0988
+      },
+      "score": {
+        "n": 0,
+        "skipped": "fewer than 30 items; temperature left at 1.000"
+      },
+      "noul": {
+        "n": 0,
+        "skipped": "fewer than 30 items; temperature left at 1.000"
+      }
+    }
+  },
+  "failures": [
+    "onnx_fp32_trimmed drops en validation accuracy by 2.2 points",
+    "int8 drops en validation accuracy by 2.6 points"
+  ],
+  "minutes": 17.0,
+  "passed": false
+}
