@@ -5,6 +5,7 @@ model/dist/
 data/raw/*
 data/labeled/*
 data/splits/*
+data/browser/
 !data/*/.gitkeep
 # Runtime state
 *.db
