@@ -99,7 +99,8 @@ class RealModel:
         self.m = OrtModel(bundle, threads=threads, max_len=max_len)
 
     def predict(self, req):
-        return self.m.predict(req["state"], req["questions"], allow_truncate=req.get("allow_truncate", False))
+        return self.m.predict(req["state"], req["questions"], allow_truncate=req.get("allow_truncate", False),
+                              strict=req.get("strict", False))
 
 
 def serve(model, out):

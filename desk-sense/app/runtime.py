@@ -79,15 +79,24 @@ class TextEncoder:
         return self.tok.encode(text, add_special_tokens=False).ids
 
 
-def build_sequence(enc, state, q, max_len, head_max_len, state_ids=None):
+class OptionsTooLong(ValueError):
+    pass
+
+
+def build_sequence(enc, state, q, max_len, head_max_len, state_ids=None, strict=False):
     """[CLS] <type> instructions [SEP] [MASK] opt0 [MASK] opt1 ... [SEP] state [SEP].
-    `state_ids`: the state already tokenized, so a 5-question request tokenizes the ticket once."""
+    `state_ids`: the state already tokenized, so a 5-question request tokenizes the ticket once.
+    `strict`: raise OptionsTooLong instead of shortening options (laya's behaviour, kept for tickets)."""
     mask = enc.mask_token
     opts = render_options(q)
     ins = str(q["ins"]).replace(mask, " ")
     head_ids = enc.ids("%s question: %s" % (q["t"], ins))
-    opt_ids = [[enc.mask_id] + enc.ids(" " + o.replace(mask, " "))[:48] for o in opts]
+    full = [[enc.mask_id] + enc.ids(" " + o.replace(mask, " ")) for o in opts]
+    opt_ids = [o[:49] for o in full]
     opt_budget = head_max_len - sum(len(o) for o in opt_ids)
+    if strict and (opt_ids != full or opt_budget < 16 or len(head_ids) > opt_budget):
+        raise OptionsTooLong("question + options need %d tokens; the head reads %d"
+                             % (len(head_ids) + sum(len(o) for o in full), head_max_len))
     if opt_budget < 16:
         per = max(4, (head_max_len - 16) // max(1, len(opt_ids)))
         opt_ids = [o[:per] for o in opt_ids]
@@ -153,7 +162,7 @@ class Runtime:
         self.temperature = [clamp_temperature(t) for t in self.cfg.get("temperature", [1.0, 1.0, 1.0])]
         self.temperature_by_options = {k: clamp_temperature(v) for k, v in self.cfg.get("temperature_by_options", {}).items()}
 
-    def prepare(self, state, questions):
+    def prepare(self, state, questions, strict=False):
         """Returns items, the collated batch, and length info: `room` is how many state tokens the
         tightest question leaves space for; `truncated` means the model would not see all of it."""
         items, room = [], self.max_len
@@ -161,7 +170,7 @@ class Runtime:
         n_state = len(st)
         for qid, qdef in questions.items():
             q = to_internal(qdef)
-            seq, markers, r, _ = build_sequence(self.enc, state, q, self.max_len, self.head_max_len, st)
+            seq, markers, r, _ = build_sequence(self.enc, state, q, self.max_len, self.head_max_len, st, strict)
             room = min(room, r)
             if len(markers) != len(render_options(q)):
                 raise ValueError("question %r options exceed head_max_len=%d" % (qid, self.head_max_len))

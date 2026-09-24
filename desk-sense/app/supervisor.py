@@ -222,6 +222,10 @@ class Supervisor:
             if "error" in reply:
                 self.store.fail(rid)
                 return {"id": rid, "status": "failed", "message": reply["error"]}
+            if "options_too_long" in reply:
+                refusal = {"reason": "options_too_long", "message": reply["options_too_long"] + ". Nothing was cut."}
+                self.store.finish(rid, "refused", {"refused": refusal}, language=g.language)
+                return {"id": rid, "status": "refused", **refusal}
             if "too_long" in reply:
                 info = reply["too_long"]
                 refusal = {"reason": "too_long", "tokens": info["state_tokens"], "limit": info["room"],

@@ -3,7 +3,7 @@ from pathlib import Path
 
 import numpy as np
 
-from app.runtime import Runtime, collate
+from app.runtime import OptionsTooLong, Runtime, collate
 from app.worker import release_free_heap
 
 MODEL_FILE = "model.onnx"
@@ -69,8 +69,11 @@ class OrtModel:
         return {qid: np.asarray(logits[r, : len(it["markers"])], dtype=np.float64)
                 for r, (qid, it) in enumerate(zip(questions, items))}
 
-    def predict(self, state, questions, allow_truncate=False):
-        items, batch, info = self.rt.prepare(state, questions)
+    def predict(self, state, questions, allow_truncate=False, strict=False):
+        try:
+            items, batch, info = self.rt.prepare(state, questions, strict)
+        except OptionsTooLong as e:
+            return {"options_too_long": str(e)}
         if info["truncated"] and not allow_truncate:
             return {"too_long": info}
         logits, act = self.forward(items)
