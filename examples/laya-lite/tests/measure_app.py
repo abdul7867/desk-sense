@@ -34,11 +34,22 @@ def requests(n):
     return out
 
 
-def measure(bundle, n, threads, db, max_len=None):
+def timed_requests(minutes):
+    """Soak mode: the same request mix, repeated until `minutes` have passed (G5: 1 hour, no crashes)."""
+    deadline = time.monotonic() + minutes * 60
+    while time.monotonic() < deadline:
+        for req in requests(100):
+            if time.monotonic() >= deadline:
+                return
+            yield req
+
+
+def measure(bundle, n, threads, db, max_len=None, minutes=None):
     sup = Supervisor(db, bundle=bundle, threads=threads, max_len=max_len)  # real watchdog: it must not fire on a healthy worker
     lat_e2e, lat_model, statuses = [], [], {}
+    started = time.monotonic()
     try:
-        for text, fill_window in requests(n):
+        for text, fill_window in (timed_requests(minutes) if minutes else requests(n)):
             t = time.perf_counter()
             res = sup.submit(text, allow_truncate=fill_window)
             lat_e2e.append((time.perf_counter() - t) * 1000)
