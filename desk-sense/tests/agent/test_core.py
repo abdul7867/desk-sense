@@ -188,6 +188,7 @@ def test_strict_refuses_instead_of_cutting_options():
 
 @pytest.mark.parametrize("name, risky_expected", [
     ("Place order", True), ("Place your order", True), ("Order now", True), ("Confirm order", True),
+    ("Order", True), ("Order for ₹499", True), ("order (2 items)", True),
     ("Open order 4817", False), ("Sort order", False), ("Track your order", False),
 ])
 def test_order_is_risky_only_as_a_purchase(name, risky_expected):
