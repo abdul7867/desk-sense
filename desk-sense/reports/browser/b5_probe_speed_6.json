@@ -1,0 +1,35 @@
+{
+  "steps": 200,
+  "statuses": {
+    "done": 200
+  },
+  "zones_untrained_or_trained": {
+    "flag": 200
+  },
+  "threads": 2,
+  "bundle": "model/browser-run-probe6/dist",
+  "bundle_weights_mb": 222,
+  "tokens_per_step": {
+    "p50": 231.0,
+    "p95": 251.0,
+    "max": 259
+  },
+  "model_latency_ms": {
+    "p50": 238.0,
+    "p95": 278.0
+  },
+  "end_to_end_ms": {
+    "p50": 238.5,
+    "p95": 278.3
+  },
+  "peak_mb": {
+    "worker": 351.2,
+    "supervisor": 37.5,
+    "total": 388.7
+  },
+  "worker_imports_torch": false,
+  "worker_restarts": 0,
+  "cold_start_s": 1.54,
+  "platform": "linux",
+  "label": "dev container, 4 vCPU, 15 GB RAM; pruned 6-layer student (untrained weights, speed only), int8, 2 threads"
+}
