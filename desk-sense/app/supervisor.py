@@ -4,6 +4,7 @@
     python -m app.supervisor --fake                 # no model, random answers
 """
 import argparse
+import hmac
 import json
 import os
 import queue
@@ -14,13 +15,14 @@ import time
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
-from app import guard, zones
+from app import guard, systemone, zones
 from app.store import Store
 
 ROOT = Path(__file__).resolve().parent.parent
 SCHEMA_PATH = ROOT / "schema.json"
 DEFAULT_BUNDLE = ROOT / "model" / "dist"
 HOST = "127.0.0.1"  # R7: never 0.0.0.0
+MAX_BODY_BYTES = 256 * 1024
 # glibc otherwise keeps one heap per thread and holds freed activation buffers: +200-400 MB of RSS
 # after a long ticket. Large blocks go to mmap and are returned on free. Ignored off Linux.
 WORKER_MALLOC_ENV = {"MALLOC_ARENA_MAX": "1", "MALLOC_TRIM_THRESHOLD_": "0", "MALLOC_MMAP_THRESHOLD_": "65536"}
@@ -230,7 +232,8 @@ class Supervisor:
             zone = zones.assign(reply["answers"], self.schema["zones"])
             self.store.finish(rid, "done", reply["answers"], g.language, zone, reply.get("latency_ms"))
             return {"id": rid, "status": "done", "language": g.language, "zone": zone,
-                    "answers": reply["answers"], "latency_ms": reply.get("latency_ms"), "attempts": attempt}
+                    "answers": reply["answers"], "latency_ms": reply.get("latency_ms"), "attempts": attempt,
+                    "usage": reply.get("usage")}
 
     def worker_stats(self):
         with self.lock:
@@ -246,7 +249,12 @@ class Supervisor:
         self.store.close()
 
 
-def make_server(sup, port=0):
+def make_server(sup, port=0, token=None, allowed_origins=(), routes=None):
+    """`token`: when set, every POST needs `Authorization: Bearer <token>`. `allowed_origins`: browser
+    origins (e.g. chrome-extension://<id>) that may call; any other Origin is refused, so a web page
+    open in the same browser cannot drive the engine. `routes`: extra {path: fn(body) -> (code, obj)}."""
+    routes = dict(routes or {})
+
     class Handler(BaseHTTPRequestHandler):
         def _send(self, code, obj):
             body = json.dumps(obj, ensure_ascii=False).encode("utf-8")
@@ -256,20 +264,55 @@ def make_server(sup, port=0):
             self.end_headers()
             self.wfile.write(body)
 
+        def _refusal(self):
+            """None if the caller may proceed, else (code, error)."""
+            host = (self.headers.get("Host") or "").rsplit(":", 1)[0]
+            if host not in ("127.0.0.1", "localhost"):  # DNS rebinding
+                return 403, "host not allowed"
+            origin = self.headers.get("Origin")
+            if origin is not None and origin not in allowed_origins:
+                return 403, "origin not allowed"
+            if token is not None:
+                sent = self.headers.get("Authorization", "")
+                if not hmac.compare_digest(sent.encode("utf-8"), ("Bearer " + token).encode("utf-8")):
+                    return 401, "missing or wrong token"
+            return None
+
         def do_GET(self):
+            refused = self._refusal()
+            if refused:
+                return self._send(refused[0], {"error": refused[1]})
             if self.path == "/health":
                 return self._send(200, {"ok": True, "requests": sup.store.counts()})
             self._send(404, {"error": "not found"})
 
         def do_POST(self):
-            if self.path != "/predict":
+            refused = self._refusal()
+            if refused:
+                return self._send(refused[0], {"error": refused[1]})
+            if self.path != "/predict" and self.path != "/v1/systemone" and self.path not in routes:
                 return self._send(404, {"error": "not found"})
             try:
-                body = json.loads(self.rfile.read(int(self.headers.get("Content-Length", 0))) or b"{}")
-                state = body["state"]
-            except (ValueError, KeyError):
+                length = int(self.headers.get("Content-Length", 0))
+            except ValueError:
+                return self._send(400, {"error": "bad Content-Length"})
+            if length > MAX_BODY_BYTES:
+                return self._send(413, {"error": "body over %d bytes" % MAX_BODY_BYTES})
+            try:
+                body = json.loads(self.rfile.read(length) or b"{}")
+            except ValueError:
+                return self._send(400, {"error": "body must be JSON"})
+            if self.path == "/v1/systemone":
+                try:
+                    state, questions = systemone.validate(body)
+                except systemone.InvalidRequest as e:
+                    return self._send(400, {"error": {"type": "invalid_request", "message": str(e)}})
+                return self._send(*systemone.to_wire(sup.submit(state, questions)))
+            if self.path in routes:
+                return self._send(*routes[self.path](body))
+            if not isinstance(body, dict) or "state" not in body:
                 return self._send(400, {"error": "body must be JSON with a 'state' field"})
-            self._send(200, sup.submit(state, body.get("questions")))
+            self._send(200, sup.submit(body["state"], body.get("questions")))
 
         def log_message(self, *args):
             pass
