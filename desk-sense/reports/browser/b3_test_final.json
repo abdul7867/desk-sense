@@ -1,0 +1,155 @@
+{
+  "bundles": [
+    {
+      "bundle": "model/browser-run/dist",
+      "zones": {
+        "act": 0.95,
+        "confirm": 0.6
+      },
+      "result": {
+        "all": {
+          "n": 543,
+          "accuracy": 0.7993,
+          "ranker_first_choice": 0.7238,
+          "act_coverage": 0.4936,
+          "act_precision": 0.9776,
+          "confirm_or_act_coverage": 0.849,
+          "ece": 0.0757
+        },
+        "wording:exact": {
+          "n": 208,
+          "accuracy": 0.9038,
+          "ranker_first_choice": 0.8558,
+          "act_coverage": 0.625,
+          "act_precision": 0.9923,
+          "confirm_or_act_coverage": 0.9519,
+          "ece": 0.0356
+        },
+        "wording:none": {
+          "n": 67,
+          "accuracy": 0.6269,
+          "ranker_first_choice": 0.2985,
+          "act_coverage": 0.1642,
+          "act_precision": 0.9091,
+          "confirm_or_act_coverage": 0.5821,
+          "ece": 0.1763
+        },
+        "wording:partial": {
+          "n": 268,
+          "accuracy": 0.7612,
+          "ranker_first_choice": 0.7276,
+          "act_coverage": 0.4739,
+          "act_precision": 0.9685,
+          "confirm_or_act_coverage": 0.8358,
+          "ece": 0.0955
+        }
+      },
+      "act_threshold_sweep": {
+        "0.85": {
+          "coverage": 0.6538,
+          "precision": 0.9408
+        },
+        "0.9": {
+          "coverage": 0.6004,
+          "precision": 0.9601
+        },
+        "0.93": {
+          "coverage": 0.5433,
+          "precision": 0.9661
+        },
+        "0.95": {
+          "coverage": 0.4936,
+          "precision": 0.9776
+        },
+        "0.97": {
+          "coverage": 0.4273,
+          "precision": 0.9914
+        },
+        "0.98": {
+          "coverage": 0.372,
+          "precision": 0.9901
+        },
+        "0.99": {
+          "coverage": 0.2965,
+          "precision": 0.9876
+        }
+      }
+    },
+    {
+      "bundle": "model/browser-run-student/int8_acc4",
+      "zones": {
+        "act": 0.95,
+        "confirm": 0.6
+      },
+      "result": {
+        "all": {
+          "n": 543,
+          "accuracy": 0.779,
+          "ranker_first_choice": 0.7238,
+          "act_coverage": 0.2449,
+          "act_precision": 0.9624,
+          "confirm_or_act_coverage": 0.814,
+          "ece": 0.0674
+        },
+        "wording:exact": {
+          "n": 208,
+          "accuracy": 0.8413,
+          "ranker_first_choice": 0.8558,
+          "act_coverage": 0.274,
+          "act_precision": 0.9825,
+          "confirm_or_act_coverage": 0.8462,
+          "ece": 0.0741
+        },
+        "wording:none": {
+          "n": 67,
+          "accuracy": 0.6418,
+          "ranker_first_choice": 0.2985,
+          "act_coverage": 0.1045,
+          "act_precision": 1.0,
+          "confirm_or_act_coverage": 0.4925,
+          "ece": 0.2255
+        },
+        "wording:partial": {
+          "n": 268,
+          "accuracy": 0.7649,
+          "ranker_first_choice": 0.7276,
+          "act_coverage": 0.2575,
+          "act_precision": 0.942,
+          "confirm_or_act_coverage": 0.8694,
+          "ece": 0.0809
+        }
+      },
+      "act_threshold_sweep": {
+        "0.85": {
+          "coverage": 0.5617,
+          "precision": 0.9148
+        },
+        "0.9": {
+          "coverage": 0.418,
+          "precision": 0.9295
+        },
+        "0.93": {
+          "coverage": 0.3278,
+          "precision": 0.9326
+        },
+        "0.95": {
+          "coverage": 0.2449,
+          "precision": 0.9624
+        },
+        "0.97": {
+          "coverage": 0.1676,
+          "precision": 0.989
+        },
+        "0.98": {
+          "coverage": 0.1087,
+          "precision": 1.0
+        },
+        "0.99": {
+          "coverage": 0.0239,
+          "precision": 1.0
+        }
+      }
+    }
+  ],
+  "split": "test"
+}
