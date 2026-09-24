@@ -12,13 +12,16 @@ Actions returned to the extension:
     finish / stop / pause / ask_user / blocked / refused    (the task ends or needs the person)
 """
 import itertools
+import json
 import threading
+from pathlib import Path
 
 from app import guard
 from browser import fastpath, question, rank, safety
 from thinker.base import ThinkerError
 from thinker.budget import Budgeted
 
+SCHEMA_PATH = Path(__file__).resolve().parent.parent / "schema_browser.json"
 MAX_RECURSION = 4
 MAX_DETOURS = 3
 ACTING_OPS = ("click", "type", "select")
@@ -54,9 +57,11 @@ def describe(a):
 
 
 class Controller:
-    def __init__(self, sup, thinker_factory, steplog=None, allowed_scripts=("latin", "devanagari")):
+    def __init__(self, sup, thinker_factory, steplog=None, schema=None):
         self.sup, self.thinker_factory, self.steplog = sup, thinker_factory, steplog
-        self.allowed = tuple(allowed_scripts)
+        schema = schema or json.loads(SCHEMA_PATH.read_text(encoding="utf-8"))
+        self.allowed = tuple(schema["allowed_scripts"])
+        self.zones = schema["zones"]  # browser act bar is higher than tickets': a wrong click costs more
         self.tasks, self._ids, self._lock = {}, itertools.count(1), threading.Lock()
 
     # public -------------------------------------------------------------------
@@ -178,10 +183,10 @@ class Controller:
         shown = [dict(el, name="[label: unsupported script]") if el["i"] in unreadable else el for el in cands]
         q = question.build_question(shown)
         state = question.build_state(task.goal, sub, task.history, page)
-        res = self.sup.decide(state, {"next": q})
+        res = self.sup.decide(state, {"next": q}, self.zones)
         if res["status"] == "refused" and res.get("reason") == "too_long":
             state = question.build_state(task.goal, sub, task.history, page, max_history=0)
-            res = self.sup.decide(state, {"next": q})
+            res = self.sup.decide(state, {"next": q}, self.zones)
         if res["status"] != "done":
             return self._think(task, page, sub, "local model: %s" % res.get("message", res.get("reason")), depth, cands)
         ans = res["answers"]["next"]

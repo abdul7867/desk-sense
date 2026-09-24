@@ -1,0 +1,11 @@
+{
+  "use_case": "Browser agent steps: pick the next element or move from a shortlist of the page (BROWSER_AGENT_PLAN.md).",
+  "allowed_scripts": ["latin", "devanagari"],
+  "zones": {"act": 0.95, "confirm": 0.60},
+  "gates": {
+    "b3_min_act_precision": 0.97,
+    "b3_min_act_coverage": 0.50,
+    "b3_max_ece": 0.10,
+    "_set": "2026-09-24 in BROWSER_AGENT_PLAN.md before any browser results. The act threshold 0.95 was chosen on the val sites and confirmed on the calib sites (DECISIONS.md)."
+  }
+}

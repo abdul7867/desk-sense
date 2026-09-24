@@ -1,0 +1,37 @@
+{
+  "steps": 300,
+  "statuses": {
+    "done": 300
+  },
+  "zones_untrained_or_trained": {
+    "act": 274,
+    "confirm": 23,
+    "flag": 3
+  },
+  "threads": 2,
+  "bundle": "model/browser-run/dist",
+  "bundle_weights_mb": 313,
+  "tokens_per_step": {
+    "p50": 231.0,
+    "p95": 250.0,
+    "max": 259
+  },
+  "model_latency_ms": {
+    "p50": 507.0,
+    "p95": 572.1
+  },
+  "end_to_end_ms": {
+    "p50": 507.7,
+    "p95": 573.0
+  },
+  "peak_mb": {
+    "worker": 351.3,
+    "supervisor": 37.5,
+    "total": 388.8
+  },
+  "worker_imports_torch": false,
+  "worker_restarts": 0,
+  "cold_start_s": 1.9,
+  "platform": "linux",
+  "label": "dev container, 4 vCPU, 15 GB RAM, Linux; browser-trained Laya int8 ckpt 2, stage A trim, 2 threads"
+}

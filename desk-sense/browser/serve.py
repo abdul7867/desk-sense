@@ -16,9 +16,12 @@ import secrets
 from pathlib import Path
 
 import thinker
-from app.supervisor import DEFAULT_BUNDLE, ROOT, Supervisor, make_server
+from app.supervisor import ROOT, Supervisor, make_server
 from browser.controller import Controller
 from browser.steplog import StepLog
+
+
+BROWSER_BUNDLE = ROOT / "model" / "browser-run" / "dist"
 
 
 def agent_routes(ctl):
@@ -48,7 +51,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--db", default=str(ROOT / "desk_sense.db"))
     ap.add_argument("--steps-db", default=str(ROOT / "data" / "browser_steps.db"))
-    ap.add_argument("--bundle", default=str(DEFAULT_BUNDLE))
+    ap.add_argument("--bundle", default=str(BROWSER_BUNDLE), help="the browser-trained model (see README)")
     ap.add_argument("--port", type=int, default=8765)
     ap.add_argument("--threads", type=int, default=2)
     ap.add_argument("--fake", action="store_true", help="fake model (deterministic: picks the ranker's top)")
@@ -62,8 +65,7 @@ def main():
     cfg = json.loads(Path(args.thinker_script).read_text(encoding="utf-8")) if args.thinker_script else {}
     Path(args.steps_db).parent.mkdir(parents=True, exist_ok=True)
     steplog = StepLog(args.steps_db)
-    ctl = Controller(sup, lambda: thinker.make(args.thinker, **cfg), steplog,
-                     tuple(sup.schema.get("allowed_scripts", ("latin", "devanagari"))))
+    ctl = Controller(sup, lambda: thinker.make(args.thinker, **cfg), steplog)
     origins = tuple("chrome-extension://" + i for i in args.extension_id)
     server = make_server(sup, args.port, token=token, allowed_origins=origins, routes=agent_routes(ctl))
     print("listening on http://%s:%d" % server.server_address[:2])

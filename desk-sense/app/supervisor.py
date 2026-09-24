@@ -239,7 +239,7 @@ class Supervisor:
                     "answers": reply["answers"], "latency_ms": reply.get("latency_ms"), "attempts": attempt,
                     "usage": reply.get("usage")}
 
-    def decide(self, state, questions):
+    def decide(self, state, questions, zone_thresholds=None):
         """Browser steps: one attempt, nothing stored first, never replayed. A click replayed after a
         crash could land on a page that has changed, so a lost step is reported and the caller
         re-reads the page instead (DECISIONS.md). Options that do not fit are refused, never cut."""
@@ -263,7 +263,7 @@ class Supervisor:
             return {"status": "refused", "reason": "options_too_long", "message": reply["options_too_long"]}
         if "too_long" in reply:
             return {"status": "refused", "reason": "too_long", "tokens": reply["too_long"]["state_tokens"]}
-        zone = zones.assign(reply["answers"], self.schema["zones"])
+        zone = zones.assign(reply["answers"], zone_thresholds or self.schema["zones"])
         return {"status": "done", "zone": zone, "answers": reply["answers"], "latency_ms": reply.get("latency_ms"),
                 "usage": reply.get("usage")}
 

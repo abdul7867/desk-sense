@@ -137,9 +137,21 @@ Status (dev container, 4 vCPU, 16 GB; not the 4 GB target):
 - **B1 plumbing: PASS** (15/15 offline tasks, real extension in Chromium).
 - **B0 baseline:** one step takes **520 ms** p50 on 2 threads, whole engine **389 MB**. The best
   no-training combination reaches 312 ms but costs 448 MB, so B4/B5 need the distilled student model.
-- **Not trained on browser steps yet (B3).** With plans worded unlike the page, the model is unsure
-  on most steps and hands them to Claude: fuzzy suite 9/15, the rest stop safely at the call budget.
+- **B3 browser model: PASS.** Trained on Mind2Web (3,948 steps, 52 sites). On 14 sites it never
+  saw it picks the right element 82–86% of the time. When it acts without asking (act bar 0.95) it is
+  right 97.7–97.8% of the time, on 55% of steps. The rest go to Claude.
+- Fuzzy real-Chrome suite (plans worded unlike the page): 12/15, up from 9/15 untrained.
   Details and numbers: `DECISIONS.md` and `reports/browser/`.
+
+Build the browser model yourself (CPU, about 2 hours; Mind2Web is CC-BY-4.0, research use requested):
+
+```bash
+python -m model.browser.convert_mind2web data/raw/mind2web/train_*.json --out data/browser/mind2web.jsonl
+python -m model.browser.split_browser data/browser/mind2web.jsonl --out data/browser/splits
+LAYA_DATA_DIR=data/browser python -m model.finetune.finetune --out model/artifacts/ckpt_browser2 --epochs 2 --max-len 320
+LAYA_MODEL_OUT=model/browser-run LAYA_DATA_DIR=data/browser python -m model.build_model --checkpoint model/artifacts/ckpt_browser2
+LAYA_DATA_DIR=data/browser python -m model.browser.evaluate_browser --bundle model/browser-run/dist --split val
+```
 
 ## Layout
 

@@ -1,0 +1,40 @@
+{
+  "epochs": 2,
+  "lr": 2e-05,
+  "batch": 16,
+  "train_rows": 3948,
+  "freeze_embeddings": true,
+  "minutes": 104.1,
+  "peak_rss_mb": 7082,
+  "train_items": 3948,
+  "device": "cpu",
+  "log": [
+    {
+      "epoch": 1,
+      "train_loss": 0.9454,
+      "val": {
+        "en": 0.8128
+      },
+      "minutes": 51.9
+    },
+    {
+      "epoch": 2,
+      "train_loss": 0.2295,
+      "val": {
+        "en": 0.8255
+      },
+      "minutes": 104.1
+    }
+  ],
+  "g3": {
+    "en": {
+      "model": 0.8255,
+      "majority": 0.6957,
+      "margin": 0.1298,
+      "passed": true
+    }
+  },
+  "versions": {
+    "torch": "2.14.0+cpu"
+  }
+}

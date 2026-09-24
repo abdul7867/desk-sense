@@ -218,6 +218,17 @@ def test_several_different_detours_bring_in_the_thinker(make_ctl):
     assert "thinker" in sources and len(sources) <= 4
 
 
+def test_browser_act_bar_comes_from_schema_browser(make_sup):
+    """The fake model is 0.97 sure. Under a 0.99 act bar a click is only 'confirm', so the thinker decides."""
+    sup = make_sup(fake_policy="first")
+    t = ScriptedThinker({"go": [{"op": "click", "target": "search button"}]})
+    ctl = Controller(sup, lambda: t, schema={"allowed_scripts": ["latin"], "zones": {"act": 0.99, "confirm": 0.6}})
+    a = ctl.start("go", None, flights_page())
+    assert a["source"] == "thinker" and "resolve" in t.calls
+    default = Controller(sup, lambda: ScriptedThinker({"go": [{"op": "click", "target": "search button"}]}))
+    assert default.zones["act"] == 0.95 and default.start("go", None, flights_page())["source"] == "model"
+
+
 def test_card_numbers_never_reach_the_thinker_or_the_log(make_ctl, tmp_path):
     seen = []
 

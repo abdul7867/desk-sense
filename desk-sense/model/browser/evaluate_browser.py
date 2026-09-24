@@ -16,7 +16,7 @@ from model.data import load_split, target_index
 from model.evaluate import ece
 from model.pin import REPORTS, ROOT
 
-ZONES = json.loads((ROOT / "schema.json").read_text())["zones"]
+ZONES = json.loads((ROOT / "schema_browser.json").read_text())["zones"]
 
 
 def score(rows, probs):
