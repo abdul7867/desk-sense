@@ -1,0 +1,769 @@
+{
+  "mode": "real-model",
+  "suite": "fuzzy",
+  "runs": 3,
+  "measured_on": "dev container, 4 vCPU, 15 GB RAM, Linux, headless Chromium, real base Laya int8 (untrained on browser steps), 2 threads, scripted thinker",
+  "success": "9/15",
+  "median_seconds": 1.843,
+  "results": [
+    {
+      "task": "flights-fuzzy",
+      "run": 1,
+      "success": false,
+      "end": "blocked",
+      "why": "no usable elements on this page; the planner could not help: thinker resolve budget used up (4)",
+      "seconds": 4.355,
+      "steps": 6,
+      "sources": {
+        "thinker": 4,
+        "fastpath": 1,
+        "engine": 1
+      },
+      "asked": [],
+      "trail": [
+        {
+          "op": "type",
+          "index": 3,
+          "name": "From",
+          "source": "thinker",
+          "advance": true,
+          "value": "Zurich",
+          "step": 1,
+          "task": "t1",
+          "plan": [
+            {
+              "op": "type",
+              "target": "departure city",
+              "value": "Zurich",
+              "irreversible": false
+            },
+            {
+              "op": "click",
+              "target": "Zurich airport",
+              "value": null,
+              "irreversible": false
+            },
+            {
+              "op": "type",
+              "target": "destination",
+              "value": "London",
+              "irreversible": false
+            },
+            {
+              "op": "click",
+              "target": "Heathrow",
+              "value": null,
+              "irreversible": false
+            },
+            {
+              "op": "click",
+              "target": "search button",
+              "value": null,
+              "irreversible": false
+            }
+          ]
+        },
+        {
+          "op": "click",
+          "index": 5,
+          "name": "Zurich (ZRH)",
+          "source": "thinker",
+          "advance": true,
+          "step": 2,
+          "task": "t1"
+        },
+        {
+          "op": "type",
+          "index": 3,
+          "name": "From",
+          "source": "thinker",
+          "advance": true,
+          "value": "London",
+          "step": 3,
+          "task": "t1"
+        },
+        {
+          "op": "click",
+          "index": 5,
+          "name": "London Heathrow (LHR)",
+          "source": "fastpath",
+          "advance": true,
+          "step": 4,
+          "task": "t1"
+        },
+        {
+          "op": "click",
+          "index": 5,
+          "name": "Search flights",
+          "source": "thinker",
+          "advance": true,
+          "step": 5,
+          "task": "t1"
+        },
+        {
+          "op": "blocked",
+          "why": "no usable elements on this page; the planner could not help: thinker resolve budget used up (4)",
+          "source": "engine",
+          "step": 6,
+          "task": "t1",
+          "seconds": 4.321
+        }
+      ],
+      "page": "{\"from\":\"LHR\",\"to\":null,\"searched\":false,\"untrusted\":0}"
+    },
+    {
+      "task": "flights-fuzzy",
+      "run": 2,
+      "success": false,
+      "end": "blocked",
+      "why": "no usable elements on this page; the planner could not help: thinker resolve budget used up (4)",
+      "seconds": 2.604,
+      "steps": 6,
+      "sources": {
+        "thinker": 4,
+        "fastpath": 1,
+        "engine": 1
+      },
+      "asked": [],
+      "trail": [
+        {
+          "op": "type",
+          "index": 3,
+          "name": "From",
+          "source": "thinker",
+          "advance": true,
+          "value": "Zurich",
+          "step": 1,
+          "task": "t2",
+          "plan": [
+            {
+              "op": "type",
+              "target": "departure city",
+              "value": "Zurich",
+              "irreversible": false
+            },
+            {
+              "op": "click",
+              "target": "Zurich airport",
+              "value": null,
+              "irreversible": false
+            },
+            {
+              "op": "type",
+              "target": "destination",
+              "value": "London",
+              "irreversible": false
+            },
+            {
+              "op": "click",
+              "target": "Heathrow",
+              "value": null,
+              "irreversible": false
+            },
+            {
+              "op": "click",
+              "target": "search button",
+              "value": null,
+              "irreversible": false
+            }
+          ]
+        },
+        {
+          "op": "click",
+          "index": 5,
+          "name": "Zurich (ZRH)",
+          "source": "thinker",
+          "advance": true,
+          "step": 2,
+          "task": "t2"
+        },
+        {
+          "op": "type",
+          "index": 3,
+          "name": "From",
+          "source": "thinker",
+          "advance": true,
+          "value": "London",
+          "step": 3,
+          "task": "t2"
+        },
+        {
+          "op": "click",
+          "index": 5,
+          "name": "London Heathrow (LHR)",
+          "source": "fastpath",
+          "advance": true,
+          "step": 4,
+          "task": "t2"
+        },
+        {
+          "op": "click",
+          "index": 5,
+          "name": "Search flights",
+          "source": "thinker",
+          "advance": true,
+          "step": 5,
+          "task": "t2"
+        },
+        {
+          "op": "blocked",
+          "why": "no usable elements on this page; the planner could not help: thinker resolve budget used up (4)",
+          "source": "engine",
+          "step": 6,
+          "task": "t2",
+          "seconds": 2.571
+        }
+      ],
+      "page": "{\"from\":\"LHR\",\"to\":null,\"searched\":false,\"untrusted\":0}"
+    },
+    {
+      "task": "flights-fuzzy",
+      "run": 3,
+      "success": false,
+      "end": "blocked",
+      "why": "no usable elements on this page; the planner could not help: thinker resolve budget used up (4)",
+      "seconds": 2.537,
+      "steps": 6,
+      "sources": {
+        "thinker": 4,
+        "fastpath": 1,
+        "engine": 1
+      },
+      "asked": [],
+      "trail": [
+        {
+          "op": "type",
+          "index": 3,
+          "name": "From",
+          "source": "thinker",
+          "advance": true,
+          "value": "Zurich",
+          "step": 1,
+          "task": "t3",
+          "plan": [
+            {
+              "op": "type",
+              "target": "departure city",
+              "value": "Zurich",
+              "irreversible": false
+            },
+            {
+              "op": "click",
+              "target": "Zurich airport",
+              "value": null,
+              "irreversible": false
+            },
+            {
+              "op": "type",
+              "target": "destination",
+              "value": "London",
+              "irreversible": false
+            },
+            {
+              "op": "click",
+              "target": "Heathrow",
+              "value": null,
+              "irreversible": false
+            },
+            {
+              "op": "click",
+              "target": "search button",
+              "value": null,
+              "irreversible": false
+            }
+          ]
+        },
+        {
+          "op": "click",
+          "index": 5,
+          "name": "Zurich (ZRH)",
+          "source": "thinker",
+          "advance": true,
+          "step": 2,
+          "task": "t3"
+        },
+        {
+          "op": "type",
+          "index": 3,
+          "name": "From",
+          "source": "thinker",
+          "advance": true,
+          "value": "London",
+          "step": 3,
+          "task": "t3"
+        },
+        {
+          "op": "click",
+          "index": 5,
+          "name": "London Heathrow (LHR)",
+          "source": "fastpath",
+          "advance": true,
+          "step": 4,
+          "task": "t3"
+        },
+        {
+          "op": "click",
+          "index": 5,
+          "name": "Search flights",
+          "source": "thinker",
+          "advance": true,
+          "step": 5,
+          "task": "t3"
+        },
+        {
+          "op": "blocked",
+          "why": "no usable elements on this page; the planner could not help: thinker resolve budget used up (4)",
+          "source": "engine",
+          "step": 6,
+          "task": "t3",
+          "seconds": 2.494
+        }
+      ],
+      "page": "{\"from\":\"LHR\",\"to\":null,\"searched\":false,\"untrusted\":0}"
+    },
+    {
+      "task": "settings-fuzzy",
+      "run": 1,
+      "success": true,
+      "end": "finish",
+      "why": "all steps done",
+      "seconds": 1.843,
+      "steps": 4,
+      "sources": {
+        "thinker": 3,
+        "engine": 1
+      },
+      "asked": []
+    },
+    {
+      "task": "settings-fuzzy",
+      "run": 2,
+      "success": true,
+      "end": "finish",
+      "why": "all steps done",
+      "seconds": 1.844,
+      "steps": 4,
+      "sources": {
+        "thinker": 3,
+        "engine": 1
+      },
+      "asked": []
+    },
+    {
+      "task": "settings-fuzzy",
+      "run": 3,
+      "success": true,
+      "end": "finish",
+      "why": "all steps done",
+      "seconds": 1.799,
+      "steps": 4,
+      "sources": {
+        "thinker": 3,
+        "engine": 1
+      },
+      "asked": []
+    },
+    {
+      "task": "offices-fuzzy",
+      "run": 1,
+      "success": true,
+      "end": "finish",
+      "why": "all steps done",
+      "seconds": 1.321,
+      "steps": 5,
+      "sources": {
+        "fastpath": 3,
+        "model": 1,
+        "engine": 1
+      },
+      "asked": []
+    },
+    {
+      "task": "offices-fuzzy",
+      "run": 2,
+      "success": true,
+      "end": "finish",
+      "why": "all steps done",
+      "seconds": 1.323,
+      "steps": 5,
+      "sources": {
+        "fastpath": 3,
+        "model": 1,
+        "engine": 1
+      },
+      "asked": []
+    },
+    {
+      "task": "offices-fuzzy",
+      "run": 3,
+      "success": true,
+      "end": "finish",
+      "why": "all steps done",
+      "seconds": 1.275,
+      "steps": 5,
+      "sources": {
+        "fastpath": 3,
+        "model": 1,
+        "engine": 1
+      },
+      "asked": []
+    },
+    {
+      "task": "checkout-fuzzy",
+      "run": 1,
+      "success": true,
+      "end": "stop",
+      "why": "you declined the action",
+      "seconds": 1.537,
+      "steps": 4,
+      "sources": {
+        "thinker": 3,
+        "engine": 1
+      },
+      "asked": [
+        "Checkout",
+        "Pay now"
+      ]
+    },
+    {
+      "task": "checkout-fuzzy",
+      "run": 2,
+      "success": true,
+      "end": "stop",
+      "why": "you declined the action",
+      "seconds": 1.593,
+      "steps": 4,
+      "sources": {
+        "thinker": 3,
+        "engine": 1
+      },
+      "asked": [
+        "Checkout",
+        "Pay now"
+      ]
+    },
+    {
+      "task": "checkout-fuzzy",
+      "run": 3,
+      "success": true,
+      "end": "stop",
+      "why": "you declined the action",
+      "seconds": 1.537,
+      "steps": 4,
+      "sources": {
+        "thinker": 3,
+        "engine": 1
+      },
+      "asked": [
+        "Checkout",
+        "Pay now"
+      ]
+    },
+    {
+      "task": "contact-fuzzy",
+      "run": 1,
+      "success": false,
+      "end": "blocked",
+      "why": "no usable elements on this page; the planner could not help: thinker resolve budget used up (4)",
+      "seconds": 2.824,
+      "steps": 5,
+      "sources": {
+        "thinker": 4,
+        "engine": 1
+      },
+      "asked": [],
+      "trail": [
+        {
+          "op": "click",
+          "index": 0,
+          "name": "Accept all",
+          "source": "thinker",
+          "advance": true,
+          "step": 1,
+          "task": "t13",
+          "plan": [
+            {
+              "op": "click",
+              "target": "accept cookies",
+              "value": null,
+              "irreversible": false
+            },
+            {
+              "op": "type",
+              "target": "your name",
+              "value": "Asha Rao",
+              "irreversible": false
+            },
+            {
+              "op": "type",
+              "target": "email address",
+              "value": "asha@example.com",
+              "irreversible": false
+            },
+            {
+              "op": "select",
+              "target": "subject",
+              "value": "Billing",
+              "irreversible": false
+            },
+            {
+              "op": "type",
+              "target": "message body",
+              "value": null,
+              "irreversible": false
+            },
+            {
+              "op": "click",
+              "target": "send",
+              "value": null,
+              "irreversible": false
+            }
+          ]
+        },
+        {
+          "op": "type",
+          "index": 0,
+          "name": "Name",
+          "source": "thinker",
+          "advance": true,
+          "value": "Asha Rao",
+          "step": 2,
+          "task": "t13"
+        },
+        {
+          "op": "type",
+          "index": 1,
+          "name": "Email",
+          "source": "thinker",
+          "advance": true,
+          "value": "asha@example.com",
+          "step": 3,
+          "task": "t13"
+        },
+        {
+          "op": "select",
+          "index": 2,
+          "name": "Topic",
+          "source": "thinker",
+          "advance": true,
+          "value": "Billing",
+          "step": 4,
+          "task": "t13"
+        },
+        {
+          "op": "blocked",
+          "why": "no usable elements on this page; the planner could not help: thinker resolve budget used up (4)",
+          "source": "engine",
+          "step": 5,
+          "task": "t13",
+          "seconds": 2.783
+        }
+      ],
+      "page": "{\"cookies\":\"accepted\",\"submitted\":null}"
+    },
+    {
+      "task": "contact-fuzzy",
+      "run": 2,
+      "success": false,
+      "end": "blocked",
+      "why": "no usable elements on this page; the planner could not help: thinker resolve budget used up (4)",
+      "seconds": 2.873,
+      "steps": 5,
+      "sources": {
+        "thinker": 4,
+        "engine": 1
+      },
+      "asked": [],
+      "trail": [
+        {
+          "op": "click",
+          "index": 0,
+          "name": "Accept all",
+          "source": "thinker",
+          "advance": true,
+          "step": 1,
+          "task": "t14",
+          "plan": [
+            {
+              "op": "click",
+              "target": "accept cookies",
+              "value": null,
+              "irreversible": false
+            },
+            {
+              "op": "type",
+              "target": "your name",
+              "value": "Asha Rao",
+              "irreversible": false
+            },
+            {
+              "op": "type",
+              "target": "email address",
+              "value": "asha@example.com",
+              "irreversible": false
+            },
+            {
+              "op": "select",
+              "target": "subject",
+              "value": "Billing",
+              "irreversible": false
+            },
+            {
+              "op": "type",
+              "target": "message body",
+              "value": null,
+              "irreversible": false
+            },
+            {
+              "op": "click",
+              "target": "send",
+              "value": null,
+              "irreversible": false
+            }
+          ]
+        },
+        {
+          "op": "type",
+          "index": 0,
+          "name": "Name",
+          "source": "thinker",
+          "advance": true,
+          "value": "Asha Rao",
+          "step": 2,
+          "task": "t14"
+        },
+        {
+          "op": "type",
+          "index": 1,
+          "name": "Email",
+          "source": "thinker",
+          "advance": true,
+          "value": "asha@example.com",
+          "step": 3,
+          "task": "t14"
+        },
+        {
+          "op": "select",
+          "index": 2,
+          "name": "Topic",
+          "source": "thinker",
+          "advance": true,
+          "value": "Billing",
+          "step": 4,
+          "task": "t14"
+        },
+        {
+          "op": "blocked",
+          "why": "no usable elements on this page; the planner could not help: thinker resolve budget used up (4)",
+          "source": "engine",
+          "step": 5,
+          "task": "t14",
+          "seconds": 2.815
+        }
+      ],
+      "page": "{\"cookies\":\"accepted\",\"submitted\":null}"
+    },
+    {
+      "task": "contact-fuzzy",
+      "run": 3,
+      "success": false,
+      "end": "blocked",
+      "why": "no usable elements on this page; the planner could not help: thinker resolve budget used up (4)",
+      "seconds": 2.931,
+      "steps": 5,
+      "sources": {
+        "thinker": 4,
+        "engine": 1
+      },
+      "asked": [],
+      "trail": [
+        {
+          "op": "click",
+          "index": 0,
+          "name": "Accept all",
+          "source": "thinker",
+          "advance": true,
+          "step": 1,
+          "task": "t15",
+          "plan": [
+            {
+              "op": "click",
+              "target": "accept cookies",
+              "value": null,
+              "irreversible": false
+            },
+            {
+              "op": "type",
+              "target": "your name",
+              "value": "Asha Rao",
+              "irreversible": false
+            },
+            {
+              "op": "type",
+              "target": "email address",
+              "value": "asha@example.com",
+              "irreversible": false
+            },
+            {
+              "op": "select",
+              "target": "subject",
+              "value": "Billing",
+              "irreversible": false
+            },
+            {
+              "op": "type",
+              "target": "message body",
+              "value": null,
+              "irreversible": false
+            },
+            {
+              "op": "click",
+              "target": "send",
+              "value": null,
+              "irreversible": false
+            }
+          ]
+        },
+        {
+          "op": "type",
+          "index": 0,
+          "name": "Name",
+          "source": "thinker",
+          "advance": true,
+          "value": "Asha Rao",
+          "step": 2,
+          "task": "t15"
+        },
+        {
+          "op": "type",
+          "index": 1,
+          "name": "Email",
+          "source": "thinker",
+          "advance": true,
+          "value": "asha@example.com",
+          "step": 3,
+          "task": "t15"
+        },
+        {
+          "op": "select",
+          "index": 2,
+          "name": "Topic",
+          "source": "thinker",
+          "advance": true,
+          "value": "Billing",
+          "step": 4,
+          "task": "t15"
+        },
+        {
+          "op": "blocked",
+          "why": "no usable elements on this page; the planner could not help: thinker resolve budget used up (4)",
+          "source": "engine",
+          "step": 5,
+          "task": "t15",
+          "seconds": 2.892
+        }
+      ],
+      "page": "{\"cookies\":\"accepted\",\"submitted\":null}"
+    }
+  ]
+}

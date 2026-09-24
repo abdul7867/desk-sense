@@ -166,7 +166,8 @@ class Controller:
         if not cands:
             if task.page_offset == 0:
                 return self._act(task, page, sub, {"op": "scroll", "direction": "down", "source": "engine"})
-            return self._think(task, page, sub, "no usable elements on this page", depth)
+            return self._think(task, page, sub, "none of the offered elements fits this step", depth,
+                               rank.shortlist(page.get("elements", []), sub, task.failed))
         unreadable = [el["i"] for el in cands if not guard.readable(el.get("name"), self.allowed)]
         if set(unreadable) & {el["i"] for el in cands[:3]}:
             return self._think(task, page, sub, "the likely targets are in a script the local model can't read", depth,

@@ -133,8 +133,13 @@ node bench/run.mjs --runs 3                        # offline bench (fake model):
 python -m browser.serve --fake --thinker fake      # engine without model or API key
 ```
 
-Status: plumbing gate **B1 passes**. The model has not been fine-tuned on browser steps yet (B3), so
-real steps rely on fast paths and Claude. Speed and RAM gates B4/B5 need a model build and the 4 GB PC.
+Status (dev container, 4 vCPU, 16 GB; not the 4 GB target):
+- **B1 plumbing: PASS** (15/15 offline tasks, real extension in Chromium).
+- **B0 baseline:** one step takes **520 ms** p50 on 2 threads, whole engine **389 MB**. The best
+  no-training combination reaches 312 ms but costs 448 MB, so B4/B5 need the distilled student model.
+- **Not trained on browser steps yet (B3).** With plans worded unlike the page, the model is unsure
+  on most steps and hands them to Claude: fuzzy suite 9/15, the rest stop safely at the call budget.
+  Details and numbers: `DECISIONS.md` and `reports/browser/`.
 
 ## Layout
 

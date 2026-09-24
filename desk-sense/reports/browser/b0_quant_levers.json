@@ -1,0 +1,32 @@
+{
+  "steps": 200,
+  "threads": 2,
+  "where": "dev container, 4 vCPU, 15 GB RAM, Linux; base Laya (untrained on browser steps)",
+  "int8_weights (shipped)": {
+    "latency_ms": {
+      "p50": 523.0,
+      "p95": 592.0
+    },
+    "worker_peak_mb": 351.2,
+    "same_pick_as_shipped": 1.0,
+    "same_pick_on_decisive": "127/127"
+  },
+  "int8_compute": {
+    "latency_ms": {
+      "p50": 432.0,
+      "p95": 489.0
+    },
+    "worker_peak_mb": 417.2,
+    "same_pick_as_shipped": 0.995,
+    "same_pick_on_decisive": "127/127"
+  },
+  "int4_weights": {
+    "latency_ms": {
+      "p50": 387.5,
+      "p95": 468.04999999999995
+    },
+    "worker_peak_mb": 351.2,
+    "same_pick_as_shipped": 0.83,
+    "same_pick_on_decisive": "112/127"
+  }
+}

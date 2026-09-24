@@ -1,0 +1,26 @@
+{
+  "short_fixed_k12": {
+    "tokens_p50": 233.5,
+    "latency_ms": {
+      "p50": 496.0,
+      "p95": 582.1
+    },
+    "peak_mb": 388.5
+  },
+  "long_fixed_k8": {
+    "tokens_p50": 203.0,
+    "latency_ms": {
+      "p50": 436.0,
+      "p95": 492.1
+    },
+    "peak_mb": 390.6
+  },
+  "short_fixed_k8": {
+    "tokens_p50": 188.0,
+    "latency_ms": {
+      "p50": 414.5,
+      "p95": 467.2
+    },
+    "peak_mb": 390.6
+  }
+}

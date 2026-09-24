@@ -1,0 +1,37 @@
+{
+  "steps": 200,
+  "statuses": {
+    "done": 200
+  },
+  "zones_untrained_or_trained": {
+    "flag": 153,
+    "act": 9,
+    "confirm": 38
+  },
+  "threads": 1,
+  "bundle": "/home/user/desk-sense/desk-sense/model/dist",
+  "bundle_weights_mb": 313,
+  "tokens_per_step": {
+    "p50": 248.5,
+    "p95": 266.0,
+    "max": 274
+  },
+  "model_latency_ms": {
+    "p50": 964.0,
+    "p95": 1083.0
+  },
+  "end_to_end_ms": {
+    "p50": 965.1,
+    "p95": 1083.5
+  },
+  "peak_mb": {
+    "worker": 351.2,
+    "supervisor": 37.3,
+    "total": 388.5
+  },
+  "worker_imports_torch": false,
+  "worker_restarts": 0,
+  "cold_start_s": 1.8,
+  "platform": "linux",
+  "label": "dev container, 4 vCPU, 15 GB RAM, base Laya int8 stage A, 1 threads"
+}

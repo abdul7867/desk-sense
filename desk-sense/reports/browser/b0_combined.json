@@ -1,0 +1,35 @@
+{
+  "2_threads": {
+    "tokens_p50": 188.0,
+    "latency_ms": {
+      "p50": 312.5,
+      "p95": 346.1
+    },
+    "end_to_end_ms": {
+      "p50": 313.1,
+      "p95": 347.1
+    },
+    "peak_mb": {
+      "worker": 410.5,
+      "supervisor": 37.4,
+      "total": 447.9
+    }
+  },
+  "4_threads": {
+    "tokens_p50": 188.0,
+    "latency_ms": {
+      "p50": 190.0,
+      "p95": 216.1
+    },
+    "end_to_end_ms": {
+      "p50": 190.7,
+      "p95": 217.2
+    },
+    "peak_mb": {
+      "worker": 410.8,
+      "supervisor": 39.4,
+      "total": 450.2
+    }
+  },
+  "setup": "int8 compute + short fixed moves + 8 candidates; dev container 4 vCPU 15 GB Linux; base Laya"
+}
