@@ -115,7 +115,7 @@ class Worker:
 class Supervisor:
     def __init__(self, db_path, bundle=DEFAULT_BUNDLE, fake=False, fake_delay=0.0, schema_path=SCHEMA_PATH,
                  idle_timeout=300.0, mem_limit_mb=450.0, watchdog_interval=1.0, max_attempts=3,
-                 request_timeout=120.0, threads=2, max_len=None):
+                 request_timeout=120.0, threads=2, max_len=None, fake_policy="random"):
         self.store = Store(db_path)
         self.schema = json.loads(Path(schema_path).read_text(encoding="utf-8"))
         self.log_path = Path(db_path).with_suffix(".worker.log")
@@ -123,7 +123,7 @@ class Supervisor:
         # Tokens the model reads per question (question + options + ticket). Lower = faster, but the
         # ticket must fit: longer ones are refused as too_long, never cut.
         self.max_len = int(max_len or self.schema.get("model_max_len", 512))
-        cmd += (["--fake", "--fake-delay", str(fake_delay)] if fake
+        cmd += (["--fake", "--fake-delay", str(fake_delay), "--fake-policy", fake_policy] if fake
                 else ["--bundle", str(bundle), "--threads", str(threads), "--max-len", str(self.max_len)])
         self.cmd = cmd
         self.idle_timeout, self.mem_limit_mb = idle_timeout, mem_limit_mb
@@ -238,6 +238,39 @@ class Supervisor:
             return {"id": rid, "status": "done", "language": g.language, "zone": zone,
                     "answers": reply["answers"], "latency_ms": reply.get("latency_ms"), "attempts": attempt,
                     "usage": reply.get("usage")}
+
+    def decide(self, state, questions):
+        """Browser steps: one attempt, nothing stored first, never replayed. A click replayed after a
+        crash could land on a page that has changed, so a lost step is reported and the caller
+        re-reads the page instead (DECISIONS.md). Options that do not fit are refused, never cut."""
+        with self.lock:
+            self.busy = True
+            try:
+                w = self._ensure_worker()
+                msg = {"id": "step", "state": state, "questions": questions, "attempt": 1, "strict": True,
+                       "max_tokens": self.schema.get("max_state_tokens", 512)}
+                reply = w.recv(self.request_timeout) if w.send(msg) else None
+                if reply is None:
+                    self._drop_worker("worker_lost_step")
+            finally:
+                self.busy = False
+                self.last_used = time.monotonic()
+        if reply is None:
+            return {"status": "failed", "message": "worker lost the step"}
+        if "error" in reply:
+            return {"status": "failed", "message": reply["error"]}
+        if "options_too_long" in reply:
+            return {"status": "refused", "reason": "options_too_long", "message": reply["options_too_long"]}
+        if "too_long" in reply:
+            return {"status": "refused", "reason": "too_long", "tokens": reply["too_long"]["state_tokens"]}
+        zone = zones.assign(reply["answers"], self.schema["zones"])
+        return {"status": "done", "zone": zone, "answers": reply["answers"], "latency_ms": reply.get("latency_ms")}
+
+    def warm(self):
+        """Start the worker now, so the first step does not pay the cold start."""
+        with self.lock:
+            self._ensure_worker()
+            self.last_used = time.monotonic()
 
     def worker_stats(self):
         with self.lock:

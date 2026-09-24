@@ -8,8 +8,10 @@ def _norm(text):
     return " ".join(sorted(words(text)))
 
 
-def decide(elements, subgoal, page):
-    """An action dict, or None to fall through to the model."""
+def decide(elements, subgoal, page, failed=()):
+    """An action dict, or None to fall through to the model. Elements that already failed on this
+    step are never fast-pathed again."""
+    elements = [el for el in elements if el["i"] not in failed]
     if page.get("busy"):
         return {"op": "wait", "why": "page busy"}
     if not subgoal:
@@ -24,7 +26,7 @@ def decide(elements, subgoal, page):
         exact = [el for el in exact if el.get("region") == "dialog"] if exact else []
     if len(exact) == 1:
         el = exact[0]
-        if op == "type" and (el.get("value") or "") == (subgoal.get("value") or ""):
+        if op == "type" and subgoal.get("value") is not None and (el.get("value") or "") == subgoal["value"]:
             return {"op": "skip", "index": el["i"], "why": "field already holds the value"}
         return {"op": op, "index": el["i"], "value": subgoal.get("value"), "why": "exact name match"}
     if op in ("click", "select"):

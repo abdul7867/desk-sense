@@ -55,8 +55,10 @@ def peak_rss_mb():
 class FakeModel:
     """Random probabilities, same reply shape as the real model. Test hooks live only here."""
 
-    def __init__(self, delay=0.0):
-        self.delay = delay
+    def __init__(self, delay=0.0, policy="random"):
+        """`policy="first"`: choice questions put 0.9 on the first option, so browser tests run
+        deterministically (the ranker puts the planned target first)."""
+        self.delay, self.policy = delay, policy
         self.rng = np.random.default_rng()
         self.hog = None
 
@@ -81,7 +83,11 @@ class FakeModel:
                 answers[qid] = {"type": "noul", "noul": round(p, 4), "confidence": round(max(p, 1 - p), 4)}
                 continue
             opts = list(q["criteria"].keys()) if q["type"] == "choice" else [str(i) for i in range(len(q["criteria"]))]
-            p = self.rng.dirichlet(np.ones(len(opts)) * 0.3)
+            if self.policy == "first" and q["type"] == "choice":
+                p = np.full(len(opts), 0.1 / max(1, len(opts) - 1))
+                p[0] = 0.9
+            else:
+                p = self.rng.dirichlet(np.ones(len(opts)) * 0.3)
             ans = {"type": q["type"], "probabilities": {o: round(float(v), 4) for o, v in zip(opts, p)},
                    "confidence": round(float(p.max()), 4)}
             if q["type"] == "choice":
@@ -136,13 +142,14 @@ def main():
     ap.add_argument("--bundle")
     ap.add_argument("--fake", action="store_true")
     ap.add_argument("--fake-delay", type=float, default=0.0)
+    ap.add_argument("--fake-policy", choices=("random", "first"), default="random")
     ap.add_argument("--threads", type=int, default=2)
     ap.add_argument("--max-len", type=int, help="tokens per question sequence; default: the bundle's")
     args = ap.parse_args()
     # The protocol owns stdout; anything a library prints goes to stderr instead.
     out = os.fdopen(os.dup(sys.stdout.fileno()), "w", encoding="utf-8")
     os.dup2(sys.stderr.fileno(), sys.stdout.fileno())
-    model = FakeModel(args.fake_delay) if args.fake else RealModel(args.bundle, args.threads, args.max_len)
+    model = FakeModel(args.fake_delay, args.fake_policy) if args.fake else RealModel(args.bundle, args.threads, args.max_len)
     serve(model, out)
 
 

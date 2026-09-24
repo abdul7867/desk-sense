@@ -67,6 +67,20 @@ def words_by_script(text):
     return counts
 
 
+def readable(text, allowed=("latin", "devanagari")):
+    """True if the model can read this short text (an element label): no more than the tolerated
+    share of letters from other scripts. Text with no letters (icons, numbers) is readable."""
+    counts = count_scripts(str(text or ""))
+    letters = sum(counts.values())
+    return letters == 0 or sum(n for s, n in counts.items() if s not in allowed) / letters <= FOREIGN_TOLERANCE
+
+
+def check_fields(texts, allowed=("latin", "devanagari")):
+    """Browser goals and plan values: the same rule as a ticket, applied to the person's own words.
+    Page text is checked label by label with `readable` instead, since pages mix scripts freely."""
+    return check(" ".join(str(t) for t in texts if t), allowed)
+
+
 def check(state, allowed=("latin", "devanagari")):
     text = text_of(state)
     if not text.strip():
